@@ -1,0 +1,37 @@
+package com.bridgelabz.fundoo.user.services;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.bridgelabz.fundoo.user.model.User;
+import com.bridgelabz.fundoo.user.repository.UserRepository;
+
+public class UserServiceImpl implements UserService {
+	
+	@Autowired
+	private UserRepository userRepository;
+
+	@Override
+	public boolean userLogin() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public User userRegister(User user) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void userForgotPassword(String email) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void userSetPassword(String password) {
+		// TODO Auto-generated method stub
+		
+	}
+
+}
