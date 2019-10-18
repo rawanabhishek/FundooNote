@@ -1,3 +1,0 @@
-INDEX VERSION 1.131+/home/admin1/UserService/.metadata/.plugins/org.eclipse.jdt.core
-2312932061.index
-729845748.index
