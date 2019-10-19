@@ -13,13 +13,14 @@ import com.bridgelabz.fundoo.user.dto.LoginDTO;
 import com.bridgelabz.fundoo.user.dto.RegisterDTO;
 
 
+
 public interface UserService {
 	
 	
 	public boolean userEmailValidate(String email);
 
 
-	public void userSetPassword(String  password, String token);
+	public void userSetPassword(String password, String token);
 	public boolean userLogin(LoginDTO login);
 	boolean userRegister(RegisterDTO register);
 
@@ -27,6 +28,9 @@ public interface UserService {
 
 
 	boolean userForgotPassword(String email);
+
+
+	
 	
 	
 

@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bridgelabz.fundoo.user.dto.LoginDTO;
 import com.bridgelabz.fundoo.user.dto.RegisterDTO;
-
+import com.bridgelabz.fundoo.user.dto.SetPasswordDTO;
 import com.bridgelabz.fundoo.user.services.UserService;
 
 @RestController
@@ -56,8 +56,8 @@ public class UserController {
 	}
 	
 	@PutMapping("/setpassword/{token}")
-	public void userSetPassword(@RequestHeader String password ,@PathVariable(name="token") String token) {
-		userService.userSetPassword(password, token);
+	public void userSetPassword(@RequestBody SetPasswordDTO setPasswordDTO,@PathVariable(name="token") String token) {
+		userService.userSetPassword(setPasswordDTO.getPassword(), token);
 	}
 
 }

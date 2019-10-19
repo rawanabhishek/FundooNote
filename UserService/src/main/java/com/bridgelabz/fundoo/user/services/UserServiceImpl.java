@@ -20,6 +20,7 @@ import com.bridgelabz.fundoo.user.configuration.UserConfiguration;
 
 import com.bridgelabz.fundoo.user.dto.LoginDTO;
 import com.bridgelabz.fundoo.user.dto.RegisterDTO;
+
 import com.bridgelabz.fundoo.user.model.User;
 import com.bridgelabz.fundoo.user.repository.UserRepository;
 import com.bridgelabz.fundoo.user.utility.UserUtility;

@@ -26,7 +26,7 @@ public class RegisterDTO {
 
 	private String contact;
 
-	private String userName;
+
 
 
 
@@ -72,20 +72,15 @@ public class RegisterDTO {
 		this.contact = contact;
 	}
 
-	public String getUserName() {
-		return userName;
-	}
-
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
-	
 	@Override
 	public String toString() {
-		return "RegisterDto [ firstName=" + firstName + ", lastName=" + lastName + ", password="
-				+ password + ", email=" + email + ", contact=" + contact + ", userName=" + userName + "]";
+		return "RegisterDTO [firstName=" + firstName + ", lastName=" + lastName + ", password=" + password + ", email="
+				+ email + ", contact=" + contact + "]";
 	}
 
+
+	
+	
 	
 
 }
