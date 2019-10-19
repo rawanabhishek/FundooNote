@@ -8,21 +8,22 @@
  ******************************************************************************/
 package com.bridgelabz.fundoo.user.dto;
 
-public class LoginDto {
+public class LoginDTO {
 	
 	private String email;
-	private String passowrd;
+	private String password;
 	public String getEmail() {
 		return email;
 	}
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	public String getPassowrd() {
-		return passowrd;
+	public String getPassword() {
+		return password;
 	}
-	public void setPassowrd(String passowrd) {
-		this.passowrd = passowrd;
+	public void setPasswordd(String password) {
+		this.password = password;
 	}
+	
 
 }

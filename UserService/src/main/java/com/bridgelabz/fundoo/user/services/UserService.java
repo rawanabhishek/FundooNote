@@ -8,15 +8,25 @@
  ******************************************************************************/
 package com.bridgelabz.fundoo.user.services;
 
-import com.bridgelabz.fundoo.user.model.User;
+
+import com.bridgelabz.fundoo.user.dto.LoginDTO;
+import com.bridgelabz.fundoo.user.dto.RegisterDTO;
+
 
 public interface UserService {
 	
-	public boolean userLogin(String email, String password);
+	
 	public boolean userEmailValidate(String email);
-	public boolean userRegister(User user);
-	public void userForgotPassword(String email);
-	public void userSetPassword(String  password);
+
+
+	public void userSetPassword(String  password, String token);
+	public boolean userLogin(LoginDTO login);
+	boolean userRegister(RegisterDTO register);
+
+
+
+
+	boolean userForgotPassword(String email);
 	
 	
 
