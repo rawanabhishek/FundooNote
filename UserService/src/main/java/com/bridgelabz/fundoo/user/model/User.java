@@ -1,9 +1,11 @@
 /******************************************************************************
  
- *  Purpose:  
- *  @author  Abhishek Rawat
- *  @version 1.0
- *  @since   18-10-2019
+ *  Purpose:  A Class  for creating the POJO class Of UserService users and this 
+ *            this class uses Entity to get know spring that it is POJO class.
+ *  		 
+ *  @author   Abhishek Rawat
+ *  @version  1.0
+ *  @since    20-10-2019
  *
  ******************************************************************************/
 package com.bridgelabz.fundoo.user.model;

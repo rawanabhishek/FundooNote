@@ -1,9 +1,12 @@
 /******************************************************************************
  
- *  Purpose:  
+ *  Purpose: A Class  implemented for handling the request coming from the user
+ *           and Controlling it through RestController annotation using spring 
+ *           boot that will handle all the request related to that user.
+ *  		
  *  @author  Abhishek Rawat
  *  @version 1.0
- *  @since   18-10-2019
+ *  @since   20-10-2019
  *
  ******************************************************************************/
 
@@ -29,10 +32,18 @@ public class UserController {
 
 	@Autowired
 	private UserService userService;
+	
+	
 
+	/**
+	 * Purpose: creating a userLogin controller which will fetch the request body 
+	 *          and send it to the service.
+	 * @param   login object containing user login credentials.
+	 * @return  login successful if the user has been logged in or else returns 
+	 *          login false.
+	 */
 	@PutMapping("/login")
 	public String userLogin(@RequestBody LoginDTO login) {
-		// System.out.println("in login");
 
 		if (userService.userLogin(login)) {
 			return "login successful";
@@ -42,22 +53,55 @@ public class UserController {
 		}
 	}
 
+	/**
+	 * Purpose: creating a userRegister controller which will fetch the request 
+	 *          body and send it to the service.
+	 * @param   register object containing user registration details .
+	 * @return  true if the registration is done or else return false.
+	 */
 	@PostMapping("/register")
 	public boolean userRegister(@RequestBody RegisterDTO register) {
-		// System.out.println("in register");
+
 		return userService.userRegister(register);
 	}
 
+	/**
+	 * Purpose: creating a userRegister controller which will fetch the request 
+	 *          header and send it to the service.
+	 * @param   email object containing user email details.
+	 * @return  true if the forgotPassword mail has been send to the user or
+	 *          else return false.
+	 */
 	@PutMapping("/forgotpassword")
 	public boolean userForgotPassword(@RequestHeader String email) {
 
 		return userService.userForgotPassword(email);
 
 	}
-	
+
+	/**
+	 * Purpose: creating a setPassword controller which will fetch the request 
+	 *          body and send it to the service.
+	 * @param   setPasswordDTO object containing the user new password.
+	 * @param   token for authorization to check the user has authority for 
+	 *          to setPassword.
+	 */
 	@PutMapping("/setpassword/{token}")
-	public void userSetPassword(@RequestBody SetPasswordDTO setPasswordDTO,@PathVariable(name="token") String token) {
+	public void userSetPassword(@RequestBody SetPasswordDTO setPasswordDTO,
+			@PathVariable(name = "token") String token) {
 		userService.userSetPassword(setPasswordDTO.getPassword(), token);
+	}
+
+	/**
+	 * Purpose: creating a userVerification controller which will fetch the 
+	 *          the pathVariable  and send it to the service.
+	 * @param   token for authorization to check the user has authority for 
+	 *          Verifying the account.
+	 */
+	@PutMapping("/verify/{token}")
+	public void userVerfication(@PathVariable(name = "token") String token) {
+		userService.isVerified(token);
+
 	}
 
 }

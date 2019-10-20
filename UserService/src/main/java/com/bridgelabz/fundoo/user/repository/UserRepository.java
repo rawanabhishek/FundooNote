@@ -1,9 +1,10 @@
 /******************************************************************************
  
- *  Purpose:  
+ *  Purpose: An interface class extending Jpa repository interface which can
+ *           give service to use the implementation of JpaRepository .
  *  @author  Abhishek Rawat
  *  @version 1.0
- *  @since   18-10-2019
+ *  @since   20-10-2019
  *
  ******************************************************************************/
 package com.bridgelabz.fundoo.user.repository;
@@ -15,5 +16,7 @@ import com.bridgelabz.fundoo.user.model.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer>{
+
+	boolean findById(String email);
 
 }

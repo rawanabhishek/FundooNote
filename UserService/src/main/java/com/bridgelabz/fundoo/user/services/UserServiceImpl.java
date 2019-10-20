@@ -1,9 +1,10 @@
 /******************************************************************************
  
- *  Purpose:  
+ *  Purpose: This is a service class for userService implementing userService
+ *           interface methods 
  *  @author  Abhishek Rawat
  *  @version 1.0
- *  @since   18-10-2019
+ *  @since   20-10-2019
  *
  ******************************************************************************/
 package com.bridgelabz.fundoo.user.services;
@@ -48,11 +49,12 @@ public class UserServiceImpl implements UserService {
 	private UserUtility  userUtility;
 	
 
+
 	@Override
 	public boolean userLogin(LoginDTO login) {
 
 		return userRepository.findAll().stream().anyMatch(i -> i.getEmail().equals(login.getEmail())
-				&& userConfiguration.passwordEncoder().matches(login.getPassword(), i.getPassword()));
+				&& userConfiguration.passwordEncoder().matches(login.getPassword(), i.getPassword()) && i.isVerified());
 
 	}
 
@@ -60,7 +62,8 @@ public class UserServiceImpl implements UserService {
 	public boolean userRegister(RegisterDTO register) {
 
 		if (!userEmailValidate(register.getEmail())) {
-
+			System.out.println("register impl");
+			sendMail(register.getEmail());
 			register.setPassword(userConfiguration.passwordEncoder().encode(register.getPassword()));
 			User user = modelMapper.map(register, User.class);
 			userRepository.save(user);
@@ -73,10 +76,10 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public boolean userForgotPassword(String email) {
 		if (userEmailValidate(email)) {
-			String token = Jwts.builder().setSubject(email).claim("role", "user").setIssuedAt(new Date())
+			String token = Jwts.builder().setSubject(email).setIssuedAt(new Date())
 					.signWith(SignatureAlgorithm.HS256, "secretKey").compact();
 
-			SimpleMailMessage simpleMailMessage = userUtility.sendSimpleMessage(email, token);
+			SimpleMailMessage simpleMailMessage = userUtility.forgotMail(email, token);
 			emailSender.send(simpleMailMessage);
 			return true;
 
@@ -99,8 +102,38 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public boolean userEmailValidate(String email) {
+		//return userRepository.findById(email);
 		return (userRepository.findAll().stream().anyMatch(i -> i.getEmail().equals(email)));
+	
 
 	}
+
+	@Override
+	public void sendMail(String email) {
+		String token = Jwts.builder().setSubject(email).setIssuedAt(new Date())
+				.signWith(SignatureAlgorithm.HS256, "verifykey").compact();
+		
+		SimpleMailMessage simpleMailMessage = userUtility.verificationMail(email, token);
+		emailSender.send(simpleMailMessage);
+		
+		
+		
+	}
+
+	@Override
+	public boolean isVerified(String token) {
+		Claims claims=Jwts.parser().setSigningKey("verifykey").parseClaimsJws(token).getBody();
+	User user=userRepository.findAll().stream().filter(i-> i.getEmail().equals(claims.getSubject())).findAny().orElse(null);	
+		
+		if(user!=null) {
+			user.setVerified(true);
+			userRepository.save(user);
+			return true;
+		}
+		
+		return false;
+	}
+	
+	
 
 }
