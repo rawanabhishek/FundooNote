@@ -13,6 +13,8 @@
 package com.bridgelabz.fundoo.user.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -24,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.bridgelabz.fundoo.user.dto.LoginDTO;
 import com.bridgelabz.fundoo.user.dto.RegisterDTO;
 import com.bridgelabz.fundoo.user.dto.SetPasswordDTO;
+import com.bridgelabz.fundoo.user.model.User;
 import com.bridgelabz.fundoo.user.services.UserService;
 
 @RestController
@@ -39,43 +42,37 @@ public class UserController {
 	 * Purpose: creating a userLogin controller which will fetch the request body 
 	 *          and send it to the service.
 	 * @param   login object containing user login credentials.
-	 * @return  login successful if the user has been logged in or else returns 
-	 *          login false.
+	 * @return  login successful if the user has been logged in return login failed.
 	 */
 	@PutMapping("/login")
-	public String userLogin(@RequestBody LoginDTO login) {
+	public ResponseEntity<String> userLogin(@RequestBody LoginDTO login) {
+		return new ResponseEntity<>(userService.userLogin(login),HttpStatus.OK);
 
-		if (userService.userLogin(login)) {
-			return "login successful";
-		} else {
-			return "Login Failed";
 
-		}
 	}
 
 	/**
 	 * Purpose: creating a userRegister controller which will fetch the request 
 	 *          body and send it to the service.
 	 * @param   register object containing user registration details .
-	 * @return  true if the registration is done or else return false.
+	 * @return  User Object Containing User details.
 	 */
 	@PostMapping("/register")
-	public boolean userRegister(@RequestBody RegisterDTO register) {
+	public ResponseEntity<User> userRegister(@RequestBody RegisterDTO register) {
 
-		return userService.userRegister(register);
+		return new ResponseEntity<>(userService.userRegister(register), HttpStatus.OK);
 	}
 
 	/**
 	 * Purpose: creating a userRegister controller which will fetch the request 
 	 *          header and send it to the service.
 	 * @param   email object containing user email details.
-	 * @return  true if the forgotPassword mail has been send to the user or
-	 *          else return false.
+	 * @return  a message saying weather the mail has been send to user or not.
 	 */
 	@PutMapping("/forgotpassword")
-	public boolean userForgotPassword(@RequestHeader String email) {
+	public ResponseEntity<String> userForgotPassword(@RequestHeader(name = "email") String email) {
 
-		return userService.userForgotPassword(email);
+		return new ResponseEntity<>(userService.userForgotPassword(email),HttpStatus.OK);
 
 	}
 
@@ -85,11 +82,12 @@ public class UserController {
 	 * @param   setPasswordDTO object containing the user new password.
 	 * @param   token for authorization to check the user has authority for 
 	 *          to setPassword.
+	 * @return  User Object containing the new Password.      
 	 */
 	@PutMapping("/setpassword/{token}")
-	public void userSetPassword(@RequestBody SetPasswordDTO setPasswordDTO,
+	public ResponseEntity<User> userSetPassword(@RequestBody SetPasswordDTO setPasswordDTO,
 			@PathVariable(name = "token") String token) {
-		userService.userSetPassword(setPasswordDTO.getPassword(), token);
+	return new ResponseEntity<>(userService.userSetPassword(setPasswordDTO.getPassword(), token),HttpStatus.OK);
 	}
 
 	/**
@@ -97,10 +95,11 @@ public class UserController {
 	 *          the pathVariable  and send it to the service.
 	 * @param   token for authorization to check the user has authority for 
 	 *          Verifying the account.
+	 * @return  User Object containing details weather the user is verified or not.         
 	 */
 	@PutMapping("/verify/{token}")
-	public void userVerfication(@PathVariable(name = "token") String token) {
-		userService.isVerified(token);
+	public ResponseEntity<User> userVerfication(@PathVariable(name = "token") String token) {
+	return new ResponseEntity<>	(userService.isVerified(token),HttpStatus.OK);
 
 	}
 

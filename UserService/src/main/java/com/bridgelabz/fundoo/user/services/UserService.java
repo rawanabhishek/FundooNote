@@ -15,6 +15,7 @@ package com.bridgelabz.fundoo.user.services;
 
 import com.bridgelabz.fundoo.user.dto.LoginDTO;
 import com.bridgelabz.fundoo.user.dto.RegisterDTO;
+import com.bridgelabz.fundoo.user.model.User;
 
 
 
@@ -22,13 +23,7 @@ import com.bridgelabz.fundoo.user.dto.RegisterDTO;
 public interface UserService {
 	
 	
-	/**
-	 * Purpose: method for validating weather the user is active or not .
-	 * @param   email  for sending the mail to user emailId . 
-	 * @return  if the user has validate his/her emailId then its return true or 
-	 *          else it returns false.
-	 */
-	public boolean userEmailValidate(String email);
+
 
 
 	/**
@@ -36,25 +31,25 @@ public interface UserService {
 	 * @param   password the new password which user to set for his id .
 	 * @param   token for checking the user is authorized or not for setting new password.
 	 */
-	public void userSetPassword(String password, String token);
+	public User userSetPassword(String password, String token);
 	
 	
 	/**
 	 * Purpose: method for login user into the UserService.
 	 * @param   login object containing user emailId and user password (in encoded 
 	 *          format ).
-	 * @return  true if the credentials are correct or return false .
+	 * @return  A login success message on success or else Failed message .
 	 */
-	public boolean userLogin(LoginDTO login);
+	public String userLogin(LoginDTO login);
 	
 	
 	/**
 	 * Purpose: method for registration of new user into UserService.
 	 * @param   register object contains users firstName, lastName ,contact , emailId and 
 	 *          password (in encoded format) and then mapping it to user Model .
-	 * @return  true if the user has been successfully register or else return false.
+	 * @return  a message saying weather the user is verified or not.
 	 */
-	boolean userRegister(RegisterDTO register);
+	public User userRegister(RegisterDTO register);
 
 
 
@@ -64,9 +59,9 @@ public interface UserService {
 	 *          password.
 	 * @param   email to which the mail has to send the mail will contains a link to  reset 
 	 *          new password.
-	 * @return  true if the mail has been send or else returns false.
+	 * @return  A message saying that the mail is send or not.
 	 */
-	boolean userForgotPassword(String email);
+	public String userForgotPassword(String email);
 	
 	
 	
@@ -82,9 +77,9 @@ public interface UserService {
 	 *          use UserSevices.
 	 * @param   token to verify the user and granting him/her the authorization to access
 	 *          the userServices.
-	 * @return  true if the is verified for authorization or else return false.
+	 * @return  weather the user is verified or not.
 	 */
-	public boolean isVerified(String token);
+	public User isVerified(String token);
 
 
 	

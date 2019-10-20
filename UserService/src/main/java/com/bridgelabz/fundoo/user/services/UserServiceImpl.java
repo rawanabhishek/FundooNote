@@ -21,7 +21,7 @@ import com.bridgelabz.fundoo.user.configuration.UserConfiguration;
 
 import com.bridgelabz.fundoo.user.dto.LoginDTO;
 import com.bridgelabz.fundoo.user.dto.RegisterDTO;
-
+import com.bridgelabz.fundoo.user.exception.UserException;
 import com.bridgelabz.fundoo.user.model.User;
 import com.bridgelabz.fundoo.user.repository.UserRepository;
 import com.bridgelabz.fundoo.user.utility.UserUtility;
@@ -51,62 +51,67 @@ public class UserServiceImpl implements UserService {
 
 
 	@Override
-	public boolean userLogin(LoginDTO login) {
+	public String userLogin(LoginDTO login) {
 
-		return userRepository.findAll().stream().anyMatch(i -> i.getEmail().equals(login.getEmail())
-				&& userConfiguration.passwordEncoder().matches(login.getPassword(), i.getPassword()) && i.isVerified());
+		if( userRepository.findAll().stream().anyMatch(i -> i.getEmail().equals(login.getEmail())
+				&& userConfiguration.passwordEncoder().matches(login.getPassword(), i.getPassword()) && i.isVerified())) {
+			return "Login successful";
+		}else {
+			throw new UserException("logging failed");
+		}
 
 	}
 
 	@Override
-	public boolean userRegister(RegisterDTO register) {
+	public User userRegister(RegisterDTO register) {
 
-		if (!userEmailValidate(register.getEmail())) {
+		if (userRepository.findByEmail(register.getEmail()).isEmpty()) {
 			System.out.println("register impl");
 			sendMail(register.getEmail());
 			register.setPassword(userConfiguration.passwordEncoder().encode(register.getPassword()));
 			User user = modelMapper.map(register, User.class);
-			userRepository.save(user);
-			return true;
+			return userRepository.save(user);
+			
+		}else {
+			throw new UserException(register.getEmail()+" already present in the database");
 		}
-		return false;
+		 
 
 	}
 
 	@Override
-	public boolean userForgotPassword(String email) {
-		if (userEmailValidate(email)) {
+	public String userForgotPassword(String email) {
+		if (userRepository.findByEmail(email)!=null) {
 			String token = Jwts.builder().setSubject(email).setIssuedAt(new Date())
 					.signWith(SignatureAlgorithm.HS256, "secretKey").compact();
 
 			SimpleMailMessage simpleMailMessage = userUtility.forgotMail(email, token);
 			emailSender.send(simpleMailMessage);
-			return true;
+			return "Email send to the user successfully";
 
 		}
-		return false;
+		throw new UserException(email+ " no user found with this email id ");
 
 	}
 
 	@Override
-	public void userSetPassword(String password ,String token) {
+	public User userSetPassword(String password ,String token) {
 		Claims claims=Jwts.parser().setSigningKey("secretKey").parseClaimsJws(token).getBody();
 		
 		User user=userRepository.findAll().stream().filter(i -> i.getEmail().equals(claims.getSubject())).findAny().orElse(null);
+		
+		if(user!=null) {
 		user.setPassword(userConfiguration.passwordEncoder().encode(password));
 		
-		userRepository.save(user);
+		return userRepository.save(user);
 
-		
+		}
+		else {
+			throw new UserException("unable to set the password");
+		}
 	}
 
-	@Override
-	public boolean userEmailValidate(String email) {
-		//return userRepository.findById(email);
-		return (userRepository.findAll().stream().anyMatch(i -> i.getEmail().equals(email)));
 	
-
-	}
 
 	@Override
 	public void sendMail(String email) {
@@ -121,17 +126,19 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public boolean isVerified(String token) {
+	public User isVerified(String token) {
 		Claims claims=Jwts.parser().setSigningKey("verifykey").parseClaimsJws(token).getBody();
 	User user=userRepository.findAll().stream().filter(i-> i.getEmail().equals(claims.getSubject())).findAny().orElse(null);	
 		
 		if(user!=null) {
 			user.setVerified(true);
-			userRepository.save(user);
-			return true;
+			return userRepository.save(user);
+			
+		}else {
+			throw new UserException("User not verified ");
 		}
 		
-		return false;
+		
 	}
 	
 	
