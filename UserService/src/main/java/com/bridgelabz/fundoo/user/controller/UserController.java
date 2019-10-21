@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.bridgelabz.fundoo.user.dto.LoginDTO;
 import com.bridgelabz.fundoo.user.dto.RegisterDTO;
 import com.bridgelabz.fundoo.user.dto.SetPasswordDTO;
+
 import com.bridgelabz.fundoo.user.model.User;
 import com.bridgelabz.fundoo.user.services.UserService;
 
@@ -46,9 +47,10 @@ public class UserController {
 	 * 
 	 * @param login object containing user login credentials.
 	 * @return login successful if the user has been logged in return login failed.
+	 * @throws Exception 
 	 */
 	@PutMapping("/login")
-	public ResponseEntity<String> userLogin(@RequestBody LoginDTO login) {
+	public ResponseEntity<String> userLogin(@RequestBody LoginDTO login)  {
 		LOG.info("Login Controller Api");
 		return new ResponseEntity<>(userService.userLogin(login), HttpStatus.OK);
 
@@ -60,12 +62,12 @@ public class UserController {
 	 * 
 	 * @param register object containing user registration details .
 	 * @return User Object Containing User details.
+	 * @throws Exception 
 	 */
 	@PostMapping("/register")
 	public ResponseEntity<User> userRegister(@RequestBody RegisterDTO register) {
 		LOG.info("register Controller Api");
-
-		return new ResponseEntity<>(userService.userRegister(register), HttpStatus.OK);
+        return new ResponseEntity<>(userService.userRegister(register), HttpStatus.OK);
 	}
 
 	/**
@@ -74,9 +76,10 @@ public class UserController {
 	 * 
 	 * @param email object containing user email details.
 	 * @return a message saying weather the mail has been send to user or not.
+	 * @throws Exception 
 	 */
 	@PutMapping("/forgotpassword")
-	public ResponseEntity<String> userForgotPassword(@RequestHeader(name = "email") String email) {
+	public ResponseEntity<String> userForgotPassword(@RequestHeader(name = "email") String email)  {
 		LOG.info("forgotpassword Controller Api");
 		return new ResponseEntity<>(userService.userForgotPassword(email), HttpStatus.OK);
 
@@ -90,10 +93,11 @@ public class UserController {
 	 * @param token          for authorization to check the user has authority for
 	 *                       to setPassword.
 	 * @return User Object containing the new Password.
+	 * @throws Exception 
 	 */
 	@PutMapping("/setpassword/{token}")
 	public ResponseEntity<User> userSetPassword(@RequestBody SetPasswordDTO setPasswordDTO,
-			@PathVariable(name = "token") String token) {
+			@PathVariable(name = "token") String token)  {
 
 		LOG.info("set Password Controller Api");
 		return new ResponseEntity<>(userService.userSetPassword(setPasswordDTO.getPassword(), token), HttpStatus.OK);
@@ -106,9 +110,11 @@ public class UserController {
 	 * @param token for authorization to check the user has authority for Verifying
 	 *              the account.
 	 * @return User Object containing details weather the user is verified or not.
+	 * @throws Exception 
 	 */
+	
 	@PutMapping("/verify/{token}")
-	public ResponseEntity<User> userVerfication(@PathVariable(name = "token") String token) {
+	public ResponseEntity<User> userVerfication(@PathVariable(name = "token") String token)  {
 		LOG.info("verifiy Controller Api");
 		return new ResponseEntity<>(userService.isVerified(token), HttpStatus.OK);
 

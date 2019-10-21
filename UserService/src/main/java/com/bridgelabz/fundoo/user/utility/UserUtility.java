@@ -26,15 +26,17 @@ public class UserUtility {
 	 * @param   to user emailId details.
 	 * @param   token for checking the user is authorized to change password 
 	 *          or not.
+	 * @param   subject of the mail to be send.
 	 * @return  SimpleMailMessage Object containing the mailing details of 
 	 *          user and sender.
 	 */
-	public  SimpleMailMessage forgotMail(
-		      String to, String token) {
+	
+	public  SimpleMailMessage mailSender(
+		      String to, String token ,String subject) {
 		     
 		        SimpleMailMessage message = new SimpleMailMessage(); 
 		        message.setTo(to); 
-		        message.setSubject("Reset your password for UsersService"); 
+		        message.setSubject(subject); 
 		        message.setText("http://localhost:8080/user/setpassword/" + token);
 		        return message;
 		        
@@ -42,26 +44,7 @@ public class UserUtility {
 		    }
 	
 	
-	/**
-	 * Purpose: to send email to user emailId for verification of emailId 
-	 *          function.
-	 * @param   to user emailId details.
-	 * @param   token for checking the user is authorized to change password 
-	 *          or not.
-	 * @return  SimpleMailMessage Object containing the mailing details of 
-	 *          user and sender.
-	 */
-	public  SimpleMailMessage verificationMail(
-		      String to, String token) {
-		     
-		        SimpleMailMessage message = new SimpleMailMessage(); 
-		        message.setTo(to); 
-		        message.setSubject("Verify your mail for UserService"); 
-		        message.setText("http://localhost:8080/user/verify/" + token);
-		        return message;
-		        
-		       
-		    }
+	
 	
 	
 

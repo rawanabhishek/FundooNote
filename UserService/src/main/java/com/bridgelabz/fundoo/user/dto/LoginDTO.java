@@ -12,9 +12,14 @@
  ******************************************************************************/
 package com.bridgelabz.fundoo.user.dto;
 
+import javax.validation.constraints.Email;
+
 public class LoginDTO {
 	
+	@Email
 	private String email;
+	
+	
 	private String password;
 	public String getEmail() {
 		return email;

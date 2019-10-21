@@ -15,6 +15,7 @@ package com.bridgelabz.fundoo.user.services;
 
 import com.bridgelabz.fundoo.user.dto.LoginDTO;
 import com.bridgelabz.fundoo.user.dto.RegisterDTO;
+
 import com.bridgelabz.fundoo.user.model.User;
 
 
@@ -31,7 +32,7 @@ public interface UserService {
 	 * @param   password the new password which user to set for his id .
 	 * @param   token for checking the user is authorized or not for setting new password.
 	 */
-	public User userSetPassword(String password, String token);
+	public User userSetPassword(String password, String token) ;
 	
 	
 	/**
@@ -40,7 +41,7 @@ public interface UserService {
 	 *          format ).
 	 * @return  A login success message on success or else returns a failed message .
 	 */
-	public String userLogin(LoginDTO login);
+	public String userLogin(LoginDTO login) ;
 	
 	
 	/**
@@ -49,7 +50,7 @@ public interface UserService {
 	 *          password (in encoded format) and then mapping it to user Model .
 	 * @return  a message saying weather the user is verified or not.
 	 */
-	public User userRegister(RegisterDTO register);
+	public User userRegister(RegisterDTO register) ;
 
 
 
@@ -61,7 +62,7 @@ public interface UserService {
 	 *          new password.
 	 * @return  A message saying that the mail is send or not.
 	 */
-	public String userForgotPassword(String email);
+	public String userForgotPassword(String email) ;
 	
 	
 	
@@ -69,7 +70,7 @@ public interface UserService {
 	 * Purpose: method for send mail to a particular mailId
 	 * @param   email to which the mail has to be send 
 	 */
-	public  void sendMail(String email);
+	public  void sendMail(String email) ;
 
 
 	/**

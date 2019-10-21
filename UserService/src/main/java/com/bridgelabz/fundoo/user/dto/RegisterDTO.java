@@ -11,6 +11,8 @@
  ******************************************************************************/
 package com.bridgelabz.fundoo.user.dto;
 
+import javax.validation.constraints.Email;
+
 public class RegisterDTO {
 
 	private String firstName;
@@ -19,6 +21,7 @@ public class RegisterDTO {
 
 	private String password;
 
+	@Email
 	private String email;
 
 	private String contact;
@@ -47,6 +50,7 @@ public class RegisterDTO {
 		this.password = password;
 	}
 
+	
 	public String getEmail() {
 		return email;
 	}
