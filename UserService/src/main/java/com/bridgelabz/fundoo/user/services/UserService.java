@@ -38,7 +38,7 @@ public interface UserService {
 	 * Purpose: method for login user into the UserService.
 	 * @param   login object containing user emailId and user password (in encoded 
 	 *          format ).
-	 * @return  A login success message on success or else Failed message .
+	 * @return  A login success message on success or else returns a failed message .
 	 */
 	public String userLogin(LoginDTO login);
 	

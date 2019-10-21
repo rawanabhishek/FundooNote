@@ -21,10 +21,12 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 
 @Entity
 @Table(name = "user")
@@ -34,21 +36,27 @@ public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
+	@NotNull
 	private int id;
 
 	@Column(name = "first_name")
+	@NotNull
 	private String firstName;
 
 	@Column(name = "last_name")
+	@NotNull
 	private String lastName;
 
 	@Column(name = "password")
+	@NotNull
 	private String password;
 
 	@Column(name = "email")
+	@NotNull
 	private String email;
 
 	@Column(name = "contact")
+	@NotNull
 	private String contact;
 
 	@CreationTimestamp
@@ -62,6 +70,7 @@ public class User {
 	private Date dateUpdate;
 
 	@Column(name = "is_verified" ,columnDefinition = "boolean default false")
+	@NotNull
 	private boolean isVerified;
 
 	public int getId() {
