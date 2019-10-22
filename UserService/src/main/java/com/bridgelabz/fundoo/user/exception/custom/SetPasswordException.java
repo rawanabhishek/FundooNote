@@ -15,7 +15,7 @@ public class SetPasswordException extends RuntimeException {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * Purpose: to create a custom exception handler for SetPassword API of
+	 * Purpose: To create a custom exception handler for SetPassword API of
 	 *          UserService. 
 	 * @param   message containing custom exception String.
 	 */

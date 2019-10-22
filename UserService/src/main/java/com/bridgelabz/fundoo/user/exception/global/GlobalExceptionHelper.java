@@ -29,7 +29,7 @@ import com.bridgelabz.fundoo.user.response.Response;
 public class GlobalExceptionHelper {
 
 	/**
-	 * Purpose: to create a global exception handler for userService .
+	 * Purpose: To create a global exception handler for userService .
 	 * @param   ex the exception message .
 	 * @return  ResponseEntity showing Http status , exception message 
 	 *          and object.

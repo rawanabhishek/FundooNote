@@ -22,11 +22,11 @@ public class UserUtility {
 	
 	
 	/**
-	 * Purpose: to send email to user emailId for forgot password function.
-	 * @param   to user emailId details.
-	 * @param   token for checking the user is authorized to change password 
+	 * Purpose: To send email to user emailId for forgot password function.
+	 * @param   To user emailId details.
+	 * @param   Token for checking the user is authorized to change password 
 	 *          or not.
-	 * @param   subject of the mail to be send.
+	 * @param   Subject of the mail to be send.
 	 * @return  SimpleMailMessage Object containing the mailing details of 
 	 *          user and sender.
 	 */

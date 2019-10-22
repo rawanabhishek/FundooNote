@@ -25,6 +25,7 @@ import com.bridgelabz.fundoo.user.configuration.UserConfiguration;
 
 import com.bridgelabz.fundoo.user.dto.LoginDTO;
 import com.bridgelabz.fundoo.user.dto.RegisterDTO;
+import com.bridgelabz.fundoo.user.dto.SetPasswordDTO;
 import com.bridgelabz.fundoo.user.exception.custom.ForgotPasswordException;
 import com.bridgelabz.fundoo.user.exception.custom.IsVerifiedException;
 import com.bridgelabz.fundoo.user.exception.custom.LoginException;
@@ -108,7 +109,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User userSetPassword(String password, String token) {
+	public User userSetPassword(SetPasswordDTO setPasswordDTO, String token) {
 		LOG.info("SetPassword Service Api");
 
 		Claims claims = Jwts.parser().setSigningKey("secretKey").parseClaimsJws(token).getBody();
@@ -116,8 +117,8 @@ public class UserServiceImpl implements UserService {
 		User user = userRepository.findAll().stream().filter(i -> i.getEmail().equals(claims.getSubject())).findAny()
 				.orElse(null);
 
-		if (user != null) {
-			user.setPassword(userConfiguration.passwordEncoder().encode(password));
+		if (user != null && setPasswordDTO.getPassword().equals(setPasswordDTO.getConfirmPassword())) {
+			user.setPassword(userConfiguration.passwordEncoder().encode(setPasswordDTO.getPassword()));
 
 			return userRepository.save(user);
 

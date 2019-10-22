@@ -21,7 +21,7 @@ public class LoginException extends RuntimeException {
 
 	
 	/**
-	 *Purpose: to create a custom exception handler for ForgotPassword
+	 *Purpose: To create a custom exception handler for ForgotPassword
 	 *         API of UserService. 
 	 * @param  message containing custom exception String.
 	 */

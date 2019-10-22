@@ -15,7 +15,7 @@ package com.bridgelabz.fundoo.user.services;
 
 import com.bridgelabz.fundoo.user.dto.LoginDTO;
 import com.bridgelabz.fundoo.user.dto.RegisterDTO;
-
+import com.bridgelabz.fundoo.user.dto.SetPasswordDTO;
 import com.bridgelabz.fundoo.user.model.User;
 
 
@@ -31,8 +31,10 @@ public interface UserService {
 	 * Purpose: method for resetting the password of particular user.
 	 * @param   password the new password which user to set for his id .
 	 * @param   token for checking the user is authorized or not for setting new password.
+	 * @return  setPassWordDTO Object containing user New Password Details.
 	 */
-	public User userSetPassword(String password, String token) ;
+	
+	public User userSetPassword(SetPasswordDTO setPasswordDTO, String token) ;
 	
 	
 	/**
