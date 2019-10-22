@@ -12,14 +12,17 @@
  ******************************************************************************/
 package com.bridgelabz.fundoo.user.dto;
 
-import javax.validation.constraints.Email;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 public class LoginDTO {
 	
-	@Email
+	@Pattern(regexp = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\."
+			+ "[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$", message="mail id format wrong")
 	private String email;
 	
-	
+	@NotNull(message="please provide password")
 	private String password;
 	public String getEmail() {
 		return email;

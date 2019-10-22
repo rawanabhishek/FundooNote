@@ -11,10 +11,18 @@
  ******************************************************************************/
 package com.bridgelabz.fundoo.user.dto;
 
+import javax.validation.constraints.NotNull;
+
 public class SetPasswordDTO {
 	
+	@NotNull(message="please provide password")
 	private String password;
+	
+	
+	@NotNull(message="please provide confirm password")
 	private String confirmPassword;
+	
+	
 	public String getPassword() {
 		return password;
 	}

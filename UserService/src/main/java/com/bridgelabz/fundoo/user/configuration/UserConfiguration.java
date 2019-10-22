@@ -32,6 +32,8 @@ public class UserConfiguration {
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
+	
+	
 
 	/**
 	 * Purpose:  A method which is created to achieve the ModelMapper

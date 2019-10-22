@@ -12,6 +12,8 @@
 
 package com.bridgelabz.fundoo.user.controller;
 
+import javax.validation.Valid;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,31 +52,36 @@ public class UserController {
 	 * 
 	 */
 	@PutMapping("/login")
-	public ResponseEntity<String> userLogin(@RequestBody LoginDTO login)  {
+	public ResponseEntity<String> userLogin(@Valid @RequestBody LoginDTO login)  {
 		LOG.info("Login Controller Api");
 		return new ResponseEntity<>(userService.userLogin(login), HttpStatus.OK);
 
 	}
+	
+	
 
 	/**
 	 * Purpose: Creating a userRegister controller which will fetch the request body
 	 *          and send it to the service.
 	 * 
-	 * @param   Register object containing user registration details .
+	 * @param   register object containing user registration details .
 	 * @return  User Object Containing User details.
 	 * 
 	 */
 	@PostMapping("/register")
-	public ResponseEntity<User> userRegister(@RequestBody RegisterDTO register) {
+	public ResponseEntity<User> userRegister(@Valid @RequestBody RegisterDTO register) {
 		LOG.info("register Controller Api");
         return new ResponseEntity<>(userService.userRegister(register), HttpStatus.OK);
 	}
+	
+	
+	
 
 	/**
 	 * Purpose: Creating a userRegister controller which will fetch the request
 	 *          header and send it to the service.
 	 * 
-	 * @param   Email string containing user email details.
+	 * @param   email string containing user email details.
 	 * @return  a message saying weather the mail has been send to user or not.
 	 *  
 	 */
@@ -84,30 +91,37 @@ public class UserController {
 		return new ResponseEntity<>(userService.userForgotPassword(email), HttpStatus.OK);
 
 	}
-
+	
+	
+	
+ 
 	/**
 	 * Purpose: Creating a setPassword controller which will fetch the request body
 	 *          and send it to the service.
 	 * 
-	 * @param   SetPasswordDTO object containing the user new password.
-	 * @param   Token for authorization to check the user has authority for
+	 * @param   setPasswordDTO object containing the user new password.
+	 * @param   token for authorization to check the user has authority for
 	 *          to setPassword.
 	 * @return  User Object containing the new Password.
 	 *  
 	 */
 	@PutMapping("/setpassword/{token}")
-	public ResponseEntity<User> userSetPassword(@RequestBody SetPasswordDTO setPasswordDTO,
+	public ResponseEntity<User> userSetPassword(@Valid @RequestBody SetPasswordDTO setPasswordDTO,
 			@PathVariable(name = "token") String token)  {
 
 		LOG.info("set Password Controller Api");
 		return new ResponseEntity<>(userService.userSetPassword(setPasswordDTO, token), HttpStatus.OK);
 	}
+	
+	
+	
+	
 
 	/**
 	 * Purpose: Creating a userVerification controller which will fetch the the
 	 *          pathVariable and send it to the service.
 	 * 
-	 * @param   Token for authorization to check the user has authority for Verifying
+	 * @param   token for authorization to check the user has authority for Verifying
 	 *          the account.
 	 * @return  User Object containing details weather the user is verified or not.
 	 *  

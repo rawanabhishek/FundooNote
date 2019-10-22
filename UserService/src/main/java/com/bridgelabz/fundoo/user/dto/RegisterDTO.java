@@ -11,19 +11,26 @@
  ******************************************************************************/
 package com.bridgelabz.fundoo.user.dto;
 
-import javax.validation.constraints.Email;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 public class RegisterDTO {
 
+	@NotNull(message = "please provide firstName")
 	private String firstName;
 
+	@NotNull(message = "please provide lastName")
 	private String lastName;
 
+	@NotNull(message = "please provide password")
 	private String password;
 
-	@Email
+	@Pattern(regexp = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$")
+    @NotNull(message = "please provide emailId")
 	private String email;
 
+	@NotNull(message = "please provide contact")
 	private String contact;
 
 	public String getFirstName() {
@@ -50,7 +57,6 @@ public class RegisterDTO {
 		this.password = password;
 	}
 
-	
 	public String getEmail() {
 		return email;
 	}

@@ -58,6 +58,13 @@ public class UserServiceImpl implements UserService {
 
 	public static final Logger LOG = LoggerFactory.getLogger(UserServiceImpl.class);
 
+	
+	/**
+	 * Purpose: Method for user login  into the UserService.
+	 * @param   login object containing user emailId and user password (in encoded 
+	 *          format ).
+	 * @return  A login success message on success or else returns a failed message .
+	 */
 	@Override
 	public String userLogin(LoginDTO login) {
 		LOG.info("Login Service Api");
@@ -72,7 +79,16 @@ public class UserServiceImpl implements UserService {
 		}
 
 	}
+	
+	
 
+	
+	/**
+	 * Purpose: Method for registration of new user into UserService.
+	 * @param   register object contains users firstName, lastName ,contact , emailId and 
+	 *          password (in encoded format) and then mapping it to user Model .
+	 * @return  a message saying weather the user is verified or not.
+	 */
 	@Override
 	public User userRegister(RegisterDTO register) {
 		LOG.info("Register Service Api");
@@ -89,7 +105,17 @@ public class UserServiceImpl implements UserService {
 		}
 
 	}
+	
+	
 
+	
+	/**
+	 * Purpose: Method for send mail to the user emailId if he/she has forgot his/her 
+	 *          password.
+	 * @param   email to which the mail has to send the mail will contains a link to  reset 
+	 *          new password.
+	 * @return  A message saying that the mail is send or not.
+	 */
 	@Override
 	public String userForgotPassword(String email)  {
 		LOG.info("ForgotPassword Service Api");
@@ -107,13 +133,23 @@ public class UserServiceImpl implements UserService {
 		}
 
 	}
+	
+	
+	
 
+	
+	/**
+	 * Purpose: Method for resetting the password of particular user.
+	 * @param   password the new password which user to set for his id .
+	 * @param   token for checking the user is authorized or not for setting new password.
+	 * @return  setPassWordDTO Object containing user New Password Details.
+	 */
 	@Override
 	public User userSetPassword(SetPasswordDTO setPasswordDTO, String token) {
 		LOG.info("SetPassword Service Api");
 
 		Claims claims = Jwts.parser().setSigningKey("secretKey").parseClaimsJws(token).getBody();
-
+		
 		User user = userRepository.findAll().stream().filter(i -> i.getEmail().equals(claims.getSubject())).findAny()
 				.orElse(null);
 
@@ -127,7 +163,13 @@ public class UserServiceImpl implements UserService {
 		}
 
 	}
+	
+	
 
+	/**
+	 * Purpose: Method for send mail to a particular mailId
+	 * @param   email to which the mail has to be send 
+	 */
 	@Override
 	public void sendMail(String email) {
 		LOG.info("sendMail Service Api");
@@ -140,6 +182,14 @@ public class UserServiceImpl implements UserService {
 
 	}
 
+	
+	/**
+	 * Purpose: Method for verifying the user in which the user get authorization to 
+	 *          use UserSevices.
+	 * @param   token to verify the user and granting him/her the authorization to access
+	 *          the userServices.
+	 * @return  weather the user is verified or not.
+	 */
 	@Override
 	public User isVerified(String token)  {
 		LOG.info("Verified Service Api");
