@@ -12,14 +12,17 @@ package com.bridgelabz.fundoo.user.response;
 
 public class Response {
 	
-	private String status;
+	private int statusCode;
+	
 	private String message;
+	
 	private Object data;
-	public String getStatus() {
-		return status;
+	
+	public int getStatusCode() {
+		return statusCode;
 	}
-	public void setStatus(String status) {
-		this.status = status;
+	public void setStatusCode(int statusCode) {
+		this.statusCode = statusCode;
 	}
 	public String getMessage() {
 		return message;
@@ -27,17 +30,26 @@ public class Response {
 	public void setMessage(String message) {
 		this.message = message;
 	}
+
 	public Object getData() {
 		return data;
 	}
 	public void setData(Object data) {
 		this.data = data;
 	}
-	public Response(String status, String message, Object data) {
+
+	
+	
+	
+	public Response(int statusCode, String message, Object data) {
 		super();
-		this.status = status;
+		this.statusCode = statusCode;
 		this.message = message;
 		this.data = data;
 	}
-
+	@Override
+	public String toString() {
+		return "Response [statusCode=" + statusCode + ", message=" + message + ", data=" + data + "]";
+	}
+	
 }

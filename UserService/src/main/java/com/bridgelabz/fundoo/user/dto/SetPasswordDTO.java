@@ -22,7 +22,14 @@ public class SetPasswordDTO {
 	@NotNull(message="please provide confirm password")
 	private String confirmPassword;
 	
+	private String token;
 	
+	public String getToken() {
+		return token;
+	}
+	public void setToken(String token) {
+		this.token = token;
+	}
 	public String getPassword() {
 		return password;
 	}
@@ -37,7 +44,8 @@ public class SetPasswordDTO {
 	}
 	@Override
 	public String toString() {
-		return "SetPasswordDto [password=" + password + ", confirmPassword=" + confirmPassword + "]";
+		return "SetPasswordDTO [password=" + password + ", confirmPassword=" + confirmPassword + ", token=" + token
+				+ "]";
 	}
 	
 

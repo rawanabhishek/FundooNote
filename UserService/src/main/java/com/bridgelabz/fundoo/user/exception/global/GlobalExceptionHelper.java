@@ -36,7 +36,7 @@ public class GlobalExceptionHelper {
 	 */
 	@ExceptionHandler(Exception.class)
 	public final ResponseEntity<Response> somethingWentWrong(Exception ex) {
-		Response responseMessage = new Response("400", ex.getMessage(), null);
+		Response responseMessage = new Response(500, ex.getMessage(), null);
 		return new ResponseEntity<>(responseMessage, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
@@ -49,7 +49,7 @@ public class GlobalExceptionHelper {
 	 */
 	@ExceptionHandler(LoginException.class)
 	public final ResponseEntity<Response> loginException(LoginException ex) {
-		Response responseMessage = new Response("400", ex.getMessage(), null);
+		Response responseMessage = new Response(400, ex.getMessage(), null);
 
 		return new ResponseEntity<>(responseMessage, HttpStatus.BAD_REQUEST);
 	}
@@ -64,7 +64,7 @@ public class GlobalExceptionHelper {
 	@ExceptionHandler(RegisterException.class)
 	public final ResponseEntity<Response> registerException(RegisterException ex) {
 
-		Response responseMessage = new Response("400", ex.getMessage(), null);
+		Response responseMessage = new Response(400, ex.getMessage(), null);
 
 		return new ResponseEntity<>(responseMessage, HttpStatus.BAD_GATEWAY);
 	}
@@ -79,7 +79,7 @@ public class GlobalExceptionHelper {
 	@ExceptionHandler(ForgotPasswordException.class)
 	public final ResponseEntity<Response> forgotPasswordException(ForgotPasswordException ex) {
 
-		Response responseMessage = new Response("400", ex.getMessage(), null);
+		Response responseMessage = new Response(400, ex.getMessage(), null);
 
 		return new ResponseEntity<>(responseMessage, HttpStatus.BAD_REQUEST);
 	}
@@ -94,7 +94,7 @@ public class GlobalExceptionHelper {
 	@ExceptionHandler(SetPasswordException.class)
 	public final ResponseEntity<Response> setPasswordException(SetPasswordException ex) {
 
-		Response responseMessage = new Response("400", ex.getMessage(), null);
+		Response responseMessage = new Response(400, ex.getMessage(), null);
 
 		return new ResponseEntity<>(responseMessage, HttpStatus.BAD_REQUEST);
 	}
@@ -108,7 +108,7 @@ public class GlobalExceptionHelper {
 	 */
 	@ExceptionHandler(IsVerifiedException.class)
 	public final ResponseEntity<Response> isVerifiedException(IsVerifiedException ex) {
-		Response responseMessage = new Response("400", ex.getMessage(), null);
+		Response responseMessage = new Response(400, ex.getMessage(), null);
 
 		return new ResponseEntity<>(responseMessage, HttpStatus.BAD_REQUEST);
 

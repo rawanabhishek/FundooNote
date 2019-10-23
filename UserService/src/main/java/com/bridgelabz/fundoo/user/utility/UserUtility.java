@@ -26,18 +26,19 @@ public class UserUtility {
 	 * @param   To user emailId details.
 	 * @param   Token for checking the user is authorized to change password 
 	 *          or not.
+	 * @param   url containing link for particular operations.         
 	 * @param   Subject of the mail to be send.
 	 * @return  SimpleMailMessage Object containing the mailing details of 
 	 *          user and sender.
 	 */
 	
 	public  SimpleMailMessage mailSender(
-		      String to, String token ,String subject) {
+		      String to, String token ,String subject ,String url) {
 		     
 		        SimpleMailMessage message = new SimpleMailMessage(); 
 		        message.setTo(to); 
 		        message.setSubject(subject); 
-		        message.setText("http://localhost:8080/user/setpassword/" + token);
+		        message.setText(url + token);
 		        return message;
 		        
 		       

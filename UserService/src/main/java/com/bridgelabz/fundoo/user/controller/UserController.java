@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,105 +31,100 @@ import com.bridgelabz.fundoo.user.dto.LoginDTO;
 import com.bridgelabz.fundoo.user.dto.RegisterDTO;
 import com.bridgelabz.fundoo.user.dto.SetPasswordDTO;
 
-import com.bridgelabz.fundoo.user.model.User;
-import com.bridgelabz.fundoo.user.services.UserService;
+import com.bridgelabz.fundoo.user.response.Response;
+
+import com.bridgelabz.fundoo.user.services.IUserService;
+import com.bridgelabz.fundoo.user.utility.CommonFiles;
+
 
 @RestController
 @RequestMapping("/user")
 public class UserController {
 
 	@Autowired
-	private UserService userService;
+	private IUserService userService;
 
 	public static final Logger LOG = LoggerFactory.getLogger(UserController.class);
 
 	/**
 	 * Purpose: Creating a userLogin controller which will fetch the request body
-	 *          and send it to the service.
+	 * and send it to the service.
 	 * 
-	 * @param   login object containing user login credentials.
-	 * @return  login successful if the user has been logged in return login failed.
+	 * @param login object containing user login credentials.
+	 * @return ResponseEntity which is holding the user object and HttpStatus in
+	 *         that entity.
 	 * 
 	 */
 	@PutMapping("/login")
-	public ResponseEntity<String> userLogin(@Valid @RequestBody LoginDTO login)  {
-		LOG.info("Login Controller Api");
+	public ResponseEntity<Response> userLogin(@Valid @RequestBody LoginDTO login) {
+		LOG.info(CommonFiles.CONTROLLER_LOGIN_METHOD);
 		return new ResponseEntity<>(userService.userLogin(login), HttpStatus.OK);
 
 	}
-	
-	
 
 	/**
 	 * Purpose: Creating a userRegister controller which will fetch the request body
-	 *          and send it to the service.
+	 * and send it to the service.
 	 * 
-	 * @param   register object containing user registration details .
-	 * @return  User Object Containing User details.
+	 * @param register object containing user registration details .
+	 * @return ResponseEntity which is holding the user object and HttpStatus in
+	 *         that entity.
 	 * 
 	 */
 	@PostMapping("/register")
-	public ResponseEntity<User> userRegister(@Valid @RequestBody RegisterDTO register) {
-		LOG.info("register Controller Api");
-        return new ResponseEntity<>(userService.userRegister(register), HttpStatus.OK);
+	public ResponseEntity<Response> userRegister(@Valid @RequestBody RegisterDTO register) {
+		LOG.info(CommonFiles.CONTROLLER_REGISTER_METHOD);
+		return new ResponseEntity<>(userService.userRegister(register), HttpStatus.OK);
 	}
-	
-	
-	
 
 	/**
 	 * Purpose: Creating a userRegister controller which will fetch the request
-	 *          header and send it to the service.
+	 * header and send it to the service.
 	 * 
-	 * @param   email string containing user email details.
-	 * @return  a message saying weather the mail has been send to user or not.
-	 *  
+	 * @param email string containing user email details.
+	 * @return ResponseEntity which is holding the user object and HttpStatus in
+	 *         that entity.
+	 * 
 	 */
 	@PutMapping("/forgotpassword")
-	public ResponseEntity<String> userForgotPassword(@RequestHeader(name = "email") String email)  {
-		LOG.info("forgotpassword Controller Api");
+	public ResponseEntity<Response> userForgotPassword(@RequestHeader(name = "email") String email) {
+		LOG.info(CommonFiles.CONTROLLER_FORGOTPASSWORD_METHOD);
 		return new ResponseEntity<>(userService.userForgotPassword(email), HttpStatus.OK);
 
 	}
-	
-	
-	
- 
+
 	/**
 	 * Purpose: Creating a setPassword controller which will fetch the request body
-	 *          and send it to the service.
+	 * and send it to the service.
 	 * 
-	 * @param   setPasswordDTO object containing the user new password.
-	 * @param   token for authorization to check the user has authority for
-	 *          to setPassword.
-	 * @return  User Object containing the new Password.
-	 *  
+	 * @param setPasswordDTO object containing the user new password.
+	 * @param tokenfor       authorization to check the user has authority for to
+	 *                       setPassword.
+	 * @return ResponseEntity which is holding the user object and HttpStatus in
+	 *         that entity.
+	 * 
 	 */
-	@PutMapping("/setpassword/{token}")
-	public ResponseEntity<User> userSetPassword(@Valid @RequestBody SetPasswordDTO setPasswordDTO,
-			@PathVariable(name = "token") String token)  {
+	@PutMapping("/setpassword")
+	public ResponseEntity<Response> userSetPassword(@Valid @RequestBody SetPasswordDTO setPasswordDTO) {
 
-		LOG.info("set Password Controller Api");
-		return new ResponseEntity<>(userService.userSetPassword(setPasswordDTO, token), HttpStatus.OK);
+		LOG.info(CommonFiles.CONTROLLER_SETPASSWORD_METHOD);
+		return new ResponseEntity<>(userService.userSetPassword(setPasswordDTO), HttpStatus.OK);
 	}
-	
-	
-	
-	
 
 	/**
 	 * Purpose: Creating a userVerification controller which will fetch the the
-	 *          pathVariable and send it to the service.
+	 * pathVariable and send it to the service.
 	 * 
-	 * @param   token for authorization to check the user has authority for Verifying
-	 *          the account.
-	 * @return  User Object containing details weather the user is verified or not.
-	 *  
+	 * @param token for authorization to check the user has authority for Verifying
+	 *              the account.
+	 * @return ResponseEntity which is holding the user object and HttpStatus in
+	 *         that entity..
+	 * 
 	 */
-	
-	@PutMapping("/verify/{token}")
-	public ResponseEntity<User> userVerfication(@PathVariable(name = "token") String token)  {
-		LOG.info("verifiy Controller Api");
+
+	@PutMapping("/verify")
+	public ResponseEntity<Response> userVerfication(@RequestHeader(name = "token") String token) {
+		LOG.info(CommonFiles.CONTROLLER_ISVERIFIED_METHOD);
 		return new ResponseEntity<>(userService.isVerified(token), HttpStatus.OK);
 
 	}
