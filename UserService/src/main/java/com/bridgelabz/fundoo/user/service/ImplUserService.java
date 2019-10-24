@@ -7,7 +7,7 @@
  *  @since   20-10-2019
  *
  ******************************************************************************/
-package com.bridgelabz.fundoo.user.services;
+package com.bridgelabz.fundoo.user.service;
 
 import java.util.Date;
 
@@ -106,6 +106,7 @@ public class ImplUserService implements IUserService {
 		register.setPassword(userConfiguration.passwordEncoder().encode(register.getPassword()));
 		User user=modelMapper.map(register, User.class);
 		userRepository.save(user);
+		
 		
 		return new Response(200,CommonFiles.REGISTER_SUCCESS,userRepository.save(user));
 

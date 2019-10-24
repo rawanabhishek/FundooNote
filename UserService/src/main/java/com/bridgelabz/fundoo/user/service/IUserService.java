@@ -10,7 +10,7 @@
  *  @since   20-10-2019
  *
  ******************************************************************************/
-package com.bridgelabz.fundoo.user.services;
+package com.bridgelabz.fundoo.user.service;
 
 import com.bridgelabz.fundoo.user.dto.LoginDTO;
 import com.bridgelabz.fundoo.user.dto.RegisterDTO;

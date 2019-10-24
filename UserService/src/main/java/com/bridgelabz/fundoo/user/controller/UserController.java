@@ -32,8 +32,7 @@ import com.bridgelabz.fundoo.user.dto.RegisterDTO;
 import com.bridgelabz.fundoo.user.dto.SetPasswordDTO;
 
 import com.bridgelabz.fundoo.user.response.Response;
-
-import com.bridgelabz.fundoo.user.services.IUserService;
+import com.bridgelabz.fundoo.user.service.IUserService;
 import com.bridgelabz.fundoo.user.utility.CommonFiles;
 
 
