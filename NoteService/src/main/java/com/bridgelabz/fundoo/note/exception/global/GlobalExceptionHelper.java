@@ -7,7 +7,7 @@
  *  		
  *  @author  Abhishek Rawat
  *  @version 1.0
- *  @since   21-10-2019
+ *  @since   24-10-2019
  *
  ******************************************************************************/
 package com.bridgelabz.fundoo.note.exception.global;
@@ -18,11 +18,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import com.bridgelabz.fundoo.note.exception.custom.AddNoteException;
-import com.bridgelabz.fundoo.note.exception.custom.DeleteNoteException;
-import com.bridgelabz.fundoo.note.exception.custom.PinException;
-import com.bridgelabz.fundoo.note.exception.custom.ReadNoteException;
-import com.bridgelabz.fundoo.note.exception.custom.UpdateNoteException;
+import com.bridgelabz.fundoo.note.exception.custom.NoteException;
+
+import com.bridgelabz.fundoo.note.exception.custom.LabelException;
+
 import com.bridgelabz.fundoo.note.response.Response;
 
 
@@ -43,77 +42,34 @@ public class GlobalExceptionHelper {
 	}
 
 	/**
-	 * Purpose: to create a global exception handler for AddNoteException custom
+	 * Purpose: to create a global exception handler for NoteException custom
 	 *          exception. 
 	 * @param   ex the exception message .
 	 * @return  ResponseEntity showing Http status , exception message 
 	 *          and object.
 	 */
-	@ExceptionHandler(AddNoteException.class)
-	public final ResponseEntity<Response> addNoteException(AddNoteException ex) {
+	@ExceptionHandler(NoteException.class)
+	public final ResponseEntity<Response> NoteException(NoteException ex) {
 		Response responseMessage = new Response(400, ex.getMessage(), null);
 
 		return new ResponseEntity<>(responseMessage, HttpStatus.BAD_REQUEST);
 	}
 
 	/**
-	 * Purpose: to create a global exception handler for UpdateNoteException custom
+	 * Purpose: to create a global exception handler for LabelException custom
 	 *          exception. 
 	 * @param   ex the exception message .
 	 * @return  ResponseEntity showing Http status , exception message 
 	 *          and object.
 	 */
-	@ExceptionHandler(UpdateNoteException.class)
-	public final ResponseEntity<Response> updateNoteException(UpdateNoteException ex) {
+	@ExceptionHandler(LabelException.class)
+	public final ResponseEntity<Response> updateNoteException(LabelException ex) {
 
 		Response responseMessage = new Response(400, ex.getMessage(), null);
 
 		return new ResponseEntity<>(responseMessage, HttpStatus.BAD_GATEWAY);
 	}
 
-	/**
-	 * Purpose: to create a global exception handler for ReadNoteException custom
-	 *          exception. 
-	 * @param   ex the exception message .
-	 * @return  ResponseEntity showing Http status , exception message 
-	 *          and object.
-	 */
-	@ExceptionHandler(ReadNoteException.class)
-	public final ResponseEntity<Response> readNotePasswordException(ReadNoteException ex) {
-
-		Response responseMessage = new Response(400, ex.getMessage(), null);
-
-		return new ResponseEntity<>(responseMessage, HttpStatus.BAD_REQUEST);
-	}
-
-	/**
-	 * Purpose: to create a global exception handler PinException custom
-	 *          exception. 
-	 * @param   ex the exception message .
-	 * @return  ResponseEntity showing Http status , exception message 
-	 *          and object.
-	 */
-	@ExceptionHandler(PinException.class)
-	public final ResponseEntity<Response> pinException(PinException ex) {
-
-		Response responseMessage = new Response(400, ex.getMessage(), null);
-
-		return new ResponseEntity<>(responseMessage, HttpStatus.BAD_REQUEST);
-	}
-
-	/**
-	 * Purpose: to create a global exception handler for DeleteNoteException custom
-	 *          exception. 
-	 * @param   ex the exception message .
-	 * @return  ResponseEntity showing Http status , exception message 
-	 *          and object.
-	 */
-	@ExceptionHandler(DeleteNoteException.class)
-	public final ResponseEntity<Response> deleteNoteException(DeleteNoteException ex) {
-		Response responseMessage = new Response(400, ex.getMessage(), null);
-
-		return new ResponseEntity<>(responseMessage, HttpStatus.BAD_REQUEST);
-
-	}
+	
 
 }

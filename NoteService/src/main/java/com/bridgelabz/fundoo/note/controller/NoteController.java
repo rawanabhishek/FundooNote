@@ -26,7 +26,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bridgelabz.fundoo.note.dto.NoteDTO;
-import com.bridgelabz.fundoo.note.dto.UpdateDTO;
+import com.bridgelabz.fundoo.note.dto.NoteUpdateDTO;
+
 import com.bridgelabz.fundoo.note.response.Response;
 import com.bridgelabz.fundoo.note.service.INoteService;
 
@@ -50,9 +51,9 @@ public class NoteController {
 	 * @throws Exception
 	 */
 	@PostMapping("/")
-	public ResponseEntity<Response> addNote(@RequestBody NoteDTO noteDTO) {
+	public ResponseEntity<Response> add(@RequestBody NoteDTO noteDTO) {
 		LOG.info("inside add note controller");
-		return new ResponseEntity<>(noteService.addNote(noteDTO),HttpStatus.OK);
+		return new ResponseEntity<>(noteService.add(noteDTO),HttpStatus.OK);
 	}
 	
 	
@@ -64,8 +65,8 @@ public class NoteController {
 	 * @throws Exception
 	 */
 	@GetMapping("/")
-	public ResponseEntity<Response> getNote(@RequestHeader int userId){
-		return new ResponseEntity<>(noteService.readNote(userId),HttpStatus.OK);
+	public ResponseEntity<Response> get(@RequestHeader int userId){
+		return new ResponseEntity<>(noteService.get(userId),HttpStatus.OK);
 	}
 	
 	
@@ -76,9 +77,9 @@ public class NoteController {
 	 * @throws Exception
 	 */
 	@PutMapping("/")
-	public ResponseEntity<Response> updateNote(@RequestBody UpdateDTO updateDTO) {
+	public ResponseEntity<Response> update(@RequestBody NoteUpdateDTO updateDTO) {
 		
-		return new ResponseEntity<>(noteService.updateNote(updateDTO),HttpStatus.OK);
+		return new ResponseEntity<>(noteService.update(updateDTO),HttpStatus.OK);
 	}
 	
 
@@ -88,8 +89,8 @@ public class NoteController {
 	 * @return
 	 */
 	@DeleteMapping("/")
-	public ResponseEntity<Response> deleteNote(@RequestHeader int id){
-		return new ResponseEntity<>(noteService.deleteNote(id),HttpStatus.OK);
+	public ResponseEntity<Response> delete(@RequestHeader int id){
+		return new ResponseEntity<>(noteService.delete(id),HttpStatus.OK);
 	}
 	
 
@@ -124,6 +125,27 @@ public class NoteController {
 	@PutMapping("/trash")
 	public ResponseEntity<Response> trash(@RequestHeader int id){
 		return new ResponseEntity<>(noteService.trash(id),HttpStatus.OK);
+	}
+	
+	
+	/**
+	 *  Purpose: Creating sortDate controller which fetch the header
+	 * @param id
+	 * @return
+	 */
+	@GetMapping("/date")
+	public ResponseEntity<Response> sortDate(@RequestHeader(name="userId") int id){
+		return new ResponseEntity<>(noteService.sortDate(id),HttpStatus.OK);
+	}
+	
+	/**
+	 *  Purpose: Creating sortName controller which fetch the header
+	 * @param id
+	 * @return
+	 */
+	@GetMapping("/name")
+	public ResponseEntity<Response> sortName(@RequestHeader (name="userId") int id){
+		return new ResponseEntity<>(noteService.sortName(id),HttpStatus.OK);
 	}
 
 }

@@ -13,8 +13,11 @@
 
 package com.bridgelabz.fundoo.note.service;
 
+
+
 import com.bridgelabz.fundoo.note.dto.NoteDTO;
-import com.bridgelabz.fundoo.note.dto.UpdateDTO;
+import com.bridgelabz.fundoo.note.dto.NoteUpdateDTO;
+
 import com.bridgelabz.fundoo.note.response.Response;
 
 public interface INoteService {
@@ -23,25 +26,25 @@ public interface INoteService {
 	 * @param noteDTO
 	 * @return
 	 */
-	public Response addNote(NoteDTO noteDTO) ;
+	public Response add(NoteDTO noteDTO) ;
 	
 	/**
 	 * @param userId
 	 * @return
 	 */
-	public Response readNote(int userId);
+	public Response get(int userId);
 	
 	/**
 	 * @param updateeDTO
 	 * @return
 	 */
-	public Response updateNote(UpdateDTO updateeDTO) ;
+	public Response update(NoteUpdateDTO updateDTO) ;
 	
 	/**
 	 * @param noteId
 	 * @return
 	 */
-	public Response deleteNote(int noteId);
+	public Response delete(int noteId);
 	
 	
 	/**
@@ -61,5 +64,10 @@ public interface INoteService {
 	 * @return
 	 */
 	public Response trash(int id);
+	
+	
+	public Response sortDate(int userId);
+	
+	public Response sortName(int userId);
 
 }

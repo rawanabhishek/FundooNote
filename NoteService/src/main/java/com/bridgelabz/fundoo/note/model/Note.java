@@ -37,8 +37,9 @@ import lombok.Setter;
 @Setter
 public class Note {
 	
-	@Id
+	
 	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Id
 	private Integer noteId;
 	
 	

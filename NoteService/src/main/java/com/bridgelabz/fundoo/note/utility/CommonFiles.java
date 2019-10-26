@@ -12,7 +12,7 @@ package com.bridgelabz.fundoo.note.utility;
 
 public class CommonFiles {
 	
-	//userService related message
+	//noteService related message
 	public static final String ADD_NOTE_SUCCESS="Note added successful";
 	public static final String ADD_NOTE_FAILED="Adding note failed";
 	public static final String DELETE_NOTE_SUCCESS="delete note successfully";
@@ -22,6 +22,26 @@ public class CommonFiles {
 	public static final String PIN_SUCCESS="Pin operation has been done successfull";
 	public static final String ARCHIVE_SUCCESS="Archive operation has been done successfull";
 	public static final String TRASH_SUCCESS="Trash operation has been done successfull";
+	public static final String READ_NOTE_FAILED ="No user find with this id ";
+	public static final String DELETE_NOTE_FAILED = "no note find with note id";
+	public static final String SORT_DATE_SUCCESS = "Sorted by date successful";
+	public static final String SORT_NAME_SUCCESS = "sorted by name successful";
+	public static final String USER_FOUND_FAILED = "User not found";
+	
+	
+	//labelService related message
+	public static final String ADD_LABEL_SUCCESS="label added successfully";
+	public static final String ADD_LABEL_FAILED="Adding label failed";
+	public static final String DELETE_LABEL_FAILED="Deleting label failed";
+	public static final String DELETE_LABEL_SUCCESS="Deleting label success";
+	public static final String GET_LABEL_SUCCESS="Reading label successfully";
+	public static final String GET_LABEL_FAILED="Reading label failed";
+	public static final String UPDATE_LABEL_SUCCESS=" label updated successfully";
+	public static final String UPDATE_LABEL_FAILED="updating label failed";
+	
+	
+	
+	
 	
 
 	
@@ -54,6 +74,11 @@ public class CommonFiles {
 	public static final String CONTROLLER_SETPASSWORD_METHOD="Set password controller method";
 	public static final String CONTROLLER_REGISTER_METHOD="Register controller method";
 	public static final String CONTROLLER_ISVERIFIED_METHOD="Is verified controller method";
+	
+	
+	
+	
+	
 	
 	
 

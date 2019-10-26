@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class NoteConfiguration {
+public class ApplicationConfiguration {
 	
 	/**
 	 * Purpose:  A method which is created to achieve the ModelMapper

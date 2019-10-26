@@ -17,10 +17,10 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class UpdateDTO {
+public class NoteUpdateDTO {
 
 	
-	private int noteId;
+	private Integer noteId;
 	private String title;
 	private String description;
 	
