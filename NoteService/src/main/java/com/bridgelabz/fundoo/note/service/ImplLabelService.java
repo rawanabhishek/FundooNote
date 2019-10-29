@@ -9,6 +9,8 @@
  ******************************************************************************/
 package com.bridgelabz.fundoo.note.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,86 +34,81 @@ public class ImplLabelService implements ILabelService {
 	@Autowired
 	private ApplicationConfiguration configuration;
 
-	
+	public static final Logger LOG = LoggerFactory.getLogger(ImplNoteService.class);
+
 	/**
 	 * Purpose: Method for adding label for a particular user
-	 * @param labelDTO containing label details 
-	 * @param token containing details of a user for which the
-	 *        the label has to be made 
-	 * @return Response object containing status code , message 
-	 *         and object .
+	 * 
+	 * @param labelDTO containing label details
+	 * @param token    containing details of a user for which the the label has to
+	 *                 be made
+	 * @return Response object containing status code , message and object .
 	 */
 	@Override
-	public Response add(LabelDTO labelDTO , String token) {
-		
-		if(labelDTO==null) {
+	public Response add(LabelDTO labelDTO, String token) {
+		LOG.info(CommonFiles.SERVICE_ADD_METHOD);
+
+		if (labelDTO == null) {
 			throw new LabelException(CommonFiles.ADD_LABEL_FAILED);
 		}
-		String key =TokenUtility.tokenParser(token);
-		
-        
+
+		String key = TokenUtility.tokenParser(token);
+
 		Label label = configuration.modelMapper().map(labelDTO, Label.class);
 		label.setUser(key);
+
 		return new Response(200, CommonFiles.ADD_LABEL_SUCCESS, labelRepository.save(label));
 
 	}
 
-	
-	
-	
 	/**
-	 *  Purpose: Method of updating labels of a particular
-	 *           user 
-	 * @param label containing the update data of a particular
-	 *        label 
-	 * @return Response object containing status code , message 
-	 *         and object .
+	 * Purpose: Method of updating labels of a particular user
+	 * 
+	 * @param label containing the update data of a particular label
+	 * @return Response object containing status code , message and object .
 	 */
 	@Override
 	public Response update(LabelUpdateDTO labelUpdateDTO) {
-		Label label=labelRepository.findById(labelUpdateDTO.getLabelId()).orElse(null);
-		if(label==null) {
+
+		LOG.info(CommonFiles.SERVICE_UPDATE_METHOD);
+		Label label = labelRepository.findById(labelUpdateDTO.getLabelId()).orElse(null);
+		if (label == null) {
 			throw new LabelException(CommonFiles.UPDATE_LABEL_FAILED);
 		}
 		label.setName(labelUpdateDTO.getName());
-		
+
 		return new Response(200, CommonFiles.UPDATE_LABEL_SUCCESS, labelRepository.save(label));
 	}
 
-	
-	
-	
-
 	/**
-	 *  Purpose: Method for deleting labels of a particular user
+	 * Purpose: Method for deleting labels of a particular user
+	 * 
 	 * @param labelId of particular label which we want to delete
-	 * @return Response object containing status code , message 
-	 *         and object .
+	 * @return Response object containing status code , message and object .
 	 */
 	@Override
 	public Response delete(int labelId) {
-		if(labelId==0) {
+
+		LOG.info(CommonFiles.SERVICE_DELETE_METHOD);
+		if (labelId == 0) {
 			throw new LabelException(CommonFiles.DELETE_LABEL_FAILED);
 		}
 		labelRepository.deleteById(labelId);
 		return new Response(200, CommonFiles.DELETE_LABEL_SUCCESS, true);
 
 	}
-	
-	
-	
-	
-	
 
 	/**
-	 *  Purpose: Method for fetching the labels 
-	 * @param labelId of particular label which we want to get 
-	 * @return Response object containing status code , message 
-	 *         and object .
+	 * Purpose: Method for fetching the labels
+	 * 
+	 * @param labelId of particular label which we want to get
+	 * @return Response object containing status code , message and object .
 	 */
 	@Override
 	public Response get(int labelId) {
-		if(labelId==0) {
+
+		LOG.info(CommonFiles.SERVICE_GET_METHOD);
+		if (labelId == 0) {
 			throw new LabelException(CommonFiles.GET_LABEL_FAILED);
 		}
 		return new Response(200, CommonFiles.GET_LABEL_SUCCESS,

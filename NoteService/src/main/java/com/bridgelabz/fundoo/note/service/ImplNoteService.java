@@ -55,6 +55,7 @@ public class ImplNoteService implements INoteService {
 	@Override
 	public Response add(NoteDTO noteDTO ,String token ) {
 
+		LOG.info(CommonFiles.SERVICE_ADD_METHOD);
 		if ((noteDTO.getTitle().isEmpty() || noteDTO.getDescription().isEmpty())) {
 
 			throw new NoteException(CommonFiles.ADD_NOTE_FAILED);
@@ -80,6 +81,7 @@ public class ImplNoteService implements INoteService {
 	 */
 	@Override
 	public Response update(NoteUpdateDTO updateDTO) {
+		LOG.info(CommonFiles.SERVICE_UPDATE_METHOD);
 
 		if (!(updateDTO.getTitle().isEmpty() || updateDTO.getDescription().isEmpty())) {
 
@@ -103,6 +105,8 @@ public class ImplNoteService implements INoteService {
 	 */
 	@Override
 	public Response delete(int noteId) {
+		
+		LOG.info(CommonFiles.SERVICE_DELETE_METHOD);
 		Note note = noteRepository.findById(noteId).orElse(null);
 		if (note == null) {
 			throw new LabelException(CommonFiles.DELETE_NOTE_FAILED);
@@ -119,9 +123,10 @@ public class ImplNoteService implements INoteService {
 	 *         and object .
 	 */
 	@Override
-	public Response get(String userId) {
+	public Response get(String user) {
+		LOG.info(CommonFiles.SERVICE_GET_METHOD);
 
-		Stream<Note> note = noteRepository.findAll().stream().filter(i -> i.getUser() == userId);
+		Stream<Note> note = noteRepository.findAll().stream().filter(i -> i.getUser().equals(user) );
 
 		if (note == null) {
 			throw new NoteException(CommonFiles.GET_NOTE_FAILED);
@@ -139,6 +144,8 @@ public class ImplNoteService implements INoteService {
 	 */
 	@Override
 	public Response pin(int id) {
+		
+		LOG.info(CommonFiles.SERVICE_PIN_METHOD);
 		Note note = noteRepository.findById(id).orElse(null);
 		if (note == null) {
 			throw new NoteException(CommonFiles.USER_FOUND_FAILED);
@@ -162,6 +169,7 @@ public class ImplNoteService implements INoteService {
 	 */
 	@Override
 	public Response archive(int id) {
+		LOG.info(CommonFiles.SERVICE_ARCHIVE_METHOD);
 		Note note = noteRepository.findById(id).orElse(null);
 		if (note == null) {
 			throw new NoteException(CommonFiles.USER_FOUND_FAILED);
@@ -187,6 +195,8 @@ public class ImplNoteService implements INoteService {
 	 */
 	@Override
 	public Response trash(int id) {
+		LOG.info(CommonFiles.SERVICE_TRASH_METHOD);
+		
 		Note note = noteRepository.findById(id).orElse(null);
 		if (note == null) {
 			throw new NoteException(CommonFiles.USER_FOUND_FAILED);
@@ -211,8 +221,9 @@ public class ImplNoteService implements INoteService {
 	 */
 	@Override
 	public Response sortDate(String user) {
+		LOG.info(CommonFiles.SERVICE_SORT_METHOD);
 
-		Stream<Note> sortedNote = noteRepository.findAll().stream().filter(i -> i.getUser() == user)
+		Stream<Note> sortedNote = noteRepository.findAll().stream().filter(i -> i.getUser().equals(user) )
 				.sorted((Note n1, Note n2) -> n1.getUpdate().compareTo(n2.getUpdate())).parallel();
 
 		return new Response(200, CommonFiles.SORT_DATE_SUCCESS, sortedNote);
@@ -228,8 +239,10 @@ public class ImplNoteService implements INoteService {
 	 */
 	@Override
 	public Response sortName(String user) {
+		
+		LOG.info(CommonFiles.SERVICE_SORT_METHOD);
 
-		Stream<Note> sortedNote = noteRepository.findAll().stream().filter(i -> i.getUser() == user)
+		Stream<Note> sortedNote = noteRepository.findAll().stream().filter(i -> i.getUser().equals(user))
 				.sorted((Note n1, Note n2) -> n1.getTitle().compareTo(n2.getTitle())).parallel();
 
 		return new Response(200, CommonFiles.SORT_NAME_SUCCESS, sortedNote);

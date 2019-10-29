@@ -56,6 +56,19 @@ public class CommonFiles {
 	
 
 
+	//note service Methods messages
+	public static final String SERVICE_ADD_METHOD="Add service method";
+	public static final String SERVICE_UPDATE_METHOD="update service method";
+	public static final String SERVICE_DELETE_METHOD="delete service method";
+	public static final String SERVICE_GET_METHOD="get service method";
+	public static final String SERVICE_SORT_METHOD="sort service method";
+	public static final String SERVICE_PIN_METHOD="Pin service method";
+	public static final String SERVICE_TRASH_METHOD="Trash service method";
+	public static final String SERVICE_ARCHIVE_METHOD="Archive service method";
+	
+	
+	
+
 	
 
 	

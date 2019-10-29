@@ -39,7 +39,9 @@ public class LabelController {
 	
 	
 	/**
-	 * Purpose: Creating a Label controller for note to add labels
+	 * Purpose: Creating a Label controller for note to add labels which 
+	 *          take request from request body and request header and 
+	 *          send the response
 	 * @param labelDTO  having label details 
 	 * @param token containing user details 
 	 * @return ResponseEntity containing Response which contains status code,
@@ -52,7 +54,8 @@ public class LabelController {
 	}
 	
 	/**
-	 * Purpose:Creating a Label controller for note to get labels
+	 * Purpose:Creating a Label controller for note to get labels which 
+	 *          take request from request header  and send the response
 	 * @param labelId of particular label
 	 * @return ResponseEntity containing Response which contains status code,
 	 *         message and object
@@ -65,7 +68,8 @@ public class LabelController {
 	
 	
 	/**
-	 * Purpose:Creating a Label controller for note to delete labels
+	 * Purpose:Creating a Label controller for note to delete label  which 
+	 *          take request from request header  and send the response
 	 * @param labelId of particular label
 	 * @return ResponseEntity containing Response which contains status code,
 	 *         message and object
@@ -77,11 +81,13 @@ public class LabelController {
 	}
 	
 	/**
-	 * Purpose:Creating a Label controller for note to update labels
-	 * @param label
+	 * Purpose:Creating a Label controller for note to update labels  which 
+	 *          take request from request body  and send the response
+	 * @param labelUpdateDTO containing update label data 
 	 * @return ResponseEntity containing Response which contains status code,
 	 *         message and object
 	 */
+	
 	@PutMapping("/")
 	public ResponseEntity<Response> update(@RequestBody LabelUpdateDTO labelUpdateDTO){
 		return new ResponseEntity<Response>(labelService.update(labelUpdateDTO),HttpStatus.OK);

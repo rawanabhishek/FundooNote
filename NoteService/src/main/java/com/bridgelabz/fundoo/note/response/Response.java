@@ -10,6 +10,9 @@
  ******************************************************************************/
 package com.bridgelabz.fundoo.note.response;
 
+
+
+
 public class Response {
 
 	private int statusCode;
