@@ -13,6 +13,8 @@ package com.bridgelabz.fundoo.note.utility;
 
 
 
+
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -36,13 +38,15 @@ public class TokenUtility {
 	
 	/**
 	 * Purpose: to parse JWT token
-	 * @param token for checking the user is authorized ot not
-	 * @return claims Object 
+	 * @param token for checking the user is authorized or not
+	 * @return String containg the key value 
 	 */
-	public static Claims tokenParser(String token) {
+	public static String tokenParser(String token) {
 		
-		return Jwts.parser().setSigningKey(CommonFiles.TOKEN_KEY).parseClaimsJws
-				(token).getBody();
+
+		Claims claims = Jwts.parser().setSigningKey(CommonFiles.TOKEN_KEY).parseClaimsJws(token).getBody();
+		String key = claims.getSubject();
+		return key;
 	}
 
 }

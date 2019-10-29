@@ -43,8 +43,8 @@ public class Note {
 	private Integer noteId;
 	
 	
-	@Column(name="user_id")
-	private int userId;
+	
+	private String user;
 	
 	
     @Column(name="title")
@@ -54,13 +54,13 @@ public class Note {
 	private String description;
 	
     @Column(name="is_pin" , columnDefinition = "boolean default false")
-	private boolean isPin;
+	private boolean pin;
 	
     @Column(name="is_archive" , columnDefinition = "boolean default false")
-	private boolean isArchive;
+	private boolean archive;
 	
     @Column(name="is_trash" , columnDefinition = "boolean default false")
-	private boolean isTrash;
+	private boolean trash;
 	
     @CreationTimestamp
     @Column(name="date_created")

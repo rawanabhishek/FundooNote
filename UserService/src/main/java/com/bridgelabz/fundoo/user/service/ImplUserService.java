@@ -9,7 +9,6 @@
  ******************************************************************************/
 package com.bridgelabz.fundoo.user.service;
 
-import java.util.Date;
 
 
 import org.modelmapper.ModelMapper;
@@ -38,9 +37,7 @@ import com.bridgelabz.fundoo.user.utility.CommonFiles;
 import com.bridgelabz.fundoo.user.utility.TokenUtility;
 import com.bridgelabz.fundoo.user.utility.UserUtility;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+
 
 @Service
 public class ImplUserService implements IUserService {
@@ -72,16 +69,15 @@ public class ImplUserService implements IUserService {
 	@Override
 	public Response userLogin(LoginDTO login) {
 		LOG.info(CommonFiles.SERVICE_LOGIN_METHOD);
-
+        
 		if (!userRepository.findAll().stream()
 				.anyMatch(i -> i.getEmail().equals(login.getEmail())
 						&& userConfiguration.passwordEncoder().matches(login.getPassword(), i.getPassword())
 						&& i.isVerified())) {
 			throw new LoginException(CommonFiles.LOGIN_FAILED);
 		}
-		
-		
-		return new Response(200,CommonFiles.LOGIN_SUCCESS,true);
+        String token=TokenUtility.tokenBuild(login.getEmail());
+		return new Response(200, CommonFiles.LOGIN_SUCCESS, token);
 
 	}
 
@@ -102,13 +98,12 @@ public class ImplUserService implements IUserService {
 
 		}
 
-		sendMail(register.getEmail(),CommonFiles.VERIFY_URL);
+		sendMail(register.getEmail(), CommonFiles.VERIFY_URL);
 		register.setPassword(userConfiguration.passwordEncoder().encode(register.getPassword()));
-		User user=modelMapper.map(register, User.class);
+		User user = modelMapper.map(register, User.class);
 		userRepository.save(user);
-		
-		
-		return new Response(200,CommonFiles.REGISTER_SUCCESS,userRepository.save(user));
+
+		return new Response(200, CommonFiles.REGISTER_SUCCESS, userRepository.save(user));
 
 	}
 
@@ -128,12 +123,11 @@ public class ImplUserService implements IUserService {
 			throw new ForgotPasswordException(email + CommonFiles.EMAIL_FAILED);
 
 		}
-		
-		
-		SimpleMailMessage simpleMailMessage = userUtility.mailSender(email, TokenUtility.tokenBuild(email), 
-				CommonFiles.EMAIL_SUBJECT_SETPASSWORD,CommonFiles.SET_PASSWORD_URL);
+
+		SimpleMailMessage simpleMailMessage = userUtility.mailSender(email, TokenUtility.tokenBuild(email),
+				CommonFiles.EMAIL_SUBJECT_SETPASSWORD, CommonFiles.SET_PASSWORD_URL);
 		emailSender.send(simpleMailMessage);
-		return new Response(200,CommonFiles.EMAIL_SUCCESS,true);
+		return new Response(200, CommonFiles.EMAIL_SUCCESS, true);
 
 	}
 
@@ -141,7 +135,7 @@ public class ImplUserService implements IUserService {
 	 * Purpose: Method for resetting the password of particular user.
 	 * 
 	 * @param password the new password which user to set for his id .
-	 * @param token for checking the user is authorized or not for setting new
+	 * @param token    for checking the user is authorized or not for setting new
 	 *                 password.
 	 * @return Response which contains the response of the method.
 	 */
@@ -149,21 +143,20 @@ public class ImplUserService implements IUserService {
 	public Response userSetPassword(SetPasswordDTO setPasswordDTO) {
 		LOG.info(CommonFiles.SERVICE_SETPASSWORD_METHOD);
 
-		Claims claims = TokenUtility.tokenParser(setPasswordDTO.getToken());
+		
 
-		User user = userRepository.findAll().stream().filter(i -> i.getEmail().equals(claims.getSubject())).findAny()
+		User user = userRepository.findAll().stream().filter(i -> i.getEmail().equals
+				(TokenUtility.tokenParser(setPasswordDTO.getToken()))).findAny()
 				.orElse(null);
 
-		
 		if (user == null && !(setPasswordDTO.getPassword().equals(setPasswordDTO.getConfirmPassword()))) {
 
 			throw new SetPasswordException(CommonFiles.SET_PASSWORD_FAILED);
 
 		}
 		user.setPassword(userConfiguration.passwordEncoder().encode(setPasswordDTO.getPassword()));
-		
-		
-		return new Response(200,CommonFiles.SET_PASSWORD_SUCCESS,userRepository.save(user));
+
+		return new Response(200, CommonFiles.SET_PASSWORD_SUCCESS, userRepository.save(user));
 
 	}
 
@@ -173,17 +166,14 @@ public class ImplUserService implements IUserService {
 	 * @param email to which the mail has to be send
 	 */
 	@Override
-	public void sendMail(String email ,String url) {
+	public void sendMail(String email, String url) {
 		LOG.info(CommonFiles.SERVICE_SENDMAIL_METHOD);
 
-		String token = Jwts.builder().setSubject(email).setIssuedAt(new Date())
-				.signWith(SignatureAlgorithm.HS256, "verifykey").compact();
-		
-		SimpleMailMessage simpleMailMessage = userUtility.mailSender(email, token, 
-				CommonFiles.EMAIL_SUBJECT_VERIFY, url);
+		String token = TokenUtility.tokenBuild(email);
+
+		SimpleMailMessage simpleMailMessage = userUtility.mailSender(email, token, CommonFiles.EMAIL_SUBJECT_VERIFY,
+				url);
 		emailSender.send(simpleMailMessage);
-		
-	
 
 	}
 
@@ -199,8 +189,9 @@ public class ImplUserService implements IUserService {
 	public Response isVerified(String token) {
 		LOG.info(CommonFiles.SERVICE_ISVERIFIED_METHOD);
 
-		Claims claims = TokenUtility.tokenParser(token);
-		User user = userRepository.findAll().stream().filter(i -> i.getEmail().equals(claims.getSubject())).findAny()
+	
+		User user = userRepository.findAll().stream().filter(i -> i.getEmail().
+				equals(TokenUtility.tokenParser(token))).findAny()
 				.orElse(null);
 
 		if (user == null) {
@@ -208,8 +199,8 @@ public class ImplUserService implements IUserService {
 
 		}
 		user.setVerified(true);
-		
-		return new Response(200,CommonFiles.USER_VERIFIED,userRepository.save(user));
+
+		return new Response(200, CommonFiles.USER_VERIFIED, userRepository.save(user));
 
 	}
 

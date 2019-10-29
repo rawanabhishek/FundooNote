@@ -1,3 +1,14 @@
+/******************************************************************************
+ 
+ *  Purpose: A  Class implemented for handling the request coming from the user
+ *           and Controlling it through RestController annotation using spring 
+ *           boot that will handle all the request related to that user.
+ *  		
+ *  @author  Abhishek Rawat
+ *  @version 1.0
+ *  @since   26-10-2019
+ *
+ ******************************************************************************/
 package com.bridgelabz.fundoo.note.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,19 +40,22 @@ public class LabelController {
 	
 	/**
 	 * Purpose: Creating a Label controller for note to add labels
-	 * @param labelDTO
-	 * @return
+	 * @param labelDTO  having label details 
+	 * @param token containing user details 
+	 * @return ResponseEntity containing Response which contains status code,
+	 *         message and object
 	 */
 	@PostMapping("/")
-	public ResponseEntity<Response> add(@RequestBody LabelDTO labelDTO){
-		return new ResponseEntity<Response>(labelService.add(labelDTO),HttpStatus.OK);
+	public ResponseEntity<Response> add(@RequestBody LabelDTO labelDTO ,@RequestHeader String token){
+		return new ResponseEntity<Response>(labelService.add(labelDTO ,token),HttpStatus.OK);
 		
 	}
 	
 	/**
 	 * Purpose:Creating a Label controller for note to get labels
-	 * @param labelId
-	 * @return
+	 * @param labelId of particular label
+	 * @return ResponseEntity containing Response which contains status code,
+	 *         message and object
 	 */
 	@GetMapping("/")
 	public ResponseEntity<Response> get(@RequestHeader int labelId){
@@ -52,8 +66,9 @@ public class LabelController {
 	
 	/**
 	 * Purpose:Creating a Label controller for note to delete labels
-	 * @param labelId
-	 * @return
+	 * @param labelId of particular label
+	 * @return ResponseEntity containing Response which contains status code,
+	 *         message and object
 	 */
 	@DeleteMapping("/")
 	public ResponseEntity<Response> delete(@RequestHeader int labelId){
@@ -64,7 +79,8 @@ public class LabelController {
 	/**
 	 * Purpose:Creating a Label controller for note to update labels
 	 * @param label
-	 * @return
+	 * @return ResponseEntity containing Response which contains status code,
+	 *         message and object
 	 */
 	@PutMapping("/")
 	public ResponseEntity<Response> update(@RequestBody LabelUpdateDTO labelUpdateDTO){

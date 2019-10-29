@@ -23,6 +23,6 @@ public class NoteDTO {
 	private String description;
 	private boolean pin;
 	private boolean archive;
-	private int userId;
+
 
 }

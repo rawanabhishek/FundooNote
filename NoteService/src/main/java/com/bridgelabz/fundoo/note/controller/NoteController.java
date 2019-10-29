@@ -47,13 +47,15 @@ public class NoteController {
 	 * Purpose: Creating a addNote controller which will fetch the request body
 	 * and send it to the service.
 	 * @param noteDTO object containing user addNote details
-	 * @return
-	 * @throws Exception
+	 * @param token containing user details 
+	 * @return ResponseEntity containing Response which contains status code,
+	 *         message and object
+	 * 
 	 */
 	@PostMapping("/")
-	public ResponseEntity<Response> add(@RequestBody NoteDTO noteDTO) {
-		LOG.info("inside add note controller");
-		return new ResponseEntity<>(noteService.add(noteDTO),HttpStatus.OK);
+	public ResponseEntity<Response> add(@RequestBody NoteDTO noteDTO ,@RequestHeader String token) {
+		
+		return new ResponseEntity<>(noteService.add(noteDTO ,token),HttpStatus.OK);
 	}
 	
 	
@@ -61,20 +63,22 @@ public class NoteController {
 	 * Purpose: Creating a getNote controller which will fetch the header
 	 * and send it to the service.
 	 * @param userId  containing user id.
-	 * @return
-	 * @throws Exception
+	 * @return ResponseEntity containing Response which contains status code,
+	 *         message and object
+	 * 
 	 */
 	@GetMapping("/")
-	public ResponseEntity<Response> get(@RequestHeader int userId){
-		return new ResponseEntity<>(noteService.get(userId),HttpStatus.OK);
+	public ResponseEntity<Response> get(@RequestHeader(name="user") String user){
+		return new ResponseEntity<>(noteService.get(user),HttpStatus.OK);
 	}
 	
 	
 	/**
 	 *  Purpose: Creating a updateNote controller which will fetch the request body
-	 * @param updateDTO
-	 * @return
-	 * @throws Exception
+	 * @param updateDTO containing new update data for a particular note 
+	 * @return ResponseEntity containing Response which contains status code,
+	 *         message and object
+	 * 
 	 */
 	@PutMapping("/")
 	public ResponseEntity<Response> update(@RequestBody NoteUpdateDTO updateDTO) {
@@ -85,8 +89,9 @@ public class NoteController {
 
 	/**
 	 *  Purpose: Creating a deleteNote controller which will fetch the header
-	 * @param id
-	 * @return
+	 * @param id of a particular note
+	 * @return ResponseEntity containing Response which contains status code,
+	 *         message and object
 	 */
 	@DeleteMapping("/")
 	public ResponseEntity<Response> delete(@RequestHeader int id){
@@ -96,8 +101,9 @@ public class NoteController {
 
 	/**
 	 *  Purpose: Creating a pin controller which will fetch the header
-	 * @param id
-	 * @return
+	 * @param id of a particular note
+	 * @return ResponseEntity containing Response which contains status code,
+	 *         message and object
 	 */
 	@PutMapping("/pin")
 	public ResponseEntity<Response> pin(@RequestHeader int id){
@@ -107,8 +113,9 @@ public class NoteController {
 
 	/**
 	 *  Purpose: Creating a archive controller which will fetch the header
-	 * @param id
-	 * @return
+	 * @param id of a particular note
+	 * @return ResponseEntity containing Response which contains status code,
+	 *         message and object
 	 */
 	@PutMapping("/archive")
 	public ResponseEntity<Response> archive(@RequestHeader int id){
@@ -119,8 +126,9 @@ public class NoteController {
 	
 	/**
 	 *  Purpose: Creating a trash controller which will fetch the header
-	 * @param id
-	 * @return
+	 * @param id of a particular note
+	 * @return ResponseEntity containing Response which contains status code,
+	 *         message and object
 	 */
 	@PutMapping("/trash")
 	public ResponseEntity<Response> trash(@RequestHeader int id){
@@ -130,22 +138,24 @@ public class NoteController {
 	
 	/**
 	 *  Purpose: Creating sortDate controller which fetch the header
-	 * @param id
-	 * @return
+	 * @param user unique detail of a particular user 
+	 * @return ResponseEntity containing Response which contains status code,
+	 *         message and object
 	 */
 	@GetMapping("/date")
-	public ResponseEntity<Response> sortDate(@RequestHeader(name="userId") int id){
-		return new ResponseEntity<>(noteService.sortDate(id),HttpStatus.OK);
+	public ResponseEntity<Response> sortDate(@RequestHeader(name="user") String user){
+		return new ResponseEntity<>(noteService.sortDate(user),HttpStatus.OK);
 	}
 	
 	/**
 	 *  Purpose: Creating sortName controller which fetch the header
-	 * @param id
-	 * @return
+	 * @param user user unique detail of a particular user
+	 * @return ResponseEntity containing Response which contains status code,
+	 *         message and object
 	 */
 	@GetMapping("/name")
-	public ResponseEntity<Response> sortName(@RequestHeader (name="userId") int id){
-		return new ResponseEntity<>(noteService.sortName(id),HttpStatus.OK);
+	public ResponseEntity<Response> sortName(@RequestHeader (name="user") String user){
+		return new ResponseEntity<>(noteService.sortName(user),HttpStatus.OK);
 	}
 
 }

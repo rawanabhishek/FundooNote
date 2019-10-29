@@ -22,11 +22,12 @@ public class CommonFiles {
 	public static final String PIN_SUCCESS="Pin operation has been done successfull";
 	public static final String ARCHIVE_SUCCESS="Archive operation has been done successfull";
 	public static final String TRASH_SUCCESS="Trash operation has been done successfull";
-	public static final String READ_NOTE_FAILED ="No user find with this id ";
+	public static final String GET_NOTE_FAILED ="No user find with this id ";
 	public static final String DELETE_NOTE_FAILED = "no note find with note id";
 	public static final String SORT_DATE_SUCCESS = "Sorted by date successful";
 	public static final String SORT_NAME_SUCCESS = "sorted by name successful";
 	public static final String USER_FOUND_FAILED = "User not found";
+	public static final String TRASH_NOTE_FAILED = "no user find with this id";
 	
 	
 	//labelService related message
@@ -53,27 +54,10 @@ public class CommonFiles {
 	public static final String TOKEN_KEY="secretKey";
 	
 	
-	//url message for different functionality of user service
-	public static final String VERIFY_URL="http://localhost:8080/user/verify/";	
-	public static final String SET_PASSWORD_URL="http://localhost:8080/user/setpassword/";
+
 
 	
-	//User service Methods messages
-	public static final String SERVICE_LOGIN_METHOD="Login service method";
-	public static final String SERVICE_FORGOTPASSWORD_METHOD="Forgot Password service method";
-	public static final String SERVICE_SETPASSWORD_METHOD="Set password service method";
-	public static final String SERVICE_REGISTER_METHOD="Register service method";
-	public static final String SERVICE_ISVERIFIED_METHOD="Is verified service method";
-	public static final String SERVICE_SENDMAIL_METHOD="Send mail service method";
-	
-	
-	
-	//User controller messages
-	public static final String CONTROLLER_LOGIN_METHOD="Login controller method";
-	public static final String CONTROLLER_FORGOTPASSWORD_METHOD="Forgot Password controller method";
-	public static final String CONTROLLER_SETPASSWORD_METHOD="Set password controller method";
-	public static final String CONTROLLER_REGISTER_METHOD="Register controller method";
-	public static final String CONTROLLER_ISVERIFIED_METHOD="Is verified controller method";
+
 	
 	
 	

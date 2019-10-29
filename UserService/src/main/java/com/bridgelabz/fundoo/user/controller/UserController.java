@@ -36,6 +36,7 @@ import com.bridgelabz.fundoo.user.service.IUserService;
 import com.bridgelabz.fundoo.user.utility.CommonFiles;
 
 
+
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -56,6 +57,7 @@ public class UserController {
 	 */
 	@PutMapping("/login")
 	public ResponseEntity<Response> userLogin(@Valid @RequestBody LoginDTO login) {
+		
 		LOG.info(CommonFiles.CONTROLLER_LOGIN_METHOD);
 		return new ResponseEntity<>(userService.userLogin(login), HttpStatus.OK);
 

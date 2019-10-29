@@ -1,9 +1,9 @@
 /******************************************************************************
  
  *  Purpose: To create a Global Exception Handler Class which will handle all
- *           the global exception of userService API's and also handles the 
- *           the global exception for custom Exception handler of UserService
- *           API's.
+ *           the global exception of noteService API's and labelService and also
+ *           handles the the global exception for custom Exception handler of 
+ *           UserService and labelService API's.
  *  		
  *  @author  Abhishek Rawat
  *  @version 1.0
@@ -30,7 +30,7 @@ import com.bridgelabz.fundoo.note.response.Response;
 public class GlobalExceptionHelper {
 
 	/**
-	 * Purpose: To create a global exception handler for noteService .
+	 * Purpose: To create a global exception handler for noteService and label .
 	 * @param   ex the exception message .
 	 * @return  ResponseEntity showing Http status , exception message 
 	 *          and object.

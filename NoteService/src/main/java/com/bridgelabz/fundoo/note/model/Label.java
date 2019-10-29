@@ -1,3 +1,13 @@
+/******************************************************************************
+ 
+ *  Purpose:  A Class  for creating the POJO class Of UserService users and this 
+ *            this class uses Entity to get know spring that it is POJO class.
+ *  		 
+ *  @author   Abhishek Rawat
+ *  @version  1.0
+ *  @since    26-10-2019
+ *
+ ******************************************************************************/
 package com.bridgelabz.fundoo.note.model;
 
 import java.util.Date;
@@ -29,7 +39,7 @@ public class Label {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer labelId;
 	
-	private int userId;
+	private String user;
 	
 	private String name;
 	
