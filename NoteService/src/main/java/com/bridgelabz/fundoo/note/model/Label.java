@@ -1,7 +1,8 @@
 /******************************************************************************
  
  *  Purpose:  A Class  for creating the POJO class Of UserService users and this 
- *            this class uses Entity to get know spring that it is POJO class.
+ *            this class uses @Entity annotation to get know spring that it is 
+ *            an entity.
  *  		 
  *  @author   Abhishek Rawat
  *  @version  1.0

@@ -1,7 +1,7 @@
 /******************************************************************************
  
- *  Purpose: An interface class extending Jpa repository interface which can
- *           give service to use the implementation of JpaRepository .
+ *  Purpose: An interface class extending Jpa repository  which give 
+ *           its  service to use in the application .
  *  @author  Abhishek Rawat
  *  @version 1.0
  *  @since   24-10-2019
