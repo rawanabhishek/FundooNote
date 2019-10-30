@@ -13,6 +13,7 @@ package com.bridgelabz.fundoo.note.model;
 
 import java.util.Date;
 
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -28,6 +29,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 
 
@@ -36,6 +38,7 @@ import lombok.Setter;
 @Table(name = "note")
 @Getter
 @Setter
+@ToString
 public class Note {
 	
 	
@@ -45,7 +48,7 @@ public class Note {
 	
 	
 	
-	private String user;
+	private String emailId;
 	
 	
     @Column(name="title")
@@ -77,6 +80,8 @@ public class Note {
 	
     @Column(name="remainder")
 	private Date remainder;
+    
+ 
 
 	
 

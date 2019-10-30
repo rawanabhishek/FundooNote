@@ -19,7 +19,8 @@ import lombok.Setter;
 public class NoteUpdateDTO {
 
 	
-	private Integer noteId;
+	
+	
 	private String title;
 	private String description;
 	

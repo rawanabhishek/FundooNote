@@ -17,12 +17,13 @@ import org.springframework.stereotype.Service;
 import com.bridgelabz.fundoo.note.configuration.ApplicationConfiguration;
 
 import com.bridgelabz.fundoo.note.dto.LabelDTO;
-import com.bridgelabz.fundoo.note.dto.LabelUpdateDTO;
+
 import com.bridgelabz.fundoo.note.exception.custom.LabelException;
 import com.bridgelabz.fundoo.note.model.Label;
 import com.bridgelabz.fundoo.note.repository.LabelRepository;
 import com.bridgelabz.fundoo.note.response.Response;
 import com.bridgelabz.fundoo.note.utility.CommonFiles;
+
 import com.bridgelabz.fundoo.note.utility.TokenUtility;
 
 @Service
@@ -55,44 +56,56 @@ public class ImplLabelService implements ILabelService {
 		String key = TokenUtility.tokenParser(token);
 
 		Label label = configuration.modelMapper().map(labelDTO, Label.class);
-		label.setUser(key);
+		label.setEmailId(key);
 
-		return new Response(200, CommonFiles.ADD_LABEL_SUCCESS, labelRepository.save(label));
+		labelRepository.save(label);
+		String labelToken = TokenUtility.tokenBuild(label.getLabelId().toString());
+
+		return new Response(200, CommonFiles.ADD_LABEL_SUCCESS, labelToken);
 
 	}
 
 	/**
 	 * Purpose: Method of updating labels of a particular user
-	 * 
-	 * @param label containing the update data of a particular label
+	 * @param labelIdToken containing labbelId details
+	 * @param labelDTO containing the update data of a particular label
 	 * @return Response object containing status code , message and object .
 	 */
 	@Override
-	public Response update(LabelUpdateDTO labelUpdateDTO) {
+	public Response update(LabelDTO labelDTO ,String labelIdToken) {
 
 		LOG.info(CommonFiles.SERVICE_UPDATE_METHOD);
-		Label label = labelRepository.findById(labelUpdateDTO.getLabelId()).orElse(null);
+		int labelId = TokenUtility.tokenParserInt(labelIdToken);
+		
+		Label label = labelRepository.findById(labelId).orElse(null);
 		if (label == null) {
 			throw new LabelException(CommonFiles.UPDATE_LABEL_FAILED);
 		}
-		label.setName(labelUpdateDTO.getName());
+		label.setName(labelDTO.getName());
 
 		return new Response(200, CommonFiles.UPDATE_LABEL_SUCCESS, labelRepository.save(label));
 	}
 
 	/**
 	 * Purpose: Method for deleting labels of a particular user
-	 * 
-	 * @param labelId of particular label which we want to delete
+	 * @param labelIdToken containing labbelId details
+	 *@param emailIdToken containing emailId details
 	 * @return Response object containing status code , message and object .
 	 */
 	@Override
-	public Response delete(int labelId) {
+	public Response delete(String labelIdToken, String emailIdToken) {
+		String emailId = TokenUtility.tokenParser(emailIdToken);
 
+		int labelId = TokenUtility.tokenParserInt(labelIdToken);
 		LOG.info(CommonFiles.SERVICE_DELETE_METHOD);
-		if (labelId == 0) {
+
+		Label label = labelRepository.findByLabelIdAndEmailId(labelId, emailId).orElse(null);
+		if (label == null) {
+
 			throw new LabelException(CommonFiles.DELETE_LABEL_FAILED);
+
 		}
+
 		labelRepository.deleteById(labelId);
 		return new Response(200, CommonFiles.DELETE_LABEL_SUCCESS, true);
 
@@ -100,19 +113,23 @@ public class ImplLabelService implements ILabelService {
 
 	/**
 	 * Purpose: Method for fetching the labels
-	 * 
-	 * @param labelId of particular label which we want to get
+	 * @param labelIdToken containing labbelId details
+	 *@param emailIdToken containing emailId details
 	 * @return Response object containing status code , message and object .
 	 */
 	@Override
-	public Response get(int labelId) {
+	public Response get(String labelIdToken, String emailIdToken) {
+
+		String emailId = TokenUtility.tokenParser(emailIdToken);
+
+		int labelId = TokenUtility.tokenParserInt(labelIdToken);
 
 		LOG.info(CommonFiles.SERVICE_GET_METHOD);
 		if (labelId == 0) {
 			throw new LabelException(CommonFiles.GET_LABEL_FAILED);
 		}
 		return new Response(200, CommonFiles.GET_LABEL_SUCCESS,
-				labelRepository.findAll().stream().filter(i -> i.getLabelId() == labelId));
+				labelRepository.findById(labelId).filter(i -> i.getEmailId().equals(emailId)));
 
 	}
 

@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bridgelabz.fundoo.note.dto.LabelDTO;
-import com.bridgelabz.fundoo.note.dto.LabelUpdateDTO;
+
 
 import com.bridgelabz.fundoo.note.response.Response;
 import com.bridgelabz.fundoo.note.service.ILabelService;
@@ -56,13 +56,14 @@ public class LabelController {
 	/**
 	 * Purpose:Creating a Label controller for note to get labels which 
 	 *          take request from request header  and send the response
-	 * @param labelId of particular label
+	 * @param labelIdToken token containing details of labelId
+	 * @param emailIdToken containing emailId details
 	 * @return ResponseEntity containing Response which contains status code,
 	 *         message and object
 	 */
 	@GetMapping("/")
-	public ResponseEntity<Response> get(@RequestHeader int labelId){
-		return new ResponseEntity<Response>(labelService.get(labelId),HttpStatus.OK);
+	public ResponseEntity<Response> get(@RequestHeader String labelIdToken , @RequestHeader String emailIdToken){
+		return new ResponseEntity<Response>(labelService.get(labelIdToken, emailIdToken),HttpStatus.OK);
 		
 	}
 	
@@ -70,13 +71,14 @@ public class LabelController {
 	/**
 	 * Purpose:Creating a Label controller for note to delete label  which 
 	 *          take request from request header  and send the response
-	 * @param labelId of particular label
+	 * @param labelIdToken token containing details of labelId
+	 * @param emailIdToken containing emailId details
 	 * @return ResponseEntity containing Response which contains status code,
 	 *         message and object
 	 */
 	@DeleteMapping("/")
-	public ResponseEntity<Response> delete(@RequestHeader int labelId){
-		return new ResponseEntity<Response>(labelService.delete(labelId),HttpStatus.OK);
+	public ResponseEntity<Response> delete(@RequestHeader String labelIdToken , @RequestHeader String emailIdToken){
+		return new ResponseEntity<Response>(labelService.delete(labelIdToken, emailIdToken),HttpStatus.OK);
 		
 	}
 	
@@ -84,13 +86,14 @@ public class LabelController {
 	 * Purpose:Creating a Label controller for note to update labels  which 
 	 *          take request from request body  and send the response
 	 * @param labelUpdateDTO containing update label data 
+	 * @param labelIdToken token containing details of labelId
 	 * @return ResponseEntity containing Response which contains status code,
 	 *         message and object
 	 */
 	
 	@PutMapping("/")
-	public ResponseEntity<Response> update(@RequestBody LabelUpdateDTO labelUpdateDTO){
-		return new ResponseEntity<Response>(labelService.update(labelUpdateDTO),HttpStatus.OK);
+	public ResponseEntity<Response> update(@RequestBody LabelDTO labelDTO ,@RequestHeader String labelIdToken){
+		return new ResponseEntity<Response>(labelService.update(labelDTO , labelIdToken),HttpStatus.OK);
 		
 	}
 	

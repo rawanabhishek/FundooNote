@@ -18,9 +18,14 @@ import lombok.Setter;
 @Getter
 public class NoteDTO {
 
+	
+	
 	private String title;
 	private String description;
+	
+	
 	private boolean pin;
+	
 	private boolean archive;
 
 

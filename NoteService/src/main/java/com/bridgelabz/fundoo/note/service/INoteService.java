@@ -37,71 +37,87 @@ public interface INoteService {
 	
 	/**
 	 * Purpose: Method for getting all the note of a given user
-	 * @param userId for which we have to fetch all the note
+	 * @param emailIdToken token containing email id 
 	 * @return Response object containing status code , message 
 	 *         and object .
 	 */
-	public Response get(String user);
+	public Response get(String emailIdToken);
 	
 	/**
 	 * Purpose: Method for updating notes of a particular user 
 	 * @param updateDTO containing the updated data for a particular note
 	 *        and setting its value to model and saving it to the
 	 *        database.
+	 * @param noteIdToken token containing note id 
 	 * @return Response object containing status code , message 
 	 *         and object .
 	 */
-	public Response update(NoteUpdateDTO updateDTO) ;
+	public Response update(NoteUpdateDTO updateDTO , String noteIdToken) ;
 	
 	/**
 	 * Purpose:Method for deleting notes of a particular user 
-	 * @param noteId of a note which we need to delete it from the
-	 *        database
+	 * @param emailIdToken token containing email id 
+	 * @param noteIdToken token containing note id 
+	 *        
 	 * @return Response object containing status code , message 
 	 *         and object .
 	 */
-	public Response delete(int noteId);
+	public Response delete(String noteIdToken , String emailIdToken);
 	
 	
 	/**
 	 * Purpose: Method for pin and unpin note
-	 * @param id of note which we need to pin or unpin 
+	 * @param emailIdToken token containing email id 
+	 * @param noteIdToken token containing note id 
 	 * @return Response object containing status code , message 
 	 *         and object .
 	 */
-	public Response pin(int id);
+	public Response pin(String noteIdToken , String emailIdToken);
+	
+	
 	
 	/**
 	 * Purpose: Method for archive and unarchive a note
-	 * @param id of note which we need to archive or unarchive
+	 * @param emailIdToken token containing email id 
+	 * @param noteIdToken token containing note id 
 	 * @return Response object containing status code , message 
 	 *         and object .
 	 */
-	public Response archive(int id );
+	public Response archive(String noteIdToken , String emailIdToken );
+	
+	/**
+	 * Purpose: Method for  unarchive a note and Setting the Pin true
+	 *@param emailIdToken token containing email id 
+	 * @param noteIdToken token containing note id 
+	 * @return Response object containing status code , message 
+	 *         and object .
+	 */
+	public Response archivePin(String noteIdToken , String emailIdToken );
 	
 	/**
 	 * Purpose:Method for trash and untrash a note
-	 * @param id of note which we need to trash or untrash
+	 * @param emailIdToken token containing email id 
+	 * @param noteIdToken token containing note id 
 	 * @return Response object containing status code , message 
 	 *         and object .
 	 */
-	public Response trash(int id);
+	public Response trash(String noteIdToken , String emailIdToken);
 	
 	
 	/**
 	 * Purpose: Method for sorting notes of a user by updated date
-	 * @param user for which we have to sort all the notes of that user
+	 *@param emailIdToken token containing email id 
 	 * @return Response object containing status code , message 
 	 *         and object .
 	 */
-	public Response sortDate(String user);
+	public Response sortDate(String emailIdToken);
 	
 	/**
 	 * Purpose: Method for sorting notes of a user by name (title()  
-	 * @param user for which we have to sort all the notes of that user
+	 * @param emailIdToken token containing email id 
 	 * @return Response object containing status code , message 
 	 *         and object .
 	 */
-	public Response sortName(String user);
+	public Response sortName(String emailIdToken);
 
 }

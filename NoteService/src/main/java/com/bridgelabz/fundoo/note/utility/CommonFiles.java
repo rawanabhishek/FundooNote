@@ -21,6 +21,7 @@ public class CommonFiles {
 	public static final String GET_NOTE_SUCCESS="Notes fetched successfully";
 	public static final String PIN_SUCCESS="Pin operation has been done successfull";
 	public static final String ARCHIVE_SUCCESS="Archive operation has been done successfull";
+	public static final String ARCHIVE_PIN_SUCCESS="Archive  pin operation has been done successfull";
 	public static final String TRASH_SUCCESS="Trash operation has been done successfull";
 	public static final String GET_NOTE_FAILED ="No user find with this id ";
 	public static final String DELETE_NOTE_FAILED = "no note find with note id";
@@ -65,6 +66,7 @@ public class CommonFiles {
 	public static final String SERVICE_PIN_METHOD="Pin service method";
 	public static final String SERVICE_TRASH_METHOD="Trash service method";
 	public static final String SERVICE_ARCHIVE_METHOD="Archive service method";
+	public static final String SERVICE_ARCHIVE_PIN_METHOD="Archive pin service method";
 	
 	
 	

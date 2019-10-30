@@ -13,7 +13,7 @@
 package com.bridgelabz.fundoo.note.service;
 
 import com.bridgelabz.fundoo.note.dto.LabelDTO;
-import com.bridgelabz.fundoo.note.dto.LabelUpdateDTO;
+
 
 import com.bridgelabz.fundoo.note.response.Response;
 
@@ -37,21 +37,25 @@ public interface ILabelService {
 	 *           user 
 	 * @param label containing the update data of a particular
 	 *        label 
+	 *        
+	 * @param labelIdToken token containing label id 
 	 * @return Response object containing status code , message 
 	 *         and object .
 	 */
-	public Response update(LabelUpdateDTO labelUpdateDTO);
+	
+	public Response update(LabelDTO labelDTO ,String labelIdToken);
 	
 	
 	
 	
 	/**
 	 *  Purpose: Method for deleting labels of a particular user
-	 * @param labelId of particular label which we want to delete
+	 * @param labelIdToken token containing label id 
+	 * @param emailIdToken token containing email id 
 	 * @return Response object containing status code , message 
 	 *         and object .
 	 */
-	public Response delete(int labelId);
+	public Response delete(String labelIdToken , String emailIdToken);
 	
 	
 	
@@ -62,6 +66,6 @@ public interface ILabelService {
 	 * @return Response object containing status code , message 
 	 *         and object .
 	 */
-	public Response get(int labelId);
+	public Response get(String labelIdToken , String emailIdToken);
 
 }

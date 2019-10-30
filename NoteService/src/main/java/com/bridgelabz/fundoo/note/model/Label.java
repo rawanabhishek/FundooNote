@@ -27,10 +27,12 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Setter
 @Getter
+@ToString
 @Table(name = "label")
 public class Label {
 	
@@ -40,7 +42,7 @@ public class Label {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer labelId;
 	
-	private String user;
+	private String emailId;
 	
 	private String name;
 	

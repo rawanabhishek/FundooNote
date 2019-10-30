@@ -62,100 +62,119 @@ public class NoteController {
 	/**
 	 * Purpose: Creating a getNote controller which will fetch the header
 	 * and send it to the service.
-	 * @param userId  containing user id.
+	 * @param emailIdToken token containing email id 
+	 * 
 	 * @return ResponseEntity containing Response which contains status code,
 	 *         message and object
 	 * 
 	 */
 	@GetMapping("/")
-	public ResponseEntity<Response> get(@RequestHeader(name="user") String user){
-		return new ResponseEntity<>(noteService.get(user),HttpStatus.OK);
+	public ResponseEntity<Response> get(@RequestHeader String emailIdToken){
+		return new ResponseEntity<>(noteService.get(emailIdToken),HttpStatus.OK);
 	}
 	
 	
 	/**
 	 *  Purpose: Creating a updateNote controller which will fetch the request body
 	 * @param updateDTO containing new update data for a particular note 
+	 * @param noteIdToken token containing note id
 	 * @return ResponseEntity containing Response which contains status code,
 	 *         message and object
 	 * 
 	 */
 	@PutMapping("/")
-	public ResponseEntity<Response> update(@RequestBody NoteUpdateDTO updateDTO) {
+	public ResponseEntity<Response> update(@RequestBody NoteUpdateDTO updateDTO , @RequestHeader String noteIdtoken) {
 		
-		return new ResponseEntity<>(noteService.update(updateDTO),HttpStatus.OK);
+		return new ResponseEntity<>(noteService.update(updateDTO, noteIdtoken),HttpStatus.OK);
 	}
 	
 
 	/**
 	 *  Purpose: Creating a deleteNote controller which will fetch the header
-	 * @param id of a particular note
+	 * @param emailIdToken token containing email id 
+	 * @param noteIdToken token containing note id
 	 * @return ResponseEntity containing Response which contains status code,
 	 *         message and object
 	 */
 	@DeleteMapping("/")
-	public ResponseEntity<Response> delete(@RequestHeader int id){
-		return new ResponseEntity<>(noteService.delete(id),HttpStatus.OK);
+	public ResponseEntity<Response> delete(@RequestHeader String noteIdToken , @RequestHeader String emailIdToken){
+		return new ResponseEntity<>(noteService.delete(noteIdToken ,emailIdToken),HttpStatus.OK);
 	}
 	
 
 	/**
 	 *  Purpose: Creating a pin controller which will fetch the header
-	 * @param id of a particular note
+	 *  @param emailIdToken token containing email id 
+	 * @param noteIdToken token containing note id
 	 * @return ResponseEntity containing Response which contains status code,
 	 *         message and object
 	 */
 	@PutMapping("/pin")
-	public ResponseEntity<Response> pin(@RequestHeader int id){
-		return new ResponseEntity<>(noteService.pin(id),HttpStatus.OK);
+	public ResponseEntity<Response> pin(@RequestHeader String noteIdToken , @RequestHeader String emailIdToken){
+		return new ResponseEntity<>(noteService.pin(noteIdToken ,emailIdToken),HttpStatus.OK);
 	}
 	
 
 	/**
 	 *  Purpose: Creating a archive controller which will fetch the header
-	 * @param id of a particular note
+	 * @param emailIdToken token containing email id 
+	 * @param noteIdToken token containing note id
 	 * @return ResponseEntity containing Response which contains status code,
 	 *         message and object
 	 */
 	@PutMapping("/archive")
-	public ResponseEntity<Response> archive(@RequestHeader int id){
-		return new ResponseEntity<>(noteService.archive(id),HttpStatus.OK);
+	public ResponseEntity<Response> archive(@RequestHeader String noteIdToken , @RequestHeader String emailIdToken){
+		return new ResponseEntity<>(noteService.archive(noteIdToken ,emailIdToken),HttpStatus.OK);
+	}
+	
+	/**
+	 *  Purpose: Creating a archive controller which will fetch the header
+	 *  @param emailIdToken token containing email id 
+	 * @param noteIdToken token containing note id
+	 * @return ResponseEntity containing Response which contains status code,
+	 *         message and object
+	 */
+	@PutMapping("/archivepin")
+	public ResponseEntity<Response> archivePin(@RequestHeader String noteIdToken , @RequestHeader String emailIdToken){
+		return new ResponseEntity<>(noteService.archivePin(noteIdToken ,emailIdToken),HttpStatus.OK);
 	}
 	
 	
 	
 	/**
-	 *  Purpose: Creating a trash controller which will fetch the header
-	 * @param id of a particular note
+	 * Purpose: Creating a trash controller which will fetch the header
+	 * @param emailIdToken token containing email id 
+	 * @param noteIdToken token containing note id
 	 * @return ResponseEntity containing Response which contains status code,
 	 *         message and object
 	 */
 	@PutMapping("/trash")
-	public ResponseEntity<Response> trash(@RequestHeader int id){
-		return new ResponseEntity<>(noteService.trash(id),HttpStatus.OK);
+	public ResponseEntity<Response> trash(@RequestHeader String noteIdToken , @RequestHeader String emailIdToken){
+		return new ResponseEntity<>(noteService.trash(noteIdToken ,emailIdToken),HttpStatus.OK);
 	}
 	
 	
 	/**
-	 *  Purpose: Creating sortDate controller which fetch the header
-	 * @param user unique detail of a particular user 
+	 * Purpose: Creating sortDate controller which fetch the header
+	 * @param emailIdToken token containing email id 
+	 * 
 	 * @return ResponseEntity containing Response which contains status code,
 	 *         message and object
 	 */
 	@GetMapping("/date")
-	public ResponseEntity<Response> sortDate(@RequestHeader(name="user") String user){
-		return new ResponseEntity<>(noteService.sortDate(user),HttpStatus.OK);
+	public ResponseEntity<Response> sortDate(@RequestHeader String emailIdToken){
+		return new ResponseEntity<>(noteService.sortDate(emailIdToken),HttpStatus.OK);
 	}
 	
 	/**
-	 *  Purpose: Creating sortName controller which fetch the header
-	 * @param user user unique detail of a particular user
+	 * Purpose: Creating sortName controller which fetch the header
+	 * @param emailIdToken token containing email id 
 	 * @return ResponseEntity containing Response which contains status code,
 	 *         message and object
 	 */
 	@GetMapping("/name")
-	public ResponseEntity<Response> sortName(@RequestHeader (name="user") String user){
-		return new ResponseEntity<>(noteService.sortName(user),HttpStatus.OK);
+	public ResponseEntity<Response> sortName(@RequestHeader String emailIdToken){
+		return new ResponseEntity<>(noteService.sortName(emailIdToken),HttpStatus.OK);
 	}
 
 }
