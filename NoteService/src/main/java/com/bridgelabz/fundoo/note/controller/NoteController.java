@@ -83,9 +83,9 @@ public class NoteController {
 	 * 
 	 */
 	@PutMapping("/")
-	public ResponseEntity<Response> update(@RequestBody NoteUpdateDTO updateDTO , @RequestHeader String noteIdtoken) {
+	public ResponseEntity<Response> update(@RequestBody NoteUpdateDTO updateDTO , @RequestHeader int noteId ,@RequestHeader String emailIdToken) {
 		
-		return new ResponseEntity<>(noteService.update(updateDTO, noteIdtoken),HttpStatus.OK);
+		return new ResponseEntity<>(noteService.update(updateDTO, noteId , emailIdToken),HttpStatus.OK);
 	}
 	
 
@@ -97,8 +97,8 @@ public class NoteController {
 	 *         message and object
 	 */
 	@DeleteMapping("/")
-	public ResponseEntity<Response> delete(@RequestHeader String noteIdToken , @RequestHeader String emailIdToken){
-		return new ResponseEntity<>(noteService.delete(noteIdToken ,emailIdToken),HttpStatus.OK);
+	public ResponseEntity<Response> delete(@RequestHeader int  noteId , @RequestHeader String emailIdToken){
+		return new ResponseEntity<>(noteService.delete(noteId ,emailIdToken),HttpStatus.OK);
 	}
 	
 
@@ -110,8 +110,8 @@ public class NoteController {
 	 *         message and object
 	 */
 	@PutMapping("/pin")
-	public ResponseEntity<Response> pin(@RequestHeader String noteIdToken , @RequestHeader String emailIdToken){
-		return new ResponseEntity<>(noteService.pin(noteIdToken ,emailIdToken),HttpStatus.OK);
+	public ResponseEntity<Response> pin(@RequestHeader int  noteId , @RequestHeader String emailIdToken){
+		return new ResponseEntity<>(noteService.pin(noteId ,emailIdToken),HttpStatus.OK);
 	}
 	
 
@@ -123,8 +123,8 @@ public class NoteController {
 	 *         message and object
 	 */
 	@PutMapping("/archive")
-	public ResponseEntity<Response> archive(@RequestHeader String noteIdToken , @RequestHeader String emailIdToken){
-		return new ResponseEntity<>(noteService.archive(noteIdToken ,emailIdToken),HttpStatus.OK);
+	public ResponseEntity<Response> archive(@RequestHeader int  noteId , @RequestHeader String emailIdToken){
+		return new ResponseEntity<>(noteService.archive(noteId ,emailIdToken),HttpStatus.OK);
 	}
 	
 	/**
@@ -135,8 +135,8 @@ public class NoteController {
 	 *         message and object
 	 */
 	@PutMapping("/archivepin")
-	public ResponseEntity<Response> archivePin(@RequestHeader String noteIdToken , @RequestHeader String emailIdToken){
-		return new ResponseEntity<>(noteService.archivePin(noteIdToken ,emailIdToken),HttpStatus.OK);
+	public ResponseEntity<Response> archivePin(@RequestHeader int noteId, @RequestHeader String emailIdToken){
+		return new ResponseEntity<>(noteService.archivePin(noteId ,emailIdToken),HttpStatus.OK);
 	}
 	
 	
@@ -149,8 +149,8 @@ public class NoteController {
 	 *         message and object
 	 */
 	@PutMapping("/trash")
-	public ResponseEntity<Response> trash(@RequestHeader String noteIdToken , @RequestHeader String emailIdToken){
-		return new ResponseEntity<>(noteService.trash(noteIdToken ,emailIdToken),HttpStatus.OK);
+	public ResponseEntity<Response> trash(@RequestHeader int  noteId , @RequestHeader String emailIdToken){
+		return new ResponseEntity<>(noteService.trash(noteId ,emailIdToken),HttpStatus.OK);
 	}
 	
 	
@@ -176,5 +176,24 @@ public class NoteController {
 	public ResponseEntity<Response> sortName(@RequestHeader String emailIdToken){
 		return new ResponseEntity<>(noteService.sortName(emailIdToken),HttpStatus.OK);
 	}
+	
+	
+	@PutMapping("/label")
+	public ResponseEntity<Response> addLabel(@RequestHeader int  noteId , @RequestHeader
+			String emailIdToken , @RequestHeader int labelId){
+		System.out.println("controller add label");
+		return new ResponseEntity<>(noteService.addLabel(noteId ,emailIdToken ,labelId),HttpStatus.OK);
+	}
+	
+	
+	@PutMapping("/removelabel")
+	public ResponseEntity<Response> removeLabel(@RequestHeader int  noteId , @RequestHeader
+			String emailIdToken , @RequestHeader int labelId){
+		System.out.println("controller delete label");
+		return new ResponseEntity<>(noteService.removeLabel(noteId ,emailIdToken ,labelId),HttpStatus.OK);
+	}
+	
+	
+	
 
 }

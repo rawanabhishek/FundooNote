@@ -12,48 +12,54 @@
 package com.bridgelabz.fundoo.note.model;
 
 import java.util.Date;
+import java.util.List;
 
-
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.ManyToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 @Entity
 @Setter
 @Getter
-@ToString
-@Table(name = "label")
+@Data
 public class Label {
-	
-	
-	
+
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "label_id")
 	private Integer labelId;
-	
+
 	private String emailId;
-	
+
 	private String name;
-	
-    @CreationTimestamp
-    @Temporal(TemporalType.TIMESTAMP)
+
+	@CreationTimestamp
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date createdDate;
-	
- 
 
 	@UpdateTimestamp
-    @Temporal(TemporalType.TIMESTAMP)
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date updateDate;
+
+	
+	@JsonIgnoreProperties(value = "labels")
+	@ManyToMany(mappedBy = "labels", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<Note> notes;
 
 }

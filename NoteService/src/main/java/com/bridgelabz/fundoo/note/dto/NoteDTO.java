@@ -11,8 +11,18 @@
  ******************************************************************************/
 package com.bridgelabz.fundoo.note.dto;
 
+
+
+
+
+import java.util.List;
+
+import com.bridgelabz.fundoo.note.model.Label;
+
+
 import lombok.Getter;
 import lombok.Setter;
+
 
 @Setter
 @Getter
@@ -27,6 +37,9 @@ public class NoteDTO {
 	private boolean pin;
 	
 	private boolean archive;
+	private List<Label> labels;
+	
+	
 
 
 }

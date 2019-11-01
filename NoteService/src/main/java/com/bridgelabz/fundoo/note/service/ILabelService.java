@@ -43,7 +43,7 @@ public interface ILabelService {
 	 *         and object .
 	 */
 	
-	public Response update(LabelDTO labelDTO ,String labelIdToken);
+	public Response update(LabelDTO labelDTO ,int labelId);
 	
 	
 	
@@ -55,7 +55,7 @@ public interface ILabelService {
 	 * @return Response object containing status code , message 
 	 *         and object .
 	 */
-	public Response delete(String labelIdToken , String emailIdToken);
+	public Response delete(int labelId , String emailIdToken);
 	
 	
 	
@@ -66,6 +66,6 @@ public interface ILabelService {
 	 * @return Response object containing status code , message 
 	 *         and object .
 	 */
-	public Response get(String labelIdToken , String emailIdToken);
+	public Response get(int labelId , String emailIdToken);
 
 }

@@ -59,9 +59,9 @@ public class ImplLabelService implements ILabelService {
 		label.setEmailId(key);
 
 		labelRepository.save(label);
-		String labelToken = TokenUtility.tokenBuild(label.getLabelId().toString());
+		
 
-		return new Response(200, CommonFiles.ADD_LABEL_SUCCESS, labelToken);
+		return new Response(200, CommonFiles.ADD_LABEL_SUCCESS, label);
 
 	}
 
@@ -72,10 +72,10 @@ public class ImplLabelService implements ILabelService {
 	 * @return Response object containing status code , message and object .
 	 */
 	@Override
-	public Response update(LabelDTO labelDTO ,String labelIdToken) {
+	public Response update(LabelDTO labelDTO ,int labelId) {
 
 		LOG.info(CommonFiles.SERVICE_UPDATE_METHOD);
-		int labelId = TokenUtility.tokenParserInt(labelIdToken);
+		
 		
 		Label label = labelRepository.findById(labelId).orElse(null);
 		if (label == null) {
@@ -93,10 +93,10 @@ public class ImplLabelService implements ILabelService {
 	 * @return Response object containing status code , message and object .
 	 */
 	@Override
-	public Response delete(String labelIdToken, String emailIdToken) {
+	public Response delete(int labelId, String emailIdToken) {
 		String emailId = TokenUtility.tokenParser(emailIdToken);
 
-		int labelId = TokenUtility.tokenParserInt(labelIdToken);
+		
 		LOG.info(CommonFiles.SERVICE_DELETE_METHOD);
 
 		Label label = labelRepository.findByLabelIdAndEmailId(labelId, emailId).orElse(null);
@@ -118,11 +118,11 @@ public class ImplLabelService implements ILabelService {
 	 * @return Response object containing status code , message and object .
 	 */
 	@Override
-	public Response get(String labelIdToken, String emailIdToken) {
+	public Response get(int labelId, String emailIdToken) {
 
 		String emailId = TokenUtility.tokenParser(emailIdToken);
 
-		int labelId = TokenUtility.tokenParserInt(labelIdToken);
+	
 
 		LOG.info(CommonFiles.SERVICE_GET_METHOD);
 		if (labelId == 0) {

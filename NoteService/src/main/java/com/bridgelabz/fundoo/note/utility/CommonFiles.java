@@ -40,6 +40,8 @@ public class CommonFiles {
 	public static final String GET_LABEL_FAILED="Reading label failed";
 	public static final String UPDATE_LABEL_SUCCESS=" label updated successfully";
 	public static final String UPDATE_LABEL_FAILED="updating label failed";
+	public static final String LABEL_FOUND_FAILED = "Label not found";
+	public static final String REMOVE_LABEL_SUCCESS = "label Removed successfully";
 	
 	
 	
@@ -67,6 +69,7 @@ public class CommonFiles {
 	public static final String SERVICE_TRASH_METHOD="Trash service method";
 	public static final String SERVICE_ARCHIVE_METHOD="Archive service method";
 	public static final String SERVICE_ARCHIVE_PIN_METHOD="Archive pin service method";
+	
 	
 	
 	

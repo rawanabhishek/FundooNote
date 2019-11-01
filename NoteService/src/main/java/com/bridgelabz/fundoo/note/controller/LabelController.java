@@ -48,7 +48,7 @@ public class LabelController {
 	 *         message and object
 	 */
 	@PostMapping("/")
-	public ResponseEntity<Response> add(@RequestBody LabelDTO labelDTO ,@RequestHeader String token){
+	public ResponseEntity<Response> add(@RequestBody LabelDTO labelDTO ,@RequestHeader String token ){
 		return new ResponseEntity<Response>(labelService.add(labelDTO ,token),HttpStatus.OK);
 		
 	}
@@ -62,8 +62,8 @@ public class LabelController {
 	 *         message and object
 	 */
 	@GetMapping("/")
-	public ResponseEntity<Response> get(@RequestHeader String labelIdToken , @RequestHeader String emailIdToken){
-		return new ResponseEntity<Response>(labelService.get(labelIdToken, emailIdToken),HttpStatus.OK);
+	public ResponseEntity<Response> get(@RequestHeader int labelId , @RequestHeader String emailIdToken){
+		return new ResponseEntity<Response>(labelService.get(labelId, emailIdToken),HttpStatus.OK);
 		
 	}
 	
@@ -77,8 +77,8 @@ public class LabelController {
 	 *         message and object
 	 */
 	@DeleteMapping("/")
-	public ResponseEntity<Response> delete(@RequestHeader String labelIdToken , @RequestHeader String emailIdToken){
-		return new ResponseEntity<Response>(labelService.delete(labelIdToken, emailIdToken),HttpStatus.OK);
+	public ResponseEntity<Response> delete(@RequestHeader int labelId , @RequestHeader String emailIdToken){
+		return new ResponseEntity<Response>(labelService.delete(labelId, emailIdToken),HttpStatus.OK);
 		
 	}
 	
@@ -92,8 +92,8 @@ public class LabelController {
 	 */
 	
 	@PutMapping("/")
-	public ResponseEntity<Response> update(@RequestBody LabelDTO labelDTO ,@RequestHeader String labelIdToken){
-		return new ResponseEntity<Response>(labelService.update(labelDTO , labelIdToken),HttpStatus.OK);
+	public ResponseEntity<Response> update(@RequestBody LabelDTO labelDTO ,@RequestHeader int labelId){
+		return new ResponseEntity<Response>(labelService.update(labelDTO , labelId),HttpStatus.OK);
 		
 	}
 	

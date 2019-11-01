@@ -12,8 +12,6 @@ package com.bridgelabz.fundoo.note.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +22,9 @@ import com.bridgelabz.fundoo.note.dto.NoteDTO;
 import com.bridgelabz.fundoo.note.dto.NoteUpdateDTO;
 import com.bridgelabz.fundoo.note.exception.custom.NoteException;
 import com.bridgelabz.fundoo.note.exception.custom.LabelException;
-
+import com.bridgelabz.fundoo.note.model.Label;
 import com.bridgelabz.fundoo.note.model.Note;
-
+import com.bridgelabz.fundoo.note.repository.LabelRepository;
 import com.bridgelabz.fundoo.note.repository.NoteRepository;
 import com.bridgelabz.fundoo.note.response.Response;
 import com.bridgelabz.fundoo.note.utility.CommonFiles;
@@ -37,6 +35,9 @@ public class ImplNoteService implements INoteService {
 
 	@Autowired
 	private NoteRepository noteRepository;
+
+	@Autowired
+	private LabelRepository labelRepository;
 
 	@Autowired
 	private ApplicationConfiguration configuration;
@@ -57,38 +58,37 @@ public class ImplNoteService implements INoteService {
 	public Response add(NoteDTO noteDTO, String token) {
 
 		LOG.info(CommonFiles.SERVICE_ADD_METHOD);
-		if (!(noteDTO.getTitle().isEmpty() || noteDTO.getDescription().isEmpty())) {
+
+		if ((noteDTO.getTitle().isBlank() && noteDTO.getDescription().isBlank())) {
 
 			throw new NoteException(CommonFiles.ADD_NOTE_FAILED);
 
 		}
-		String key = TokenUtility.tokenParser(token);
 
 		Note note = configuration.modelMapper().map(noteDTO, Note.class);
-		note.setEmailId(key);
+		System.out.println(note);
+		note.setEmailId(TokenUtility.tokenParser(token));
 
-		noteRepository.save(note);
-		String noteToken = TokenUtility.tokenBuild(note.getNoteId().toString());
-		return new Response(200, CommonFiles.ADD_NOTE_SUCCESS, noteToken);
+		return new Response(200, CommonFiles.ADD_NOTE_SUCCESS, noteRepository.save(note));
 
 	}
 
 	/**
 	 * Purpose: Method for updating notes of a particular user
 	 * 
-	 * @param updateDTO containing the updated data for a particular note and
-	 *                  setting its value to model and saving it to the database.
-	 * @param emailIdToken token containing email id 
-	 *                  
+	 * @param updateDTO    containing the updated data for a particular note and
+	 *                     setting its value to model and saving it to the database.
+	 * @param emailIdToken token containing email id
+	 * 
 	 * @return Response object containing status code , message and object .
 	 */
 	@Override
-	public Response update(NoteUpdateDTO updateDTO, String noteIdToken) {
+	public Response update(NoteUpdateDTO updateDTO, int noteId, String emailIdToken) {
 		LOG.info(CommonFiles.SERVICE_UPDATE_METHOD);
-		int noteId = TokenUtility.tokenParserInt(noteIdToken);
+		String emailId = TokenUtility.tokenParser(emailIdToken);
 
-		Note note = noteRepository.findById(noteId).orElse(null);
-		if ((!(updateDTO.getTitle().isEmpty() || updateDTO.getDescription().isEmpty())) && note == null) {
+		Note note = noteRepository.findByNoteIdAndEmailId(noteId, emailId).orElse(null);
+		if (((updateDTO.getTitle().isBlank() && updateDTO.getDescription().isBlank())) && note == null) {
 			throw new NoteException(CommonFiles.UPDATE_NOTE_FAILED);
 		}
 
@@ -99,23 +99,23 @@ public class ImplNoteService implements INoteService {
 
 	/**
 	 * Purpose:Method for deleting notes of a particular user
-	 * @param emailIdToken token containing email id 
-	 * @param noteIdToken token containing note id 
+	 * 
+	 * @param emailIdToken token containing email id
+	 * @param noteIdToken  token containing note id
 	 *
 	 * @return Response object containing status code , message and object .
 	 */
 	@Override
-	public Response delete(String noteIdToken, String emailIdToken) {
+	public Response delete(int noteId, String emailIdToken) {
 		String emailId = TokenUtility.tokenParser(emailIdToken);
 
-		int noteId = TokenUtility.tokenParserInt(noteIdToken);
 		LOG.info(CommonFiles.SERVICE_DELETE_METHOD);
 		Note note = noteRepository.findByNoteIdAndEmailId(noteId, emailId).orElse(null);
-		
-		if (note == null  || (!note.isTrash())) {
+
+		if (note == null || (!note.isTrash())) {
 			throw new LabelException(CommonFiles.DELETE_NOTE_FAILED);
 		}
-		
+
 		noteRepository.deleteById(noteId);
 		return new Response(200, CommonFiles.DELETE_NOTE_SUCCESS, true);
 	}
@@ -123,7 +123,7 @@ public class ImplNoteService implements INoteService {
 	/**
 	 * Purpose: Method for getting all the note of a given user
 	 * 
-	 * @param emailIdToken token containing email id 
+	 * @param emailIdToken token containing email id
 	 * @return Response object containing status code , message and object .
 	 */
 	@Override
@@ -145,15 +145,13 @@ public class ImplNoteService implements INoteService {
 	/**
 	 * Purpose: Method for pin and unpin note
 	 * 
-	 *  @param emailIdToken token containing email id 
-	 * @param noteIdToken token containing note id 
+	 * @param emailIdToken token containing email id
+	 * @param noteIdToken  token containing note id
 	 * @return Response object containing status code , message and object .
 	 */
 	@Override
-	public Response pin(String noteIdToken, String emailIdToken) {
+	public Response pin(int noteId, String emailIdToken) {
 		String emailId = TokenUtility.tokenParser(emailIdToken);
-
-		int noteId = TokenUtility.tokenParserInt(noteIdToken);
 
 		LOG.info(CommonFiles.SERVICE_PIN_METHOD);
 		Note note = noteRepository.findByNoteIdAndEmailId(noteId, emailId).orElse(null);
@@ -161,7 +159,7 @@ public class ImplNoteService implements INoteService {
 			throw new NoteException(CommonFiles.USER_FOUND_FAILED);
 		} else {
 			if (note.isPin()) {
-			
+
 				note.setPin(false);
 			} else {
 				note.setArchive(false);
@@ -176,15 +174,14 @@ public class ImplNoteService implements INoteService {
 	/**
 	 * Purpose: Method for archive and unarchive a note
 	 * 
-	 *  @param emailIdToken token containing email id 
-	 * @param noteIdToken token containing note id 
+	 * @param emailIdToken token containing email id
+	 * @param noteIdToken  token containing note id
 	 * @return Response object containing status code , message and object .
 	 */
 	@Override
-	public Response archive(String noteIdToken, String emailIdToken) {
+	public Response archive(int noteId, String emailIdToken) {
 		String emailId = TokenUtility.tokenParser(emailIdToken);
 
-		int noteId = TokenUtility.tokenParserInt(noteIdToken);
 		LOG.info(CommonFiles.SERVICE_ARCHIVE_METHOD);
 		Note note = noteRepository.findByNoteIdAndEmailId(noteId, emailId).orElse(null);
 		if (note == null) {
@@ -202,20 +199,18 @@ public class ImplNoteService implements INoteService {
 
 		}
 	}
-	
-	
+
 	/**
-	 * Purpose: Method for  unarchive a note and Setting the Pin true
+	 * Purpose: Method for unarchive a note and Setting the Pin true
 	 * 
-	 *  @param emailIdToken token containing email id 
-	 * @param noteIdToken token containing note id 
+	 * @param emailIdToken token containing email id
+	 * @param noteIdToken  token containing note id
 	 * @return Response object containing status code , message and object .
 	 */
 	@Override
-	public Response archivePin(String noteIdToken, String emailIdToken) {
+	public Response archivePin(int noteId, String emailIdToken) {
 		String emailId = TokenUtility.tokenParser(emailIdToken);
 
-		int noteId = TokenUtility.tokenParserInt(noteIdToken);
 		LOG.info(CommonFiles.SERVICE_ARCHIVE_PIN_METHOD);
 		Note note = noteRepository.findByNoteIdAndEmailId(noteId, emailId).orElse(null);
 		if (note == null) {
@@ -224,26 +219,25 @@ public class ImplNoteService implements INoteService {
 			if (note.isArchive()) {
 				note.setPin(true);
 				note.setArchive(false);
-			} 
+			}
 
 			return new Response(200, CommonFiles.ARCHIVE_PIN_SUCCESS, noteRepository.save(note));
 
 		}
 	}
 
-
 	/**
 	 * Purpose:Method for trash and untrash a note
-	 *  @param emailIdToken token containing email id 
-	 * @param noteIdToken token containing note id 
+	 * 
+	 * @param emailIdToken token containing email id
+	 * @param noteIdToken  token containing note id
 	 *
 	 * @return Response object containing status code , message and object .
 	 */
 	@Override
-	public Response trash(String noteIdToken, String emailIdToken) {
+	public Response trash(int noteId, String emailIdToken) {
 		String emailId = TokenUtility.tokenParser(emailIdToken);
 
-		int noteId = TokenUtility.tokenParserInt(noteIdToken);
 		LOG.info(CommonFiles.SERVICE_TRASH_METHOD);
 
 		Note note = noteRepository.findByNoteIdAndEmailId(noteId, emailId).orElse(null);
@@ -265,7 +259,7 @@ public class ImplNoteService implements INoteService {
 	/**
 	 * Purpose: Method for sorting notes of a user by updated date
 	 * 
-	 * @param emailIdToken token containing email id 
+	 * @param emailIdToken token containing email id
 	 * @return Response object containing status code , message and object .
 	 */
 	@Override
@@ -284,7 +278,7 @@ public class ImplNoteService implements INoteService {
 	/**
 	 * Purpose: Method for sorting notes of a user by name (title()
 	 * 
-	 * @param emailIdToken token containing email id 
+	 * @param emailIdToken token containing email id
 	 * @return Response object containing status code , message and object .
 	 */
 	@Override
@@ -298,6 +292,47 @@ public class ImplNoteService implements INoteService {
 				.collect(Collectors.toList());
 
 		return new Response(200, CommonFiles.SORT_NAME_SUCCESS, sortedNote);
+	}
+
+	
+	
+	
+	
+	@Override
+	public Response addLabel(int noteId, String emailIdToken, int labelId) {
+		String emailId = TokenUtility.tokenParser(emailIdToken);
+
+		Note note = noteRepository.findByNoteIdAndEmailId(noteId, emailId).orElse(null);
+
+		Label label = labelRepository.findById(labelId).orElse(null);
+
+		if (label.getEmailId().equals(emailId)) {
+
+			throw new NoteException(CommonFiles.LABEL_FOUND_FAILED);
+		}
+
+		note.getLabels().add(label);
+
+		noteRepository.save(note);
+
+		return new Response(200, CommonFiles.UPDATE_NOTE_SUCCESS, note);
+	}
+
+	@Override
+	public Response removeLabel(int noteId, String emailIdToken, int labelId) {
+		String emailId = TokenUtility.tokenParser(emailIdToken);
+
+		Note note = noteRepository.findByNoteIdAndEmailId(noteId, emailId).orElse(null);
+		
+		Label label = labelRepository.findById(labelId).orElse(null);
+		
+		
+		if(note.getLabels().contains(label) && label !=null) {
+		
+			note.getLabels().remove(label);
+			noteRepository.save(note);
+		}
+		return new Response(200, CommonFiles.REMOVE_LABEL_SUCCESS, note);
 	}
 
 }

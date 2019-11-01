@@ -9,6 +9,8 @@
  ******************************************************************************/
 package com.bridgelabz.fundoo.user.utility;
 
+
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -31,16 +33,30 @@ public class TokenUtility {
 	}
 
 	/**
-	 * Purpose: to parse JWT token
+	 * Purpose: to parse JWT token for email
 	 * 
-	 * @param token for checking the user is authorized ot not
-	 * @return key value
+	 * @param token for checking the user is authorized or not
+	 * @return String containg the key value
 	 */
 	public static String tokenParser(String token) {
 
 		Claims claims = Jwts.parser().setSigningKey(CommonFiles.TOKEN_KEY).parseClaimsJws(token).getBody();
 		String key = claims.getSubject();
 		return key;
+	}
+
+	/**
+	 * Purpose: to parse JWT token for id
+	 * 
+	 * @param token for checking the user is authorized or not
+	 * @return int containg the id value
+	 */
+	public static int tokenParserInt(String token) {
+
+		Claims claims = Jwts.parser().setSigningKey(CommonFiles.TOKEN_KEY).parseClaimsJws(token).getBody();
+		String key = claims.getSubject();
+		int id = Integer.parseInt(key);
+		return id;
 	}
 
 }

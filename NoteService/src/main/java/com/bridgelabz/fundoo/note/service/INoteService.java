@@ -52,7 +52,7 @@ public interface INoteService {
 	 * @return Response object containing status code , message 
 	 *         and object .
 	 */
-	public Response update(NoteUpdateDTO updateDTO , String noteIdToken) ;
+	public Response update(NoteUpdateDTO updateDTO , int noteId ,String emailIdToken) ;
 	
 	/**
 	 * Purpose:Method for deleting notes of a particular user 
@@ -62,7 +62,7 @@ public interface INoteService {
 	 * @return Response object containing status code , message 
 	 *         and object .
 	 */
-	public Response delete(String noteIdToken , String emailIdToken);
+	public Response delete(int noteId , String emailIdToken);
 	
 	
 	/**
@@ -72,7 +72,7 @@ public interface INoteService {
 	 * @return Response object containing status code , message 
 	 *         and object .
 	 */
-	public Response pin(String noteIdToken , String emailIdToken);
+	public Response pin(int noteId, String emailIdToken);
 	
 	
 	
@@ -83,7 +83,7 @@ public interface INoteService {
 	 * @return Response object containing status code , message 
 	 *         and object .
 	 */
-	public Response archive(String noteIdToken , String emailIdToken );
+	public Response archive(int noteId , String emailIdToken );
 	
 	/**
 	 * Purpose: Method for  unarchive a note and Setting the Pin true
@@ -92,7 +92,7 @@ public interface INoteService {
 	 * @return Response object containing status code , message 
 	 *         and object .
 	 */
-	public Response archivePin(String noteIdToken , String emailIdToken );
+	public Response archivePin(int noteId , String emailIdToken );
 	
 	/**
 	 * Purpose:Method for trash and untrash a note
@@ -101,7 +101,7 @@ public interface INoteService {
 	 * @return Response object containing status code , message 
 	 *         and object .
 	 */
-	public Response trash(String noteIdToken , String emailIdToken);
+	public Response trash(int noteId, String emailIdToken);
 	
 	
 	/**
@@ -119,5 +119,12 @@ public interface INoteService {
 	 *         and object .
 	 */
 	public Response sortName(String emailIdToken);
+	
+	
+	
+	public Response addLabel(int noteId, String emailIdToken, int labelId );
+	
+	public Response removeLabel(int noteId , String emailIdToken , int labelId);
+	
 
 }

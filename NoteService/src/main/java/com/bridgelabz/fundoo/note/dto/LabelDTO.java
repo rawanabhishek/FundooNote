@@ -11,7 +11,11 @@
  ******************************************************************************/
 package com.bridgelabz.fundoo.note.dto;
 
+
+
 import javax.validation.constraints.NotNull;
+
+
 
 import lombok.Getter;
 import lombok.Setter;
@@ -22,5 +26,7 @@ public class LabelDTO {
 
 	@NotNull(message = "label name cannot be empty")
 	private String name;
+	
+	
 
 }

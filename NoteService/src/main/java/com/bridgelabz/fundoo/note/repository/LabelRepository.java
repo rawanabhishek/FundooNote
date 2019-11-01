@@ -27,6 +27,8 @@ public interface  LabelRepository extends JpaRepository<Label, Integer>{
 
 	
 
+	
+
 
 
 	

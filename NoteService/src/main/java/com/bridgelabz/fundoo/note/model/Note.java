@@ -12,79 +12,69 @@
 package com.bridgelabz.fundoo.note.model;
 
 import java.util.Date;
-
-
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.ManyToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-
-
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
-
-
-
 
 @Entity
-@Table(name = "note")
 @Getter
 @Setter
-@ToString
+@Data
 public class Note {
-	
-	
-	@GeneratedValue(strategy = GenerationType.AUTO)
+
 	@Id
+	@Column(name = "note_id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer noteId;
-	
-	
-	
+
+	@Column(name = "email_id")
 	private String emailId;
-	
-	
-    @Column(name="title")
+
+	@Column(name = "title")
 	private String title;
-	
-    @Column(name="description")
+
+	@Column(name = "description")
 	private String description;
-	
-    @Column(name="is_pin" , columnDefinition = "boolean default false")
+
+	@Column(name = "is_pin", columnDefinition = "boolean default false")
 	private boolean pin;
-	
-    @Column(name="is_archive" , columnDefinition = "boolean default false")
+
+	@Column(name = "is_archive", columnDefinition = "boolean default false")
 	private boolean archive;
-	
-    @Column(name="is_trash" , columnDefinition = "boolean default false")
+
+	@Column(name = "is_trash", columnDefinition = "boolean default false")
 	private boolean trash;
-	
-    @CreationTimestamp
-    @Column(name="date_created")
-    @Temporal(TemporalType.TIMESTAMP)
+
+	@CreationTimestamp
+	@Column(name = "date_created")
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date created;
-	
- 
 
 	@UpdateTimestamp
-    @Column(name="date_updated")
-    @Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "date_updated")
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date update;
-	
-    @Column(name="remainder")
+
+	@Column(name = "remainder")
 	private Date remainder;
-    
- 
-
+	
 	
 
-	
-	
+	@JsonIgnoreProperties(value = "notes")
+	@ManyToMany(fetch = FetchType.LAZY)
+	private List<Label> labels;
+
 }
