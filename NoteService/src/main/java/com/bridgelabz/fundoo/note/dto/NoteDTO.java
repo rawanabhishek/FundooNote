@@ -15,7 +15,11 @@ package com.bridgelabz.fundoo.note.dto;
 
 
 
+
+import java.util.Date;
 import java.util.List;
+
+
 
 import com.bridgelabz.fundoo.note.model.Label;
 
@@ -35,9 +39,10 @@ public class NoteDTO {
 	
 	
 	private boolean pin;
-	
+	private Date remainder;
 	private boolean archive;
 	private List<Label> labels;
+	private String noteColor;
 	
 	
 

@@ -27,7 +27,7 @@ public interface ILabelService {
 	 * @return Response object containing status code , message 
 	 *         and object .
 	 */
-	public Response add(LabelDTO labelDTO , String token);
+	public Response add(LabelDTO labelDTO , String emailIdToken);
 	
 	
 	

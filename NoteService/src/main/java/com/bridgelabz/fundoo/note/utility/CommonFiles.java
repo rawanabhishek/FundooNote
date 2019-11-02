@@ -25,10 +25,21 @@ public class CommonFiles {
 	public static final String TRASH_SUCCESS="Trash operation has been done successfull";
 	public static final String GET_NOTE_FAILED ="No user find with this id ";
 	public static final String DELETE_NOTE_FAILED = "no note find with note id";
+	public static final String NOTE_TRASH = "you need to put note to trash to delete note";
 	public static final String SORT_DATE_SUCCESS = "Sorted by date successful";
 	public static final String SORT_NAME_SUCCESS = "sorted by name successful";
 	public static final String USER_FOUND_FAILED = "User not found";
 	public static final String TRASH_NOTE_FAILED = "no user find with this id";
+	public static final String NOTE_FOUND_FAILED = "Note not found";
+	public static final String ADD_COLLABORATOR_SUCCESS = "Collaborator added successfully";
+	public static final String REMOVE_COLLABORATOR_SUCCESS = "Collaborator removed successfully";
+	public static final String INVALID_DATE = "Invalid date";
+	public static final String ADD_REMAINDER_SUCCESS = "remainder added successfully";
+	public static final String REMOVE_REMAINDER_SUCCESS = "remainder removed successfully";
+	public static final String COLOR_ADDED_SUCCESS = "color added succesfully";
+	public static final String REMINDER_PRESENT = "reminder already present";
+	public static final String COLOR_ABSENT = "no color found";
+	public static final String COLOR_REMOVED_SUCCESS = "Color removed successfully";
 	
 	
 	//labelService related message
@@ -69,6 +80,18 @@ public class CommonFiles {
 	public static final String SERVICE_TRASH_METHOD="Trash service method";
 	public static final String SERVICE_ARCHIVE_METHOD="Archive service method";
 	public static final String SERVICE_ARCHIVE_PIN_METHOD="Archive pin service method";
+	public static final String UPDATE_REMAINDER_SUCCESS = "Reminder updated successfully";
+	public static final String PHOTO_ADDED_SUCCESS = "photo added suvvessfully";
+
+	
+	
+	
+	
+	
+	
+	
+
+	
 	
 	
 	

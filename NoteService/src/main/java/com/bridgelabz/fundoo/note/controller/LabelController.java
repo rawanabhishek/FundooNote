@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bridgelabz.fundoo.note.dto.LabelDTO;
@@ -48,8 +49,8 @@ public class LabelController {
 	 *         message and object
 	 */
 	@PostMapping("/")
-	public ResponseEntity<Response> add(@RequestBody LabelDTO labelDTO ,@RequestHeader String token ){
-		return new ResponseEntity<Response>(labelService.add(labelDTO ,token),HttpStatus.OK);
+	public ResponseEntity<Response> add(@RequestBody LabelDTO labelDTO ,@RequestHeader("emailIdToken") String emailIdToken ){
+		return new ResponseEntity<Response>(labelService.add(labelDTO ,emailIdToken),HttpStatus.OK);
 		
 	}
 	
@@ -62,7 +63,7 @@ public class LabelController {
 	 *         message and object
 	 */
 	@GetMapping("/")
-	public ResponseEntity<Response> get(@RequestHeader int labelId , @RequestHeader String emailIdToken){
+	public ResponseEntity<Response> get(@RequestParam int labelId , @RequestHeader("emailIdToken") String emailIdToken){
 		return new ResponseEntity<Response>(labelService.get(labelId, emailIdToken),HttpStatus.OK);
 		
 	}
@@ -77,7 +78,7 @@ public class LabelController {
 	 *         message and object
 	 */
 	@DeleteMapping("/")
-	public ResponseEntity<Response> delete(@RequestHeader int labelId , @RequestHeader String emailIdToken){
+	public ResponseEntity<Response> delete(@RequestParam int labelId , @RequestHeader("emailIdToken") String emailIdToken){
 		return new ResponseEntity<Response>(labelService.delete(labelId, emailIdToken),HttpStatus.OK);
 		
 	}
@@ -92,7 +93,7 @@ public class LabelController {
 	 */
 	
 	@PutMapping("/")
-	public ResponseEntity<Response> update(@RequestBody LabelDTO labelDTO ,@RequestHeader int labelId){
+	public ResponseEntity<Response> update(@RequestBody LabelDTO labelDTO ,@RequestParam("labelId") int labelId){
 		return new ResponseEntity<Response>(labelService.update(labelDTO , labelId),HttpStatus.OK);
 		
 	}

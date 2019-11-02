@@ -11,19 +11,27 @@
  ******************************************************************************/
 package com.bridgelabz.fundoo.note.model;
 
+
 import java.util.Date;
 import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
+
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.Pattern;
+
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.Getter;
@@ -68,13 +76,22 @@ public class Note {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date update;
 
-	@Column(name = "remainder")
-	private Date remainder;
+	@Column(name = "reminder")
+	private Date reminder;
+
+
 	
-	
+    @Pattern(regexp="^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})|([0]{0})$")
+    private String noteColor;
 
 	@JsonIgnoreProperties(value = "notes")
 	@ManyToMany(fetch = FetchType.LAZY)
 	private List<Label> labels;
+	
+	@Lob
+	private byte[] file;
+
+//	@OneToMany
+//	private List<String> collaborator=new ArrayList<String>();
 
 }

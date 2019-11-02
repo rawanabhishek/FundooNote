@@ -46,20 +46,19 @@ public class ImplLabelService implements ILabelService {
 	 * @return Response object containing status code , message and object .
 	 */
 	@Override
-	public Response add(LabelDTO labelDTO, String token) {
+	public Response add(LabelDTO labelDTO, String emailIdToken) {
 		LOG.info(CommonFiles.SERVICE_ADD_METHOD);
 
 		if (labelDTO == null) {
 			throw new LabelException(CommonFiles.ADD_LABEL_FAILED);
 		}
 
-		String key = TokenUtility.tokenParser(token);
+		String key = TokenUtility.tokenParser(emailIdToken);
 
 		Label label = configuration.modelMapper().map(labelDTO, Label.class);
 		label.setEmailId(key);
 
 		labelRepository.save(label);
-		
 
 		return new Response(200, CommonFiles.ADD_LABEL_SUCCESS, label);
 
@@ -67,16 +66,16 @@ public class ImplLabelService implements ILabelService {
 
 	/**
 	 * Purpose: Method of updating labels of a particular user
+	 * 
 	 * @param labelIdToken containing labbelId details
-	 * @param labelDTO containing the update data of a particular label
+	 * @param labelDTO     containing the update data of a particular label
 	 * @return Response object containing status code , message and object .
 	 */
 	@Override
-	public Response update(LabelDTO labelDTO ,int labelId) {
+	public Response update(LabelDTO labelDTO, int labelId) {
 
 		LOG.info(CommonFiles.SERVICE_UPDATE_METHOD);
-		
-		
+
 		Label label = labelRepository.findById(labelId).orElse(null);
 		if (label == null) {
 			throw new LabelException(CommonFiles.UPDATE_LABEL_FAILED);
@@ -88,15 +87,15 @@ public class ImplLabelService implements ILabelService {
 
 	/**
 	 * Purpose: Method for deleting labels of a particular user
+	 * 
 	 * @param labelIdToken containing labbelId details
-	 *@param emailIdToken containing emailId details
+	 * @param emailIdToken containing emailId details
 	 * @return Response object containing status code , message and object .
 	 */
 	@Override
 	public Response delete(int labelId, String emailIdToken) {
 		String emailId = TokenUtility.tokenParser(emailIdToken);
 
-		
 		LOG.info(CommonFiles.SERVICE_DELETE_METHOD);
 
 		Label label = labelRepository.findByLabelIdAndEmailId(labelId, emailId).orElse(null);
@@ -113,16 +112,15 @@ public class ImplLabelService implements ILabelService {
 
 	/**
 	 * Purpose: Method for fetching the labels
+	 * 
 	 * @param labelIdToken containing labbelId details
-	 *@param emailIdToken containing emailId details
+	 * @param emailIdToken containing emailId details
 	 * @return Response object containing status code , message and object .
 	 */
 	@Override
 	public Response get(int labelId, String emailIdToken) {
 
 		String emailId = TokenUtility.tokenParser(emailIdToken);
-
-	
 
 		LOG.info(CommonFiles.SERVICE_GET_METHOD);
 		if (labelId == 0) {

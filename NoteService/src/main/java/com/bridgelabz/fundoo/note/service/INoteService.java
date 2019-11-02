@@ -15,6 +15,10 @@ package com.bridgelabz.fundoo.note.service;
 
 
 
+import java.util.Date;
+
+import org.springframework.web.multipart.MultipartFile;
+
 import com.bridgelabz.fundoo.note.dto.NoteDTO;
 import com.bridgelabz.fundoo.note.dto.NoteUpdateDTO;
 
@@ -122,9 +126,73 @@ public interface INoteService {
 	
 	
 	
+	/**
+	 * @param noteId
+	 * @param emailIdToken
+	 * @param labelId
+	 * @return
+	 */
 	public Response addLabel(int noteId, String emailIdToken, int labelId );
 	
+	/**
+	 * @param noteId
+	 * @param emailIdToken
+	 * @param labelId
+	 * @return
+	 */
 	public Response removeLabel(int noteId , String emailIdToken , int labelId);
+	
+	
+//	public Response addCollaborator(int noteId , String emailIdToken,String collaborator);
+//	
+//	
+//	public Response removeCollaborator(int noteId , String emailIdToken, String collaborator);
+	
+	/**
+	 * @param noteId
+	 * @param emailIdToken
+	 * @param date
+	 * @return
+	 */
+	public Response addReminder(int noteId ,String emailIdToken, Date date );
+	
+	/**
+	 * @param noteId
+	 * @param emailIdToken
+	 * @param date
+	 * @return
+	 */
+	public Response updateReminder(int noteId, String emailIdToken , Date date);
+	
+	/**
+	 * @param noteId
+	 * @param emailIdToken
+	 * @return
+	 */
+	public Response removeReminder(int noteId ,String emailIdToken);
+	
+	/**
+	 * @param noteId
+	 * @param emailIdToken
+	 * @param color
+	 * @return
+	 */
+	public Response addColor(int noteId , String emailIdToken , String color);
+	
+	/**
+	 * @param noteId
+	 * @param emailIdToken
+	 * @return
+	 */
+	public Response removeColor(int noteId , String emailIdToken);
+	
+	/**
+	 * @param noteId
+	 * @param emailIdToken
+	 * @param file
+	 * @return
+	 */
+	public Response addImage(int noteId , String emailIdToken , MultipartFile file );
 	
 
 }

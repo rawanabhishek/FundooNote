@@ -16,6 +16,7 @@ package com.bridgelabz.fundoo.user.dto;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
+
 public class LoginDTO {
 	
 	@Pattern(regexp = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\."
@@ -33,7 +34,7 @@ public class LoginDTO {
 	public String getPassword() {
 		return password;
 	}
-	public void setPasswordd(String password) {
+	public void setPassword(String password) {
 		this.password = password;
 	}
 	

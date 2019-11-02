@@ -11,9 +11,13 @@
  ******************************************************************************/
 package com.bridgelabz.fundoo.note.controller;
 
+
+import java.util.Date;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,7 +27,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.bridgelabz.fundoo.note.dto.NoteDTO;
 import com.bridgelabz.fundoo.note.dto.NoteUpdateDTO;
@@ -53,9 +59,9 @@ public class NoteController {
 	 * 
 	 */
 	@PostMapping("/")
-	public ResponseEntity<Response> add(@RequestBody NoteDTO noteDTO ,@RequestHeader String token) {
+	public ResponseEntity<Response> add(@RequestBody NoteDTO noteDTO ,@RequestHeader("emailIdToken") String emailIdToken) {
 		
-		return new ResponseEntity<>(noteService.add(noteDTO ,token),HttpStatus.OK);
+		return new ResponseEntity<>(noteService.add(noteDTO ,emailIdToken),HttpStatus.OK);
 	}
 	
 	
@@ -69,7 +75,7 @@ public class NoteController {
 	 * 
 	 */
 	@GetMapping("/")
-	public ResponseEntity<Response> get(@RequestHeader String emailIdToken){
+	public ResponseEntity<Response> get(@RequestHeader("emailIdToken") String emailIdToken){
 		return new ResponseEntity<>(noteService.get(emailIdToken),HttpStatus.OK);
 	}
 	
@@ -83,7 +89,8 @@ public class NoteController {
 	 * 
 	 */
 	@PutMapping("/")
-	public ResponseEntity<Response> update(@RequestBody NoteUpdateDTO updateDTO , @RequestHeader int noteId ,@RequestHeader String emailIdToken) {
+	public ResponseEntity<Response> update(@RequestBody NoteUpdateDTO updateDTO , 
+			@RequestParam("noteId") int noteId ,@RequestHeader("emailIdToken") String emailIdToken) {
 		
 		return new ResponseEntity<>(noteService.update(updateDTO, noteId , emailIdToken),HttpStatus.OK);
 	}
@@ -97,7 +104,8 @@ public class NoteController {
 	 *         message and object
 	 */
 	@DeleteMapping("/")
-	public ResponseEntity<Response> delete(@RequestHeader int  noteId , @RequestHeader String emailIdToken){
+	public ResponseEntity<Response> delete(@RequestParam("noteId") int  noteId , 
+			@RequestHeader("emailIdToken") String emailIdToken){
 		return new ResponseEntity<>(noteService.delete(noteId ,emailIdToken),HttpStatus.OK);
 	}
 	
@@ -110,7 +118,7 @@ public class NoteController {
 	 *         message and object
 	 */
 	@PutMapping("/pin")
-	public ResponseEntity<Response> pin(@RequestHeader int  noteId , @RequestHeader String emailIdToken){
+	public ResponseEntity<Response> pin(@RequestParam("noteId")int  noteId , @RequestHeader("emailIdToken") String emailIdToken){
 		return new ResponseEntity<>(noteService.pin(noteId ,emailIdToken),HttpStatus.OK);
 	}
 	
@@ -123,7 +131,7 @@ public class NoteController {
 	 *         message and object
 	 */
 	@PutMapping("/archive")
-	public ResponseEntity<Response> archive(@RequestHeader int  noteId , @RequestHeader String emailIdToken){
+	public ResponseEntity<Response> archive(@RequestParam("noteId") int  noteId , @RequestHeader("emailIdToken") String emailIdToken){
 		return new ResponseEntity<>(noteService.archive(noteId ,emailIdToken),HttpStatus.OK);
 	}
 	
@@ -135,7 +143,7 @@ public class NoteController {
 	 *         message and object
 	 */
 	@PutMapping("/archivepin")
-	public ResponseEntity<Response> archivePin(@RequestHeader int noteId, @RequestHeader String emailIdToken){
+	public ResponseEntity<Response> archivePin(@RequestParam("noteId") int noteId, @RequestHeader("emailIdToken") String emailIdToken){
 		return new ResponseEntity<>(noteService.archivePin(noteId ,emailIdToken),HttpStatus.OK);
 	}
 	
@@ -149,7 +157,7 @@ public class NoteController {
 	 *         message and object
 	 */
 	@PutMapping("/trash")
-	public ResponseEntity<Response> trash(@RequestHeader int  noteId , @RequestHeader String emailIdToken){
+	public ResponseEntity<Response> trash(@RequestParam("noteId") int  noteId , @RequestHeader("emailIdToken") String emailIdToken){
 		return new ResponseEntity<>(noteService.trash(noteId ,emailIdToken),HttpStatus.OK);
 	}
 	
@@ -162,7 +170,7 @@ public class NoteController {
 	 *         message and object
 	 */
 	@GetMapping("/date")
-	public ResponseEntity<Response> sortDate(@RequestHeader String emailIdToken){
+	public ResponseEntity<Response> sortDate(@RequestHeader("emailIdToken") String emailIdToken){
 		return new ResponseEntity<>(noteService.sortDate(emailIdToken),HttpStatus.OK);
 	}
 	
@@ -173,25 +181,130 @@ public class NoteController {
 	 *         message and object
 	 */
 	@GetMapping("/name")
-	public ResponseEntity<Response> sortName(@RequestHeader String emailIdToken){
+	public ResponseEntity<Response> sortName(@RequestHeader("emailIdToken") String emailIdToken){
 		return new ResponseEntity<>(noteService.sortName(emailIdToken),HttpStatus.OK);
 	}
 	
 	
+	/**
+	 * @param noteId
+	 * @param emailIdToken
+	 * @param labelId
+	 * @return
+	 */
 	@PutMapping("/label")
-	public ResponseEntity<Response> addLabel(@RequestHeader int  noteId , @RequestHeader
-			String emailIdToken , @RequestHeader int labelId){
-		System.out.println("controller add label");
+	public ResponseEntity<Response> addLabel(@RequestParam("noteId") int  noteId , @RequestHeader("emailIdToken")
+			String emailIdToken , @RequestHeader("labelId") int labelId){
+		
 		return new ResponseEntity<>(noteService.addLabel(noteId ,emailIdToken ,labelId),HttpStatus.OK);
 	}
 	
 	
+	/**
+	 * @param noteId
+	 * @param emailIdToken
+	 * @param labelId
+	 * @return
+	 */
 	@PutMapping("/removelabel")
-	public ResponseEntity<Response> removeLabel(@RequestHeader int  noteId , @RequestHeader
-			String emailIdToken , @RequestHeader int labelId){
-		System.out.println("controller delete label");
+	public ResponseEntity<Response> removeLabel(@RequestParam("noteId") int  noteId , @RequestHeader("emailIdToken")
+			String emailIdToken , @RequestParam("labelId") int labelId){
+		
 		return new ResponseEntity<>(noteService.removeLabel(noteId ,emailIdToken ,labelId),HttpStatus.OK);
 	}
+	
+//	@PutMapping("/addcollaborator")
+//	public ResponseEntity<Response> addCollaborator(@RequestParam int  noteId , @RequestHeader
+//			String emailIdToken , @RequestHeader String collaborator){
+//		System.out.println("controller delete label");
+//		return new ResponseEntity<>(noteService.addCollaborator(noteId ,emailIdToken , collaborator),HttpStatus.OK);
+//	}
+//	
+//	
+//	@PutMapping("/removecollaborator")
+//	public ResponseEntity<Response> removeCollaborator(@RequestParam int  noteId , @RequestHeader
+//			String emailIdToken , @RequestHeader String collaborator){
+//		System.out.println("controller delete label");
+//		return new ResponseEntity<>(noteService.removeCollaborator(noteId ,emailIdToken , collaborator),HttpStatus.OK);
+//	}
+	
+	
+	/**
+	 * @param noteId
+	 * @param emailIdToken
+	 * @param date
+	 * @return
+	 */
+	@PutMapping("/addremainder")
+	public ResponseEntity<Response> addRemainder(@RequestParam("noteId") int  noteId , @RequestHeader("emailIdToken")
+			String emailIdToken , 
+			@RequestParam("reminder") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)Date date){
+		
+		return new ResponseEntity<>(noteService.addReminder(noteId ,emailIdToken , date),HttpStatus.OK);
+	}
+	
+	/**
+	 * @param noteId
+	 * @param emailIdToken
+	 * @param date
+	 * @return
+	 */
+	@PutMapping("/updateremainder")
+	public ResponseEntity<Response> updateRemainder(@RequestParam("noteId") int  noteId , @RequestHeader("emailIdToken")
+			String emailIdToken , @RequestParam("reminder") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)Date date){
+	
+		return new ResponseEntity<>(noteService.updateReminder(noteId ,emailIdToken , date),HttpStatus.OK);
+	}
+	
+	
+	
+	/**
+	 * @param noteId
+	 * @param emailIdToken
+	 * @return
+	 */
+	@PutMapping("/removeremainder")
+	public ResponseEntity<Response> removeRemainder(@RequestParam("noteId") int  noteId , @RequestHeader("emailIdToken")
+			String emailIdToken ){
+		
+		return new ResponseEntity<>(noteService.removeReminder(noteId ,emailIdToken ),HttpStatus.OK);
+	}
+	
+	
+	/**
+	 * @param noteId
+	 * @param emailIdToken
+	 * @param color
+	 * @return
+	 */
+	@PutMapping("/addcolor")
+	public ResponseEntity<Response> addColor(@RequestParam("noteId") int  noteId , @RequestHeader("emailIdToken")
+			String emailIdToken  ,@RequestParam("color")String color){
+		
+		return new ResponseEntity<>(noteService.removeReminder(noteId ,emailIdToken ),HttpStatus.OK);
+	}
+	
+	@PutMapping("/removecolor")
+	public ResponseEntity<Response> removeColor(@RequestParam("noteId") int  noteId , @RequestHeader("emailIdToken")
+			String emailIdToken ){
+		
+		return new ResponseEntity<>(noteService.removeColor(noteId ,emailIdToken ),HttpStatus.OK);
+	}
+	
+	
+	/**
+	 * @param noteId
+	 * @param emailIdToken
+	 * @param file
+	 * @return
+	 */
+	@PutMapping("/addImage")
+	public ResponseEntity<Response> addImage(@RequestParam("noteId") int  noteId , @RequestHeader("emailIdToken")
+			String emailIdToken  , @RequestParam MultipartFile file){
+		
+		return new ResponseEntity<>(noteService.addImage(noteId ,emailIdToken , file),HttpStatus.OK);
+	}
+	
 	
 	
 	

@@ -45,15 +45,20 @@ public class Label {
 	@Column(name = "label_id")
 	private Integer labelId;
 
+	
+	@Column(name="email_id")
 	private String emailId;
 
+	@Column(name="name")
 	private String name;
 
 	@CreationTimestamp
+	@Column(name="create_date")
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date createdDate;
+	private Date createDate;
 
 	@UpdateTimestamp
+	@Column(name="update_date")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date updateDate;
 
