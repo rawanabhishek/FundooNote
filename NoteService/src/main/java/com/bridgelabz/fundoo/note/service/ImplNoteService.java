@@ -9,7 +9,7 @@
  ******************************************************************************/
 package com.bridgelabz.fundoo.note.service;
 
-import java.io.IOException;
+
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,14 +18,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
+
 
 import com.bridgelabz.fundoo.note.configuration.ApplicationConfiguration;
 
 import com.bridgelabz.fundoo.note.dto.NoteDTO;
 import com.bridgelabz.fundoo.note.dto.NoteUpdateDTO;
 import com.bridgelabz.fundoo.note.exception.custom.NoteException;
-
 
 import com.bridgelabz.fundoo.note.model.Label;
 import com.bridgelabz.fundoo.note.model.Note;
@@ -49,16 +48,7 @@ public class ImplNoteService implements INoteService {
 
 	public static final Logger LOG = LoggerFactory.getLogger(ImplNoteService.class);
 
-	/**
-	 * Purpose: Method for adding new note for user
-	 * 
-	 * @param noteDTO containing note data which will be later map to the note model
-	 *                .
-	 * @param token   containing user details for which the particular note will be
-	 *                created . To read the data of the token we are parsing the
-	 *                token and getting the user data.
-	 * @return Response object containing status code , message and object .
-	 */
+
 	@Override
 	public Response add(NoteDTO noteDTO, String token) {
 
@@ -72,7 +62,7 @@ public class ImplNoteService implements INoteService {
 
 		Note note = configuration.modelMapper().map(noteDTO, Note.class);
 		System.out.println(note);
-		if(note.getNoteColor()==null || note.getNoteColor().isBlank()) {
+		if (note.getNoteColor() == null || note.getNoteColor().isBlank()) {
 			note.setNoteColor("#ffffff");
 		}
 		note.setEmailId(TokenUtility.tokenParser(token));
@@ -81,15 +71,7 @@ public class ImplNoteService implements INoteService {
 
 	}
 
-	/**
-	 * Purpose: Method for updating notes of a particular user
-	 * 
-	 * @param updateDTO    containing the updated data for a particular note and
-	 *                     setting its value to model and saving it to the database.
-	 * @param emailIdToken token containing email id
-	 * 
-	 * @return Response object containing status code , message and object .
-	 */
+
 	@Override
 	public Response update(NoteUpdateDTO updateDTO, int noteId, String emailIdToken) {
 		LOG.info(CommonFiles.SERVICE_UPDATE_METHOD);
@@ -105,14 +87,7 @@ public class ImplNoteService implements INoteService {
 		return new Response(200, CommonFiles.UPDATE_NOTE_SUCCESS, noteRepository.save(note));
 	}
 
-	/**
-	 * Purpose:Method for deleting notes of a particular user
-	 * 
-	 * @param emailIdToken token containing email id
-	 * @param noteIdToken  token containing note id
-	 *
-	 * @return Response object containing status code , message and object .
-	 */
+
 	@Override
 	public Response delete(int noteId, String emailIdToken) {
 		String emailId = TokenUtility.tokenParser(emailIdToken);
@@ -120,10 +95,10 @@ public class ImplNoteService implements INoteService {
 		LOG.info(CommonFiles.SERVICE_DELETE_METHOD);
 		Note note = noteRepository.findByNoteIdAndEmailId(noteId, emailId).orElse(null);
 
-		if (note == null ) {
+		if (note == null) {
 			throw new NoteException(CommonFiles.DELETE_NOTE_FAILED);
 		}
-		if(!note.isTrash()) {
+		if (!note.isTrash()) {
 			throw new NoteException(CommonFiles.NOTE_TRASH);
 		}
 
@@ -131,12 +106,7 @@ public class ImplNoteService implements INoteService {
 		return new Response(200, CommonFiles.DELETE_NOTE_SUCCESS, true);
 	}
 
-	/**
-	 * Purpose: Method for getting all the note of a given user
-	 * 
-	 * @param emailIdToken token containing email id
-	 * @return Response object containing status code , message and object .
-	 */
+
 	@Override
 	public Response get(String emailIdToken) {
 		LOG.info(CommonFiles.SERVICE_GET_METHOD);
@@ -153,13 +123,7 @@ public class ImplNoteService implements INoteService {
 		return new Response(200, CommonFiles.GET_NOTE_SUCCESS, note);
 	}
 
-	/**
-	 * Purpose: Method for pin and unpin note
-	 * 
-	 * @param emailIdToken token containing email id
-	 * @param noteIdToken  token containing note id
-	 * @return Response object containing status code , message and object .
-	 */
+
 	@Override
 	public Response pin(int noteId, String emailIdToken) {
 		String emailId = TokenUtility.tokenParser(emailIdToken);
@@ -182,13 +146,7 @@ public class ImplNoteService implements INoteService {
 		}
 	}
 
-	/**
-	 * Purpose: Method for archive and unarchive a note
-	 * 
-	 * @param emailIdToken token containing email id
-	 * @param noteIdToken  token containing note id
-	 * @return Response object containing status code , message and object .
-	 */
+
 	@Override
 	public Response archive(int noteId, String emailIdToken) {
 		String emailId = TokenUtility.tokenParser(emailIdToken);
@@ -211,13 +169,7 @@ public class ImplNoteService implements INoteService {
 		}
 	}
 
-	/**
-	 * Purpose: Method for unarchive a note and Setting the Pin true
-	 * 
-	 * @param emailIdToken token containing email id
-	 * @param noteIdToken  token containing note id
-	 * @return Response object containing status code , message and object .
-	 */
+
 	@Override
 	public Response archivePin(int noteId, String emailIdToken) {
 		String emailId = TokenUtility.tokenParser(emailIdToken);
@@ -237,14 +189,7 @@ public class ImplNoteService implements INoteService {
 		}
 	}
 
-	/**
-	 * Purpose:Method for trash and untrash a note
-	 * 
-	 * @param emailIdToken token containing email id
-	 * @param noteIdToken  token containing note id
-	 *
-	 * @return Response object containing status code , message and object .
-	 */
+
 	@Override
 	public Response trash(int noteId, String emailIdToken) {
 		String emailId = TokenUtility.tokenParser(emailIdToken);
@@ -267,12 +212,7 @@ public class ImplNoteService implements INoteService {
 
 	}
 
-	/**
-	 * Purpose: Method for sorting notes of a user by updated date
-	 * 
-	 * @param emailIdToken token containing email id
-	 * @return Response object containing status code , message and object .
-	 */
+
 	@Override
 	public Response sortDate(String emailIdToken) {
 		String emailId = TokenUtility.tokenParser(emailIdToken);
@@ -286,12 +226,7 @@ public class ImplNoteService implements INoteService {
 
 	}
 
-	/**
-	 * Purpose: Method for sorting notes of a user by name (title()
-	 * 
-	 * @param emailIdToken token containing email id
-	 * @return Response object containing status code , message and object .
-	 */
+
 	@Override
 	public Response sortName(String emailIdToken) {
 		String emailId = TokenUtility.tokenParser(emailIdToken);
@@ -384,14 +319,14 @@ public class ImplNoteService implements INoteService {
 		if (note.getReminder() != null) {
 			throw new NoteException(CommonFiles.REMINDER_PRESENT);
 		}
-		if(date.before(new Date())) {
+		if (date.before(new Date())) {
 			throw new NoteException(CommonFiles.INVALID_DATE);
 		}
 		note.setReminder(date);
 		return new Response(200, CommonFiles.ADD_REMAINDER_SUCCESS, noteRepository.save(note));
 
 	}
-	
+
 	@Override
 	public Response updateReminder(int noteId, String emailIdToken, Date date) {
 		String emailId = TokenUtility.tokenParser(emailIdToken);
@@ -399,7 +334,7 @@ public class ImplNoteService implements INoteService {
 		if (note == null) {
 			throw new NoteException(CommonFiles.NOTE_FOUND_FAILED);
 		}
-		if(date.before(new Date())) {
+		if (date.before(new Date())) {
 			throw new NoteException(CommonFiles.INVALID_DATE);
 		}
 		note.setReminder(date);
@@ -427,12 +362,11 @@ public class ImplNoteService implements INoteService {
 			throw new NoteException(CommonFiles.NOTE_FOUND_FAILED);
 		}
 		note.setNoteColor(color);
-		if(note.getNoteColor().isBlank()) {
-			System.out.println("true");
+		if (note.getNoteColor().isBlank()) {
+			
 			note.setNoteColor("#ffffff");
 		}
 
-		
 		return new Response(200, CommonFiles.COLOR_ADDED_SUCCESS, noteRepository.save(note));
 	}
 
@@ -443,30 +377,28 @@ public class ImplNoteService implements INoteService {
 		if (note == null) {
 			throw new NoteException(CommonFiles.NOTE_FOUND_FAILED);
 		}
-		if(note.getNoteColor() == null) {
+		if (note.getNoteColor() == null) {
 			throw new NoteException(CommonFiles.COLOR_ABSENT);
 		}
 		note.setNoteColor(null);
 		return new Response(200, CommonFiles.COLOR_REMOVED_SUCCESS, noteRepository.save(note));
-		
+
 	}
 
 	@Override
-	public Response addImage(int noteId, String emailIdToken, MultipartFile file) {
+	public Response updateColor(int noteId, String emailIdToken, String color) {
 		String emailId = TokenUtility.tokenParser(emailIdToken);
 		Note note = noteRepository.findByNoteIdAndEmailId(noteId, emailId).orElse(null);
 		if (note == null) {
 			throw new NoteException(CommonFiles.NOTE_FOUND_FAILED);
 		}
-		try {
-			note.setFile(file.getBytes());
-		} catch (IOException e) {
+		note.setNoteColor(color);
+		if (note.getNoteColor().isBlank()) {
 			
-			e.printStackTrace();
+			note.setNoteColor("#ffffff");
 		}
-		return new Response(200, CommonFiles.PHOTO_ADDED_SUCCESS, noteRepository.save(note));
-		
-		
+
+		return new Response(200, CommonFiles.COLOR_UPDATED_SUCCESS, noteRepository.save(note));
 	}
 
 	

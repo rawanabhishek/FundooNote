@@ -12,6 +12,8 @@
 
 package com.bridgelabz.fundoo.user.controller;
 
+import java.io.IOException;
+
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
@@ -25,7 +27,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.bridgelabz.fundoo.user.dto.LoginDTO;
 import com.bridgelabz.fundoo.user.dto.RegisterDTO;
@@ -106,10 +110,10 @@ public class UserController {
 	 * 
 	 */
 	@PutMapping("/setpassword")
-	public ResponseEntity<Response> userSetPassword(@Valid @RequestBody SetPasswordDTO setPasswordDTO) {
+	public ResponseEntity<Response> userSetPassword(@Valid @RequestBody SetPasswordDTO setPasswordDTO ,String token) {
 
 		LOG.info(CommonFiles.CONTROLLER_SETPASSWORD_METHOD);
-		return new ResponseEntity<>(userService.userSetPassword(setPasswordDTO), HttpStatus.OK);
+		return new ResponseEntity<>(userService.userSetPassword(setPasswordDTO ,token), HttpStatus.OK);
 	}
 
 	/**
@@ -128,6 +132,56 @@ public class UserController {
 		LOG.info(CommonFiles.CONTROLLER_ISVERIFIED_METHOD);
 		return new ResponseEntity<>(userService.isVerified(token), HttpStatus.OK);
 
+	}
+	
+	/**
+	 * Purpose: Creating add profile picture controller which will add profile picture
+	 *          of user to the note
+	 * @param emailIdToken for authorization to check the user has authority for Verifying
+	 *              the account.
+	 * @param file containing image for adding profile picture to the user 
+	 * @return
+	 * @throws IOException 
+	 */
+	@PostMapping("/addprofilepic")
+	public ResponseEntity<Response> addProfilePic( @RequestHeader("emailIdToken")
+			String emailIdToken  , @RequestParam("picture") MultipartFile file) throws IOException{
+		
+		return new ResponseEntity<>(userService.addProfilePic(emailIdToken , file),HttpStatus.OK);
+	}
+	
+	
+	/**
+	 * Purpose: Creating remove profile picture controller which will remove profile picture
+	 *          of user from note 
+	 * @param emailIdToken for authorization to check the user has authority for Verifying
+	 *              the account.
+	 * @return ResponseEntity which is holding the user object and HttpStatus in
+	 *         that entity..
+	 * @throws IOException
+	 */
+	@PutMapping("/removeprofilepic")
+	public ResponseEntity<Response> removeProfilePic( @RequestHeader("emailIdToken")
+			String emailIdToken  ) throws IOException{
+		
+		return new ResponseEntity<>(userService.removeProfilePic(emailIdToken ),HttpStatus.OK);
+	}
+	
+	/**
+	 * Purpose: Creating update profile picture controller which will update the profile picture
+	 *          of user
+	 * @param emailIdToken for authorization to check the user has authority for Verifying
+	 *              the account.
+	 * @param file containing image for updating user profile picture
+	 * @return ResponseEntity which is holding the user object and HttpStatus in
+	 *         that entity..
+	 * @throws IOException
+	 */
+	@PutMapping("/updateprofilepic")
+	public ResponseEntity<Response> updateProfilePic(@RequestHeader("emailIdToken")
+			String emailIdToken ,@RequestParam("picture") MultipartFile file ) throws IOException{
+		
+		return new ResponseEntity<>(userService.updateProfilePic(emailIdToken ,file),HttpStatus.OK);
 	}
 
 }

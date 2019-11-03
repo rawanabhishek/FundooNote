@@ -14,10 +14,11 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
+
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -25,11 +26,14 @@ import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+
+import lombok.Data;
+
 
 @Entity
 @Table(name = "user")
-@EntityListeners(AuditingEntityListener.class)
+@Data
 public class User {
 
 	@Id
@@ -65,84 +69,10 @@ public class User {
 
 	@Column(name = "is_verified", columnDefinition = "boolean default false")
 	private boolean isVerified;
+	
+	@Lob
+	private String profilePic;
 
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public String getFirstName() {
-		return firstName;
-	}
-
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getContact() {
-		return contact;
-	}
-
-	public void setContact(String contact) {
-		this.contact = contact;
-	}
-
-	public Date getDateCreate() {
-		return dateCreate;
-	}
-
-	public void setDateCreate(Date dateCreate) {
-		this.dateCreate = dateCreate;
-	}
-
-	public Date getDateUpdate() {
-		return dateUpdate;
-	}
-
-	public void setDateUpdate(Date dateUpdate) {
-		this.dateUpdate = dateUpdate;
-	}
-
-	public boolean isVerified() {
-		return isVerified;
-	}
-
-	public void setVerified(boolean isVerified) {
-		this.isVerified = isVerified;
-	}
-
-	@Override
-	public String toString() {
-		return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", password=" + password
-				+ ", email=" + email + ", contact=" + contact + ", dateCreate=" + dateCreate + ", dateUpdate="
-				+ dateUpdate + ", isVerified=" + isVerified + "]";
-	}
+	
 
 }

@@ -15,9 +15,10 @@ package com.bridgelabz.fundoo.note.service;
 
 
 
+
 import java.util.Date;
 
-import org.springframework.web.multipart.MultipartFile;
+
 
 import com.bridgelabz.fundoo.note.dto.NoteDTO;
 import com.bridgelabz.fundoo.note.dto.NoteUpdateDTO;
@@ -61,7 +62,7 @@ public interface INoteService {
 	/**
 	 * Purpose:Method for deleting notes of a particular user 
 	 * @param emailIdToken token containing email id 
-	 * @param noteIdToken token containing note id 
+	 * @param noteId containing note id 
 	 *        
 	 * @return Response object containing status code , message 
 	 *         and object .
@@ -72,7 +73,7 @@ public interface INoteService {
 	/**
 	 * Purpose: Method for pin and unpin note
 	 * @param emailIdToken token containing email id 
-	 * @param noteIdToken token containing note id 
+	 * @param noteId containing note id 
 	 * @return Response object containing status code , message 
 	 *         and object .
 	 */
@@ -83,7 +84,7 @@ public interface INoteService {
 	/**
 	 * Purpose: Method for archive and unarchive a note
 	 * @param emailIdToken token containing email id 
-	 * @param noteIdToken token containing note id 
+	 * @param noteId containing note id 
 	 * @return Response object containing status code , message 
 	 *         and object .
 	 */
@@ -92,7 +93,7 @@ public interface INoteService {
 	/**
 	 * Purpose: Method for  unarchive a note and Setting the Pin true
 	 *@param emailIdToken token containing email id 
-	 * @param noteIdToken token containing note id 
+	 * @param noteId  containing note id
 	 * @return Response object containing status code , message 
 	 *         and object .
 	 */
@@ -101,7 +102,7 @@ public interface INoteService {
 	/**
 	 * Purpose:Method for trash and untrash a note
 	 * @param emailIdToken token containing email id 
-	 * @param noteIdToken token containing note id 
+	 * @param noteId containing note id 
 	 * @return Response object containing status code , message 
 	 *         and object .
 	 */
@@ -127,18 +128,24 @@ public interface INoteService {
 	
 	
 	/**
-	 * @param noteId
-	 * @param emailIdToken
-	 * @param labelId
-	 * @return
+	 * Purpose: Method for sorting notes of a user by updated date
+	 * @param noteId containing note id 
+	 * @param emailIdToken  containing email id
+	 * @param labelId containing label id 
+	 * @return Response object containing status code , message 
+	 *         and object 
 	 */
 	public Response addLabel(int noteId, String emailIdToken, int labelId );
 	
+
+	
 	/**
-	 * @param noteId
-	 * @param emailIdToken
-	 * @param labelId
-	 * @return
+	 * Purpose: Method for sorting notes of a user by updated date
+	 * @param noteId containing note id 
+	 * @param emailIdToken containing email id
+	 * @param labelId containing label id 
+	 * @return Response object containing status code , message 
+	 *         and object 
 	 */
 	public Response removeLabel(int noteId , String emailIdToken , int labelId);
 	
@@ -149,50 +156,63 @@ public interface INoteService {
 //	public Response removeCollaborator(int noteId , String emailIdToken, String collaborator);
 	
 	/**
+	 * Purpose: Method for adding reminder to a  note
 	 * @param noteId
-	 * @param emailIdToken
-	 * @param date
+	 * @param emailIdToken containing email id
+	 * @param date for adding reminder
 	 * @return
 	 */
 	public Response addReminder(int noteId ,String emailIdToken, Date date );
 	
 	/**
-	 * @param noteId
+	 * Purpose: Method for updating the reminder of a note
+	 * @param noteId containing note id 
 	 * @param emailIdToken
-	 * @param date
-	 * @return
+	 * @param date for updating reminder
+	 * @return Response object containing status code , message 
+	 *         and object 
 	 */
 	public Response updateReminder(int noteId, String emailIdToken , Date date);
 	
 	/**
-	 * @param noteId
-	 * @param emailIdToken
-	 * @return
+	 * Purpose: Method for removing reminder of a note
+	 * @param noteId containing note id 
+	 * @param emailIdToken containing email id
+	 * @return Response object containing status code , message 
+	 *         and object 
 	 */
 	public Response removeReminder(int noteId ,String emailIdToken);
 	
 	/**
-	 * @param noteId
-	 * @param emailIdToken
-	 * @param color
+	 * Purpose: Method for adding color to a note 
+	 * @param noteId containing note id 
+	 * @param emailIdToken containing email id
+	 * @param color code for a note in hex color format
 	 * @return
 	 */
 	public Response addColor(int noteId , String emailIdToken , String color);
 	
+	
 	/**
-	 * @param noteId
-	 * @param emailIdToken
-	 * @return
+	 * Purpose: Method for updating color of a  note
+	 * @param noteId containing note id 
+	 * @param emailIdToken containing email id
+	 * @param color code for a note in hex color format
+	 * @return Response object containing status code , message 
+	 *         and object 
+	 */
+	public Response updateColor(int noteId, String emailIdToken, String color);
+	
+	/**
+	 * Purpose: Method for removing color of a  note
+	 * @param noteId containing note id 
+	 * @param emailIdToken containing email id
+	 * @return Response object containing status code , message 
+	 *         and object 
 	 */
 	public Response removeColor(int noteId , String emailIdToken);
 	
-	/**
-	 * @param noteId
-	 * @param emailIdToken
-	 * @param file
-	 * @return
-	 */
-	public Response addImage(int noteId , String emailIdToken , MultipartFile file );
+
 	
 
 }

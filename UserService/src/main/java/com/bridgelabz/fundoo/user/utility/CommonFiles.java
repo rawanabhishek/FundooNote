@@ -23,6 +23,10 @@ public class CommonFiles {
 	public static final String SET_PASSWORD_SUCCESS="Password set successfully";
 	public static final String USER_NOT_VERIFIED="User not verified";
 	public static final String USER_VERIFIED="User  verified successfully";
+	public static final String PHOTO_UPDATED_SUCCESS = "profile pic updated successfully";
+	public static final String PHOTO_ADDED_SUCCESS = "photo added suvvessfully";
+	public static final String PHOTO_REMOVED_SUCCESS = "photo removed successfully";
+	public static final String USER_FOUND_FAILED = "user not found";
 	
 	//Email Subject messages
 	public static final String EMAIL_SUBJECT_SETPASSWORD="Link For resetting password";

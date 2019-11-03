@@ -18,11 +18,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import com.bridgelabz.fundoo.user.exception.custom.ForgotPasswordException;
-import com.bridgelabz.fundoo.user.exception.custom.IsVerifiedException;
-import com.bridgelabz.fundoo.user.exception.custom.LoginException;
-import com.bridgelabz.fundoo.user.exception.custom.RegisterException;
-import com.bridgelabz.fundoo.user.exception.custom.SetPasswordException;
+
+import com.bridgelabz.fundoo.user.exception.custom.UserException;
 import com.bridgelabz.fundoo.user.response.Response;
 
 @ControllerAdvice
@@ -47,71 +44,12 @@ public class GlobalExceptionHelper {
 	 * @return  ResponseEntity showing Http status , exception message 
 	 *          and object.
 	 */
-	@ExceptionHandler(LoginException.class)
-	public final ResponseEntity<Response> loginException(LoginException ex) {
+	@ExceptionHandler(UserException.class)
+	public final ResponseEntity<Response> userException(UserException ex) {
 		Response responseMessage = new Response(400, ex.getMessage(), null);
 
 		return new ResponseEntity<>(responseMessage, HttpStatus.BAD_REQUEST);
 	}
 
-	/**
-	 * Purpose: to create a global exception handler for RegisterException custom
-	 *          exception. 
-	 * @param   ex the exception message .
-	 * @return  ResponseEntity showing Http status , exception message 
-	 *          and object.
-	 */
-	@ExceptionHandler(RegisterException.class)
-	public final ResponseEntity<Response> registerException(RegisterException ex) {
-
-		Response responseMessage = new Response(400, ex.getMessage(), null);
-
-		return new ResponseEntity<>(responseMessage, HttpStatus.BAD_GATEWAY);
-	}
-
-	/**
-	 * Purpose: to create a global exception handler for IsVerifiedException custom
-	 *          exception. 
-	 * @param   ex the exception message .
-	 * @return  ResponseEntity showing Http status , exception message 
-	 *          and object.
-	 */
-	@ExceptionHandler(ForgotPasswordException.class)
-	public final ResponseEntity<Response> forgotPasswordException(ForgotPasswordException ex) {
-
-		Response responseMessage = new Response(400, ex.getMessage(), null);
-
-		return new ResponseEntity<>(responseMessage, HttpStatus.BAD_REQUEST);
-	}
-
-	/**
-	 * Purpose: to create a global exception handler SetPassWordException custom
-	 *          exception. 
-	 * @param   ex the exception message .
-	 * @return  ResponseEntity showing Http status , exception message 
-	 *          and object.
-	 */
-	@ExceptionHandler(SetPasswordException.class)
-	public final ResponseEntity<Response> setPasswordException(SetPasswordException ex) {
-
-		Response responseMessage = new Response(400, ex.getMessage(), null);
-
-		return new ResponseEntity<>(responseMessage, HttpStatus.BAD_REQUEST);
-	}
-
-	/**
-	 * Purpose: to create a global exception handler for IsVerifiedException custom
-	 *          exception. 
-	 * @param   ex the exception message .
-	 * @return  ResponseEntity showing Http status , exception message 
-	 *          and object.
-	 */
-	@ExceptionHandler(IsVerifiedException.class)
-	public final ResponseEntity<Response> isVerifiedException(IsVerifiedException ex) {
-		Response responseMessage = new Response(400, ex.getMessage(), null);
-
-		return new ResponseEntity<>(responseMessage, HttpStatus.BAD_REQUEST);
-
-	}
 
 }

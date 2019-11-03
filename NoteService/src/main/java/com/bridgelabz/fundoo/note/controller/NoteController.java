@@ -12,6 +12,7 @@
 package com.bridgelabz.fundoo.note.controller;
 
 
+
 import java.util.Date;
 
 import org.slf4j.Logger;
@@ -29,7 +30,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
+
 
 import com.bridgelabz.fundoo.note.dto.NoteDTO;
 import com.bridgelabz.fundoo.note.dto.NoteUpdateDTO;
@@ -83,7 +84,7 @@ public class NoteController {
 	/**
 	 *  Purpose: Creating a updateNote controller which will fetch the request body
 	 * @param updateDTO containing new update data for a particular note 
-	 * @param noteIdToken token containing note id
+	 * @param noteId  containing note id
 	 * @return ResponseEntity containing Response which contains status code,
 	 *         message and object
 	 * 
@@ -99,7 +100,7 @@ public class NoteController {
 	/**
 	 *  Purpose: Creating a deleteNote controller which will fetch the header
 	 * @param emailIdToken token containing email id 
-	 * @param noteIdToken token containing note id
+	 * @param noteId containing note id
 	 * @return ResponseEntity containing Response which contains status code,
 	 *         message and object
 	 */
@@ -113,7 +114,7 @@ public class NoteController {
 	/**
 	 *  Purpose: Creating a pin controller which will fetch the header
 	 *  @param emailIdToken token containing email id 
-	 * @param noteIdToken token containing note id
+	 * @param noteId containing note id
 	 * @return ResponseEntity containing Response which contains status code,
 	 *         message and object
 	 */
@@ -126,7 +127,7 @@ public class NoteController {
 	/**
 	 *  Purpose: Creating a archive controller which will fetch the header
 	 * @param emailIdToken token containing email id 
-	 * @param noteIdToken token containing note id
+	 * @param noteId containing note id
 	 * @return ResponseEntity containing Response which contains status code,
 	 *         message and object
 	 */
@@ -138,7 +139,7 @@ public class NoteController {
 	/**
 	 *  Purpose: Creating a archive controller which will fetch the header
 	 *  @param emailIdToken token containing email id 
-	 * @param noteIdToken token containing note id
+	 * @param noteId containing note id
 	 * @return ResponseEntity containing Response which contains status code,
 	 *         message and object
 	 */
@@ -152,7 +153,7 @@ public class NoteController {
 	/**
 	 * Purpose: Creating a trash controller which will fetch the header
 	 * @param emailIdToken token containing email id 
-	 * @param noteIdToken token containing note id
+	 * @param noteId containing note id
 	 * @return ResponseEntity containing Response which contains status code,
 	 *         message and object
 	 */
@@ -187,10 +188,12 @@ public class NoteController {
 	
 	
 	/**
-	 * @param noteId
-	 * @param emailIdToken
-	 * @param labelId
-	 * @return
+	 * Purpose: Creating add Label controller for adding label to the note
+	 * @param noteId containing note id
+	 * @param emailIdToken token containing email id 
+	 * @param labelId containing label id 
+	 * @returnResponseEntity containing Response which contains status code,
+	 *         message and object
 	 */
 	@PutMapping("/label")
 	public ResponseEntity<Response> addLabel(@RequestParam("noteId") int  noteId , @RequestHeader("emailIdToken")
@@ -201,10 +204,12 @@ public class NoteController {
 	
 	
 	/**
-	 * @param noteId
-	 * @param emailIdToken
-	 * @param labelId
-	 * @return
+	 * Purpose: Creating remove Label controller for removing label from the note
+	 * @param noteId  containing note id
+	 * @param emailIdToken token containing email id 
+	 * @param labelId containing label id
+	 * @return ResponseEntity containing Response which contains status code,
+	 *         message and object
 	 */
 	@PutMapping("/removelabel")
 	public ResponseEntity<Response> removeLabel(@RequestParam("noteId") int  noteId , @RequestHeader("emailIdToken")
@@ -230,13 +235,15 @@ public class NoteController {
 	
 	
 	/**
-	 * @param noteId
-	 * @param emailIdToken
-	 * @param date
-	 * @return
+	 * Purpose: Creating add Reminder controller which will addreminder to the note
+	 * @param noteId containing note id
+	 * @param emailIdToken token containing email id
+	 * @param date for setting the reminder date
+	 * @return ResponseEntity containing Response which contains status code,
+	 *         message and object
 	 */
-	@PutMapping("/addremainder")
-	public ResponseEntity<Response> addRemainder(@RequestParam("noteId") int  noteId , @RequestHeader("emailIdToken")
+	@PostMapping("/addreminder")
+	public ResponseEntity<Response> addReminder(@RequestParam("noteId") int  noteId , @RequestHeader("emailIdToken")
 			String emailIdToken , 
 			@RequestParam("reminder") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)Date date){
 		
@@ -244,13 +251,15 @@ public class NoteController {
 	}
 	
 	/**
-	 * @param noteId
-	 * @param emailIdToken
-	 * @param date
-	 * @return
+	 * Purpose: Creating update reminder which will update the reminder in the note
+	 * @param noteId containing note id
+	 * @param emailIdToken token containing email id
+	 * @param date for updating reminder
+	 * @return ResponseEntity containing Response which contains status code,
+	 *         message and object
 	 */
-	@PutMapping("/updateremainder")
-	public ResponseEntity<Response> updateRemainder(@RequestParam("noteId") int  noteId , @RequestHeader("emailIdToken")
+	@PutMapping("/updatereminder")
+	public ResponseEntity<Response> updateReminder(@RequestParam("noteId") int  noteId , @RequestHeader("emailIdToken")
 			String emailIdToken , @RequestParam("reminder") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)Date date){
 	
 		return new ResponseEntity<>(noteService.updateReminder(noteId ,emailIdToken , date),HttpStatus.OK);
@@ -259,9 +268,11 @@ public class NoteController {
 	
 	
 	/**
-	 * @param noteId
-	 * @param emailIdToken
-	 * @return
+	 * Purpose: Creating remove reminder controller which will remove reminder from note
+	 * @param noteId containing note id
+	 * @param emailIdToken containing email id
+	 * @return ResponseEntity containing Response which contains status code,
+	 *         message and object
 	 */
 	@PutMapping("/removeremainder")
 	public ResponseEntity<Response> removeRemainder(@RequestParam("noteId") int  noteId , @RequestHeader("emailIdToken")
@@ -272,18 +283,27 @@ public class NoteController {
 	
 	
 	/**
-	 * @param noteId
-	 * @param emailIdToken
-	 * @param color
-	 * @return
+	 * Purpose: Creating add color controller which will add color color to the note
+	 * @param noteId containing note id
+	 * @param emailIdToken containing email id
+	 * @param color code for a note in hex color format
+	 * @return ResponseEntity containing Response which contains status code,
+	 *         message and object
 	 */
-	@PutMapping("/addcolor")
+	@PostMapping("/addcolor")
 	public ResponseEntity<Response> addColor(@RequestParam("noteId") int  noteId , @RequestHeader("emailIdToken")
 			String emailIdToken  ,@RequestParam("color")String color){
 		
 		return new ResponseEntity<>(noteService.removeReminder(noteId ,emailIdToken ),HttpStatus.OK);
 	}
 	
+	/**
+	 * Purpose: Creating remove color controller which will remove color from note
+	 * @param noteId containing note id
+	 * @param emailIdToken containing email id
+	 * @return ResponseEntity containing Response which contains status code,
+	 *         message and object
+	 */
 	@PutMapping("/removecolor")
 	public ResponseEntity<Response> removeColor(@RequestParam("noteId") int  noteId , @RequestHeader("emailIdToken")
 			String emailIdToken ){
@@ -293,17 +313,25 @@ public class NoteController {
 	
 	
 	/**
-	 * @param noteId
-	 * @param emailIdToken
-	 * @param file
-	 * @return
+	 * vPurpose: Creating update color controller which will update color for note
+	 * @param noteId containing note id
+	 * @param emailIdToken containing email id
+	 * @param color code for a note in hex color format
+	 * @return ResponseEntity containing Response which contains status code,
+	 *         message and object
 	 */
-	@PutMapping("/addImage")
-	public ResponseEntity<Response> addImage(@RequestParam("noteId") int  noteId , @RequestHeader("emailIdToken")
-			String emailIdToken  , @RequestParam MultipartFile file){
+	@PutMapping("/updatecolor")
+	public ResponseEntity<Response> updateColor(@RequestParam("noteId") int  noteId , @RequestHeader("emailIdToken")
+			String emailIdToken ,@RequestParam("color")String color ){
 		
-		return new ResponseEntity<>(noteService.addImage(noteId ,emailIdToken , file),HttpStatus.OK);
+		return new ResponseEntity<>(noteService.updateColor(noteId ,emailIdToken,color ),HttpStatus.OK);
 	}
+	
+	
+	
+	
+	
+
 	
 	
 	

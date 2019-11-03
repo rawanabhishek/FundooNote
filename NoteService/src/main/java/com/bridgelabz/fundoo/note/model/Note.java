@@ -88,8 +88,7 @@ public class Note {
 	@ManyToMany(fetch = FetchType.LAZY)
 	private List<Label> labels;
 	
-	@Lob
-	private byte[] file;
+	
 
 //	@OneToMany
 //	private List<String> collaborator=new ArrayList<String>();

@@ -40,6 +40,10 @@ public class CommonFiles {
 	public static final String REMINDER_PRESENT = "reminder already present";
 	public static final String COLOR_ABSENT = "no color found";
 	public static final String COLOR_REMOVED_SUCCESS = "Color removed successfully";
+	public static final String PHOTO_UPDATED_SUCCESS = "profile pic updated successfully";
+	public static final String PHOTO_ADDED_SUCCESS = "photo added suvvessfully";
+	public static final String PHOTO_REMOVED_SUCCESS = "photo removed successfully";
+	public static final String COLOR_UPDATED_SUCCESS = "Color updated successfully";
 	
 	
 	//labelService related message
@@ -81,7 +85,10 @@ public class CommonFiles {
 	public static final String SERVICE_ARCHIVE_METHOD="Archive service method";
 	public static final String SERVICE_ARCHIVE_PIN_METHOD="Archive pin service method";
 	public static final String UPDATE_REMAINDER_SUCCESS = "Reminder updated successfully";
-	public static final String PHOTO_ADDED_SUCCESS = "photo added suvvessfully";
+	
+	
+	
+	
 
 	
 	

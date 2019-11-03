@@ -11,6 +11,11 @@ package com.bridgelabz.fundoo.user.service;
 
 
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import org.modelmapper.ModelMapper;
 
 import org.slf4j.Logger;
@@ -20,16 +25,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
 
 import com.bridgelabz.fundoo.user.configuration.UserConfiguration;
 
 import com.bridgelabz.fundoo.user.dto.LoginDTO;
 import com.bridgelabz.fundoo.user.dto.RegisterDTO;
 import com.bridgelabz.fundoo.user.dto.SetPasswordDTO;
-import com.bridgelabz.fundoo.user.exception.custom.ForgotPasswordException;
-import com.bridgelabz.fundoo.user.exception.custom.IsVerifiedException;
-import com.bridgelabz.fundoo.user.exception.custom.LoginException;
-import com.bridgelabz.fundoo.user.exception.custom.SetPasswordException;
+
+import com.bridgelabz.fundoo.user.exception.custom.UserException;
 import com.bridgelabz.fundoo.user.model.User;
 import com.bridgelabz.fundoo.user.repository.UserRepository;
 import com.bridgelabz.fundoo.user.response.Response;
@@ -74,7 +79,7 @@ public class ImplUserService implements IUserService {
 				.anyMatch(i -> i.getEmail().equals(login.getEmail())
 						&& userConfiguration.passwordEncoder().matches(login.getPassword(), i.getPassword())
 						&& i.isVerified())) {
-			throw new LoginException(CommonFiles.LOGIN_FAILED);
+			throw new UserException(CommonFiles.LOGIN_FAILED);
 		}
         String token=TokenUtility.tokenBuild(login.getEmail());
 		return new Response(200, CommonFiles.LOGIN_SUCCESS, token);
@@ -94,7 +99,7 @@ public class ImplUserService implements IUserService {
 		LOG.info(CommonFiles.SERVICE_REGISTER_METHOD);
 
 		if (!userRepository.findByEmail(register.getEmail()).isEmpty()) {
-			throw new LoginException(register.getEmail() + CommonFiles.REGISTER_EMAIL_FOUND);
+			throw new UserException(register.getEmail() + CommonFiles.REGISTER_EMAIL_FOUND);
 
 		}
 
@@ -120,7 +125,7 @@ public class ImplUserService implements IUserService {
 		LOG.info(CommonFiles.SERVICE_FORGOTPASSWORD_METHOD);
 
 		if (userRepository.findByEmail(email) == null) {
-			throw new ForgotPasswordException(email + CommonFiles.EMAIL_FAILED);
+			throw new UserException(email + CommonFiles.EMAIL_FAILED);
 
 		}
 
@@ -140,18 +145,18 @@ public class ImplUserService implements IUserService {
 	 * @return Response which contains the response of the method.
 	 */
 	@Override
-	public Response userSetPassword(SetPasswordDTO setPasswordDTO) {
+	public Response userSetPassword(SetPasswordDTO setPasswordDTO ,String token) {
 		LOG.info(CommonFiles.SERVICE_SETPASSWORD_METHOD);
 
 		
 
 		User user = userRepository.findAll().stream().filter(i -> i.getEmail().equals
-				(TokenUtility.tokenParser(setPasswordDTO.getToken()))).findAny()
+				(TokenUtility.tokenParser(token))).findAny()
 				.orElse(null);
 
 		if (user == null && !(setPasswordDTO.getPassword().equals(setPasswordDTO.getConfirmPassword()))) {
 
-			throw new SetPasswordException(CommonFiles.SET_PASSWORD_FAILED);
+			throw new UserException(CommonFiles.SET_PASSWORD_FAILED);
 
 		}
 		user.setPassword(userConfiguration.passwordEncoder().encode(setPasswordDTO.getPassword()));
@@ -195,13 +200,91 @@ public class ImplUserService implements IUserService {
 				.orElse(null);
 
 		if (user == null) {
-			throw new IsVerifiedException(CommonFiles.USER_NOT_VERIFIED);
+			throw new UserException(CommonFiles.USER_NOT_VERIFIED);
 
 		}
 		user.setVerified(true);
 
 		return new Response(200, CommonFiles.USER_VERIFIED, userRepository.save(user));
 
+	}
+	
+	
+	/**
+	 * Purpose: Method for adding profile picture to user of UserService using multi part
+	 *          file
+	 * @param emailIdToken
+	 * @param file containing image for adding profile picture
+	 * @return Response which contains the response of the method
+	 * @throws IOException 
+	 */
+	@Override
+	public Response addProfilePic( String emailIdToken, MultipartFile file) throws IOException {
+		String email = TokenUtility.tokenParser(emailIdToken);
+		User user = userRepository.findByEmail(email).orElse(null);
+
+		if (user == null) {
+			throw new UserException(CommonFiles.USER_FOUND_FAILED);
+		}
+		
+		byte[] bytes = file.getBytes();
+		Path path = Paths.get("/home/admin1/FundooNote/UserService/src/main/java/com/bridgelabz/fundoo/user"+ file.getOriginalFilename());
+		Files.write(path, bytes);
+		String location="/home/admin1/FundooNote/UserService/src/main/java/com/bridgelabz/fundoo/user"+ file.getOriginalFilename();
+		user.setProfilePic(location);
+  
+	
+		return new Response(200, CommonFiles.PHOTO_ADDED_SUCCESS, userRepository.save(user));
+
+	}
+
+	
+	/**
+	 * Purpose: Method for removing profile picture of user of UserService
+	 * @param emailIdToken to verify the user and granting him/her the authorization to
+	 *              access the userServices.
+	 * @return Response which contains the response of the method
+	 * @throws IOException
+	 */
+	@Override
+	public Response removeProfilePic( String emailIdToken) throws IOException {
+		String email = TokenUtility.tokenParser(emailIdToken);
+		User user = userRepository.findByEmail(email).orElse(null);
+
+		if (user == null) {
+			throw new UserException(CommonFiles.USER_FOUND_FAILED);
+		}
+		Path path = Paths.get(user.getProfilePic());
+		
+		Files.delete(path);
+		user.setProfilePic(null);
+		return new Response(200, CommonFiles.PHOTO_REMOVED_SUCCESS, userRepository.save(user));
+	}
+
+	
+	/**
+	 * Purpose: Method for updating profile picture of user of userService
+	 * @param emailIdToken to verify the user and granting him/her the authorization to
+	 *              access the userServices.
+	 * @param file containing image  for updating profile picture
+	 * @return Response which contains the response of the method
+	 * @throws IOException
+	 */
+	@Override
+	public Response updateProfilePic( String emailIdToken, MultipartFile file) throws IOException {
+		String email = TokenUtility.tokenParser(emailIdToken);
+		User user = userRepository.findByEmail(email).orElse(null);
+
+		if (user == null) {
+			throw new UserException(CommonFiles.USER_FOUND_FAILED);
+		}
+		byte[] bytes = file.getBytes();
+		Path path = Paths.get("/home/admin1/FundooNote/UserService/src/main/java/com/bridgelabz/fundoo/user"+ file.getOriginalFilename());
+		Files.write(path, bytes);
+		String location="/home/admin1/FundooNote/UserService/src/main/java/com/bridgelabz/fundoo/user"+ file.getOriginalFilename();
+		user.setProfilePic(location);
+		
+		return new Response(200, CommonFiles.PHOTO_UPDATED_SUCCESS, userRepository.save(user));
 	}
 
 }

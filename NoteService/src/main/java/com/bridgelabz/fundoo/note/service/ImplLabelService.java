@@ -37,14 +37,7 @@ public class ImplLabelService implements ILabelService {
 
 	public static final Logger LOG = LoggerFactory.getLogger(ImplNoteService.class);
 
-	/**
-	 * Purpose: Method for adding label for a particular user
-	 * 
-	 * @param labelDTO containing label details
-	 * @param token    containing details of a user for which the the label has to
-	 *                 be made
-	 * @return Response object containing status code , message and object .
-	 */
+
 	@Override
 	public Response add(LabelDTO labelDTO, String emailIdToken) {
 		LOG.info(CommonFiles.SERVICE_ADD_METHOD);
@@ -64,13 +57,7 @@ public class ImplLabelService implements ILabelService {
 
 	}
 
-	/**
-	 * Purpose: Method of updating labels of a particular user
-	 * 
-	 * @param labelIdToken containing labbelId details
-	 * @param labelDTO     containing the update data of a particular label
-	 * @return Response object containing status code , message and object .
-	 */
+	
 	@Override
 	public Response update(LabelDTO labelDTO, int labelId) {
 
@@ -85,13 +72,7 @@ public class ImplLabelService implements ILabelService {
 		return new Response(200, CommonFiles.UPDATE_LABEL_SUCCESS, labelRepository.save(label));
 	}
 
-	/**
-	 * Purpose: Method for deleting labels of a particular user
-	 * 
-	 * @param labelIdToken containing labbelId details
-	 * @param emailIdToken containing emailId details
-	 * @return Response object containing status code , message and object .
-	 */
+	
 	@Override
 	public Response delete(int labelId, String emailIdToken) {
 		String emailId = TokenUtility.tokenParser(emailIdToken);
@@ -110,13 +91,7 @@ public class ImplLabelService implements ILabelService {
 
 	}
 
-	/**
-	 * Purpose: Method for fetching the labels
-	 * 
-	 * @param labelIdToken containing labbelId details
-	 * @param emailIdToken containing emailId details
-	 * @return Response object containing status code , message and object .
-	 */
+
 	@Override
 	public Response get(int labelId, String emailIdToken) {
 
