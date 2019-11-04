@@ -9,8 +9,6 @@
  ******************************************************************************/
 package com.bridgelabz.fundoo.user.service;
 
-
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -20,13 +18,12 @@ import org.modelmapper.ModelMapper;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
+
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 
 import com.bridgelabz.fundoo.user.configuration.UserConfiguration;
 
@@ -35,13 +32,12 @@ import com.bridgelabz.fundoo.user.dto.RegisterDTO;
 import com.bridgelabz.fundoo.user.dto.SetPasswordDTO;
 
 import com.bridgelabz.fundoo.user.exception.custom.UserException;
+import com.bridgelabz.fundoo.user.model.EmailData;
 import com.bridgelabz.fundoo.user.model.User;
 import com.bridgelabz.fundoo.user.repository.UserRepository;
 import com.bridgelabz.fundoo.user.response.Response;
 import com.bridgelabz.fundoo.user.utility.CommonFiles;
 import com.bridgelabz.fundoo.user.utility.TokenUtility;
-import com.bridgelabz.fundoo.user.utility.UserUtility;
-
 
 
 @Service
@@ -56,11 +52,14 @@ public class ImplUserService implements IUserService {
 	@Autowired
 	private ModelMapper modelMapper;
 
-	@Autowired
-	private JavaMailSender emailSender;
+	
 
+
+	
 	@Autowired
-	private UserUtility userUtility;
+	private RabbitTemplate rabbitTemplate;
+	
+
 
 	public static final Logger LOG = LoggerFactory.getLogger(ImplUserService.class);
 
@@ -74,14 +73,14 @@ public class ImplUserService implements IUserService {
 	@Override
 	public Response userLogin(LoginDTO login) {
 		LOG.info(CommonFiles.SERVICE_LOGIN_METHOD);
-        
+
 		if (!userRepository.findAll().stream()
 				.anyMatch(i -> i.getEmail().equals(login.getEmail())
 						&& userConfiguration.passwordEncoder().matches(login.getPassword(), i.getPassword())
 						&& i.isVerified())) {
 			throw new UserException(CommonFiles.LOGIN_FAILED);
 		}
-        String token=TokenUtility.tokenBuild(login.getEmail());
+		String token = TokenUtility.tokenBuild(login.getEmail());
 		return new Response(200, CommonFiles.LOGIN_SUCCESS, token);
 
 	}
@@ -102,8 +101,22 @@ public class ImplUserService implements IUserService {
 			throw new UserException(register.getEmail() + CommonFiles.REGISTER_EMAIL_FOUND);
 
 		}
-
-		sendMail(register.getEmail(), CommonFiles.VERIFY_URL);
+        
+		
+		EmailData emailData=new EmailData();
+		emailData.setEmail(register.getEmail());
+		emailData.setToken(TokenUtility.tokenBuild(register.getEmail()));
+		emailData.setMessage(CommonFiles.EMAIL_SUBJECT_VERIFY);
+		emailData.setPath(CommonFiles.VERIFY_URL);
+		
+		rabbitTemplate.convertAndSend(CommonFiles.ROUTING_KEY, emailData);
+		
+		
+		
+		
+         
+         
+		
 		register.setPassword(userConfiguration.passwordEncoder().encode(register.getPassword()));
 		User user = modelMapper.map(register, User.class);
 		userRepository.save(user);
@@ -128,10 +141,13 @@ public class ImplUserService implements IUserService {
 			throw new UserException(email + CommonFiles.EMAIL_FAILED);
 
 		}
-
-		SimpleMailMessage simpleMailMessage = userUtility.mailSender(email, TokenUtility.tokenBuild(email),
-				CommonFiles.EMAIL_SUBJECT_SETPASSWORD, CommonFiles.SET_PASSWORD_URL);
-		emailSender.send(simpleMailMessage);
+		EmailData emailData=new EmailData();
+		emailData.setEmail(email);
+		emailData.setToken(TokenUtility.tokenBuild(email));
+		emailData.setMessage(CommonFiles.EMAIL_SUBJECT_SETPASSWORD);
+		emailData.setPath(CommonFiles.SET_PASSWORD_URL);
+	    rabbitTemplate.convertAndSend(CommonFiles.ROUTING_KEY, emailData);
+	
 		return new Response(200, CommonFiles.EMAIL_SUCCESS, true);
 
 	}
@@ -145,14 +161,11 @@ public class ImplUserService implements IUserService {
 	 * @return Response which contains the response of the method.
 	 */
 	@Override
-	public Response userSetPassword(SetPasswordDTO setPasswordDTO ,String token) {
+	public Response userSetPassword(SetPasswordDTO setPasswordDTO, String token) {
 		LOG.info(CommonFiles.SERVICE_SETPASSWORD_METHOD);
 
-		
-
-		User user = userRepository.findAll().stream().filter(i -> i.getEmail().equals
-				(TokenUtility.tokenParser(token))).findAny()
-				.orElse(null);
+		User user = userRepository.findAll().stream().filter(i -> i.getEmail().equals(TokenUtility.tokenParser(token)))
+				.findAny().orElse(null);
 
 		if (user == null && !(setPasswordDTO.getPassword().equals(setPasswordDTO.getConfirmPassword()))) {
 
@@ -165,22 +178,7 @@ public class ImplUserService implements IUserService {
 
 	}
 
-	/**
-	 * Purpose: Method for send mail to a particular mailId
-	 * 
-	 * @param email to which the mail has to be send
-	 */
-	@Override
-	public void sendMail(String email, String url) {
-		LOG.info(CommonFiles.SERVICE_SENDMAIL_METHOD);
 
-		String token = TokenUtility.tokenBuild(email);
-
-		SimpleMailMessage simpleMailMessage = userUtility.mailSender(email, token, CommonFiles.EMAIL_SUBJECT_VERIFY,
-				url);
-		emailSender.send(simpleMailMessage);
-
-	}
 
 	/**
 	 * Purpose: Method for verifying the user in which the user get authorization to
@@ -194,10 +192,8 @@ public class ImplUserService implements IUserService {
 	public Response isVerified(String token) {
 		LOG.info(CommonFiles.SERVICE_ISVERIFIED_METHOD);
 
-	
-		User user = userRepository.findAll().stream().filter(i -> i.getEmail().
-				equals(TokenUtility.tokenParser(token))).findAny()
-				.orElse(null);
+		User user = userRepository.findAll().stream().filter(i -> i.getEmail().equals(TokenUtility.tokenParser(token)))
+				.findAny().orElse(null);
 
 		if (user == null) {
 			throw new UserException(CommonFiles.USER_NOT_VERIFIED);
@@ -208,46 +204,45 @@ public class ImplUserService implements IUserService {
 		return new Response(200, CommonFiles.USER_VERIFIED, userRepository.save(user));
 
 	}
-	
-	
+
 	/**
-	 * Purpose: Method for adding profile picture to user of UserService using multi part
-	 *          file
+	 * Purpose: Method for adding profile picture to user of UserService using multi
+	 * part file
+	 * 
 	 * @param emailIdToken
-	 * @param file containing image for adding profile picture
+	 * @param file         containing image for adding profile picture
 	 * @return Response which contains the response of the method
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	@Override
-	public Response addProfilePic( String emailIdToken, MultipartFile file) throws IOException {
+	public Response addProfilePic(String emailIdToken, MultipartFile file) throws IOException {
 		String email = TokenUtility.tokenParser(emailIdToken);
 		User user = userRepository.findByEmail(email).orElse(null);
 
 		if (user == null) {
 			throw new UserException(CommonFiles.USER_FOUND_FAILED);
 		}
-		
+
 		byte[] bytes = file.getBytes();
-		Path path = Paths.get("/home/admin1/FundooNote/UserService/src/main/java/com/bridgelabz/fundoo/user"+ file.getOriginalFilename());
+		Path path = Paths.get(CommonFiles.PROFILE_PIC_PATH + file.getOriginalFilename());
 		Files.write(path, bytes);
-		String location="/home/admin1/FundooNote/UserService/src/main/java/com/bridgelabz/fundoo/user"+ file.getOriginalFilename();
-		user.setProfilePic(location);
-  
-	
+
+		user.setProfilePic(CommonFiles.PROFILE_PIC_PATH + file.getOriginalFilename());
+
 		return new Response(200, CommonFiles.PHOTO_ADDED_SUCCESS, userRepository.save(user));
 
 	}
 
-	
 	/**
 	 * Purpose: Method for removing profile picture of user of UserService
-	 * @param emailIdToken to verify the user and granting him/her the authorization to
-	 *              access the userServices.
+	 * 
+	 * @param emailIdToken to verify the user and granting him/her the authorization
+	 *                     to access the userServices.
 	 * @return Response which contains the response of the method
 	 * @throws IOException
 	 */
 	@Override
-	public Response removeProfilePic( String emailIdToken) throws IOException {
+	public Response removeProfilePic(String emailIdToken) throws IOException {
 		String email = TokenUtility.tokenParser(emailIdToken);
 		User user = userRepository.findByEmail(email).orElse(null);
 
@@ -255,23 +250,23 @@ public class ImplUserService implements IUserService {
 			throw new UserException(CommonFiles.USER_FOUND_FAILED);
 		}
 		Path path = Paths.get(user.getProfilePic());
-		
+
 		Files.delete(path);
 		user.setProfilePic(null);
 		return new Response(200, CommonFiles.PHOTO_REMOVED_SUCCESS, userRepository.save(user));
 	}
 
-	
 	/**
 	 * Purpose: Method for updating profile picture of user of userService
-	 * @param emailIdToken to verify the user and granting him/her the authorization to
-	 *              access the userServices.
-	 * @param file containing image  for updating profile picture
+	 * 
+	 * @param emailIdToken to verify the user and granting him/her the authorization
+	 *                     to access the userServices.
+	 * @param file         containing image for updating profile picture
 	 * @return Response which contains the response of the method
 	 * @throws IOException
 	 */
 	@Override
-	public Response updateProfilePic( String emailIdToken, MultipartFile file) throws IOException {
+	public Response updateProfilePic(String emailIdToken, MultipartFile file) throws IOException {
 		String email = TokenUtility.tokenParser(emailIdToken);
 		User user = userRepository.findByEmail(email).orElse(null);
 
@@ -279,11 +274,11 @@ public class ImplUserService implements IUserService {
 			throw new UserException(CommonFiles.USER_FOUND_FAILED);
 		}
 		byte[] bytes = file.getBytes();
-		Path path = Paths.get("/home/admin1/FundooNote/UserService/src/main/java/com/bridgelabz/fundoo/user"+ file.getOriginalFilename());
+		Path path = Paths.get(CommonFiles.PROFILE_PIC_PATH + file.getOriginalFilename());
 		Files.write(path, bytes);
-		String location="/home/admin1/FundooNote/UserService/src/main/java/com/bridgelabz/fundoo/user"+ file.getOriginalFilename();
-		user.setProfilePic(location);
-		
+
+		user.setProfilePic(CommonFiles.PROFILE_PIC_PATH + file.getOriginalFilename());
+
 		return new Response(200, CommonFiles.PHOTO_UPDATED_SUCCESS, userRepository.save(user));
 	}
 

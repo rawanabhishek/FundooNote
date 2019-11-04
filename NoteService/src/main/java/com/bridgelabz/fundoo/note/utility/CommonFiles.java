@@ -44,6 +44,8 @@ public class CommonFiles {
 	public static final String PHOTO_ADDED_SUCCESS = "photo added suvvessfully";
 	public static final String PHOTO_REMOVED_SUCCESS = "photo removed successfully";
 	public static final String COLOR_UPDATED_SUCCESS = "Color updated successfully";
+	public static final String DEFAULT_COLOR_PRESENT = "Note is set to default color you need to add color to update";
+	public static final String COLOR_DEFAULT_VALUE="#ffffff";
 	
 	
 	//labelService related message
@@ -85,6 +87,7 @@ public class CommonFiles {
 	public static final String SERVICE_ARCHIVE_METHOD="Archive service method";
 	public static final String SERVICE_ARCHIVE_PIN_METHOD="Archive pin service method";
 	public static final String UPDATE_REMAINDER_SUCCESS = "Reminder updated successfully";
+	
 	
 	
 	

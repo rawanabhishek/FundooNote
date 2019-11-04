@@ -7,7 +7,7 @@
  *  @since   20-10-2019
  *
  ******************************************************************************/
-package com.bridgelabz.fundoo.user.utility;
+package com.bridgelabz.rabbitmq;
 
 
 
@@ -32,13 +32,15 @@ public class UserUtility {
 	 *          user and sender.
 	 */
 	
-	public  SimpleMailMessage mailSender(
-		      String to, String token ,String subject ,String url) {
+	
+	
+	public static  SimpleMailMessage mailSender(
+		      String to) {
 		     
 		        SimpleMailMessage message = new SimpleMailMessage(); 
 		        message.setTo(to); 
-		        message.setSubject(subject); 
-		        message.setText(url + token);
+		        message.setSubject("Hie"); 
+		        message.setText("how are you");
 		        return message;
 		        
 		       

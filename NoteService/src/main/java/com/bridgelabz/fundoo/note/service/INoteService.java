@@ -92,7 +92,7 @@ public interface INoteService {
 	
 	/**
 	 * Purpose: Method for  unarchive a note and Setting the Pin true
-	 *@param emailIdToken token containing email id 
+	 * @param emailIdToken token containing email id 
 	 * @param noteId  containing note id
 	 * @return Response object containing status code , message 
 	 *         and object .
@@ -111,7 +111,7 @@ public interface INoteService {
 	
 	/**
 	 * Purpose: Method for sorting notes of a user by updated date
-	 *@param emailIdToken token containing email id 
+	 * @param emailIdToken token containing email id 
 	 * @return Response object containing status code , message 
 	 *         and object .
 	 */

@@ -63,7 +63,7 @@ public class ImplNoteService implements INoteService {
 		Note note = configuration.modelMapper().map(noteDTO, Note.class);
 		System.out.println(note);
 		if (note.getNoteColor() == null || note.getNoteColor().isBlank()) {
-			note.setNoteColor("#ffffff");
+			note.setNoteColor(CommonFiles.COLOR_DEFAULT_VALUE);
 		}
 		note.setEmailId(TokenUtility.tokenParser(token));
 
@@ -362,10 +362,7 @@ public class ImplNoteService implements INoteService {
 			throw new NoteException(CommonFiles.NOTE_FOUND_FAILED);
 		}
 		note.setNoteColor(color);
-		if (note.getNoteColor().isBlank()) {
-			
-			note.setNoteColor("#ffffff");
-		}
+		
 
 		return new Response(200, CommonFiles.COLOR_ADDED_SUCCESS, noteRepository.save(note));
 	}
@@ -392,11 +389,11 @@ public class ImplNoteService implements INoteService {
 		if (note == null) {
 			throw new NoteException(CommonFiles.NOTE_FOUND_FAILED);
 		}
-		note.setNoteColor(color);
-		if (note.getNoteColor().isBlank()) {
-			
-			note.setNoteColor("#ffffff");
+		if(note.getNoteColor().equals(CommonFiles.COLOR_DEFAULT_VALUE)) {
+			throw new NoteException(CommonFiles.DEFAULT_COLOR_PRESENT);
 		}
+		note.setNoteColor(color);
+		
 
 		return new Response(200, CommonFiles.COLOR_UPDATED_SUCCESS, noteRepository.save(note));
 	}

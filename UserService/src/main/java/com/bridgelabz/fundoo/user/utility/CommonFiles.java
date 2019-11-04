@@ -27,6 +27,9 @@ public class CommonFiles {
 	public static final String PHOTO_ADDED_SUCCESS = "photo added suvvessfully";
 	public static final String PHOTO_REMOVED_SUCCESS = "photo removed successfully";
 	public static final String USER_FOUND_FAILED = "user not found";
+	public static final String PROFILE_PIC_PATH = "/home/admin1/FundooNote/UserService/src/main/java/com/bridgelabz/fundoo/user/ImageFiles";
+	
+	
 	
 	//Email Subject messages
 	public static final String EMAIL_SUBJECT_SETPASSWORD="Link For resetting password";
@@ -34,6 +37,11 @@ public class CommonFiles {
 	
 	//token key message
 	public static final String TOKEN_KEY="secretKey";
+	
+	//rabbit mq
+	public static final String ROUTING_KEY="my.queue.key";
+	public static final String QUEUE_EXCHANGE="my_queue_exchange";
+	public static final String MAIL_SENDER_METHOD="mailSender";
 	
 	
 	//url message for different functionality of user service

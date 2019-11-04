@@ -75,12 +75,7 @@ public interface IUserService {
 	
 	
 
-	/**
-	 * Purpose: Method for send mail to a particular mailId
-	 * 
-	 * @param email to which the mail has to be send
-	 */
-	public void sendMail(String email ,String url);
+
 	
 	
 
