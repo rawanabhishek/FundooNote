@@ -25,9 +25,10 @@ import com.bridgelabz.fundoo.note.configuration.ApplicationConfiguration;
 import com.bridgelabz.fundoo.note.dto.NoteDTO;
 import com.bridgelabz.fundoo.note.dto.NoteUpdateDTO;
 import com.bridgelabz.fundoo.note.exception.custom.NoteException;
-
+import com.bridgelabz.fundoo.note.model.Collaborator;
 import com.bridgelabz.fundoo.note.model.Label;
 import com.bridgelabz.fundoo.note.model.Note;
+import com.bridgelabz.fundoo.note.repository.CollaboratorRepository;
 import com.bridgelabz.fundoo.note.repository.LabelRepository;
 import com.bridgelabz.fundoo.note.repository.NoteRepository;
 import com.bridgelabz.fundoo.note.response.Response;
@@ -45,6 +46,9 @@ public class ImplNoteService implements INoteService {
 
 	@Autowired
 	private ApplicationConfiguration configuration;
+	
+	@Autowired
+	private CollaboratorRepository collaboratorRepository;
 
 	public static final Logger LOG = LoggerFactory.getLogger(ImplNoteService.class);
 
@@ -276,37 +280,47 @@ public class ImplNoteService implements INoteService {
 		return new Response(200, CommonFiles.REMOVE_LABEL_SUCCESS, note);
 	}
 
-//	@Override
-//	public Response addCollaborator(int noteId, String emailIdToken, String collaborator) {
-//		String emailId = TokenUtility.tokenParser(emailIdToken);
-//
-//		
-//
-//		Note note = noteRepository.findByNoteIdAndEmailId(noteId, emailId).orElse(null);
-//
-//		if (note == null) {
-//			throw new NoteException(CommonFiles.NOTE_FOUND_FAILED);
-//		}
-//         
-//		note.getCollaborator().add(collaborator);
-//
-//		return new Response(200, CommonFiles.ADD_COLLABORATOR_SUCCESS, noteRepository.save(note));
-//	}
-//
-//	@Override
-//	public Response removeCollaborator(int noteId, String emailIdToken,  String collaborator) {
-//		String emailId = TokenUtility.tokenParser(emailIdToken);
-//
-//		
-//
-//		Note note = noteRepository.findByNoteIdAndEmailId(noteId, emailId).orElse(null);
-//
-//		if (note == null) {
-//			throw new NoteException(CommonFiles.NOTE_FOUND_FAILED);
-//		}
-//		note.getCollaborator().remove(collaborator);
-//		return new Response(200, CommonFiles.REMOVE_COLLABORATOR_SUCCESS, noteRepository.save(note));
-//	}
+	@Override
+	public Response addCollaborator(int noteId, String emailIdToken, String collaboratorEmail) {
+		String emailId = TokenUtility.tokenParser(emailIdToken);
+
+		String collaboratorEmailId=TokenUtility.tokenParser(collaboratorEmail);
+
+		Note note = noteRepository.findByNoteIdAndEmailId(noteId, emailId).orElse(null);
+        Collaborator  collaborator= collaboratorRepository.findByEmail(collaboratorEmailId).orElse(null);
+	
+		if (note == null) {
+			throw new NoteException(CommonFiles.NOTE_FOUND_FAILED);
+		}
+		if(collaborator==null) {
+			throw new NoteException(CommonFiles.USER_FOUND_FAILED);
+		}
+         collaborator.setEmail(collaboratorEmail);
+         collaborator.getNotes().add(note);
+         
+		note.getCollaborator().add(collaborator);
+
+		return new Response(200, CommonFiles.ADD_COLLABORATOR_SUCCESS, noteRepository.save(note));
+	}
+
+	@Override
+	public Response removeCollaborator(int noteId, String emailIdToken,  String collaboratorEmail) {
+		String emailId = TokenUtility.tokenParser(emailIdToken);
+
+		
+
+		Note note = noteRepository.findByNoteIdAndEmailId(noteId, emailId).orElse(null);
+		Collaborator  collaborator= collaboratorRepository.findAllByEmail(collaboratorEmail);
+
+		if (note == null) {
+			throw new NoteException(CommonFiles.NOTE_FOUND_FAILED);
+		}
+		if(collaborator==null) {
+			throw new NoteException(CommonFiles.USER_FOUND_FAILED);
+		}
+		note.getCollaborator().remove(collaborator);
+		return new Response(200, CommonFiles.REMOVE_COLLABORATOR_SUCCESS, noteRepository.save(note));
+	}
 
 	@Override
 	public Response addReminder(int noteId, String emailIdToken, Date date) {

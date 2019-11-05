@@ -150,10 +150,10 @@ public interface INoteService {
 	public Response removeLabel(int noteId , String emailIdToken , int labelId);
 	
 	
-//	public Response addCollaborator(int noteId , String emailIdToken,String collaborator);
-//	
-//	
-//	public Response removeCollaborator(int noteId , String emailIdToken, String collaborator);
+	public Response addCollaborator(int noteId , String emailIdToken,String collaboratorEmail);
+	
+	
+	public Response removeCollaborator(int noteId , String emailIdToken, String collaboratorEmail);
 	
 	/**
 	 * Purpose: Method for adding reminder to a  note

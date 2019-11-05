@@ -218,20 +218,20 @@ public class NoteController {
 		return new ResponseEntity<>(noteService.removeLabel(noteId ,emailIdToken ,labelId),HttpStatus.OK);
 	}
 	
-//	@PutMapping("/addcollaborator")
-//	public ResponseEntity<Response> addCollaborator(@RequestParam int  noteId , @RequestHeader
-//			String emailIdToken , @RequestHeader String collaborator){
-//		System.out.println("controller delete label");
-//		return new ResponseEntity<>(noteService.addCollaborator(noteId ,emailIdToken , collaborator),HttpStatus.OK);
-//	}
-//	
-//	
-//	@PutMapping("/removecollaborator")
-//	public ResponseEntity<Response> removeCollaborator(@RequestParam int  noteId , @RequestHeader
-//			String emailIdToken , @RequestHeader String collaborator){
-//		System.out.println("controller delete label");
-//		return new ResponseEntity<>(noteService.removeCollaborator(noteId ,emailIdToken , collaborator),HttpStatus.OK);
-//	}
+	@PutMapping("/addcollaborator")
+	public ResponseEntity<Response> addCollaborator(@RequestParam int  noteId , @RequestHeader
+			String emailIdToken , @RequestHeader String collaborator){
+		
+		return new ResponseEntity<>(noteService.addCollaborator(noteId ,emailIdToken , collaborator),HttpStatus.OK);
+	}
+	
+	
+	@PutMapping("/removecollaborator")
+	public ResponseEntity<Response> removeCollaborator(@RequestParam int  noteId , @RequestHeader
+			String emailIdToken , @RequestHeader String collaborator){
+		
+		return new ResponseEntity<>(noteService.removeCollaborator(noteId ,emailIdToken , collaborator),HttpStatus.OK);
+	}
 	
 	
 	/**

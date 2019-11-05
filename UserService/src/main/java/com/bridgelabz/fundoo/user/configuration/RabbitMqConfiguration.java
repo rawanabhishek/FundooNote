@@ -1,3 +1,14 @@
+/******************************************************************************
+ 
+ *  Purpose: A configuration class which holds all the configuration
+ *  		 related to the RabbitMq and Create the bean
+ *           for the rabbitMq using Bean Annotation .
+ *  		
+ *  @author  Abhishek Rawat
+ *  @version 1.0
+ *  @since   04-11-2019
+ *
+ ******************************************************************************/
 package com.bridgelabz.fundoo.user.configuration;
 
 import org.springframework.amqp.core.Binding;

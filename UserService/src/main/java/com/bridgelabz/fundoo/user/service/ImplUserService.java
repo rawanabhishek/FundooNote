@@ -21,7 +21,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 
-
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -39,7 +38,6 @@ import com.bridgelabz.fundoo.user.response.Response;
 import com.bridgelabz.fundoo.user.utility.CommonFiles;
 import com.bridgelabz.fundoo.user.utility.TokenUtility;
 
-
 @Service
 public class ImplUserService implements IUserService {
 
@@ -52,14 +50,8 @@ public class ImplUserService implements IUserService {
 	@Autowired
 	private ModelMapper modelMapper;
 
-	
-
-
-	
 	@Autowired
 	private RabbitTemplate rabbitTemplate;
-	
-
 
 	public static final Logger LOG = LoggerFactory.getLogger(ImplUserService.class);
 
@@ -101,22 +93,15 @@ public class ImplUserService implements IUserService {
 			throw new UserException(register.getEmail() + CommonFiles.REGISTER_EMAIL_FOUND);
 
 		}
-        
-		
-		EmailData emailData=new EmailData();
+
+		EmailData emailData = new EmailData();
 		emailData.setEmail(register.getEmail());
 		emailData.setToken(TokenUtility.tokenBuild(register.getEmail()));
 		emailData.setMessage(CommonFiles.EMAIL_SUBJECT_VERIFY);
 		emailData.setPath(CommonFiles.VERIFY_URL);
-		
+
 		rabbitTemplate.convertAndSend(CommonFiles.ROUTING_KEY, emailData);
-		
-		
-		
-		
-         
-         
-		
+
 		register.setPassword(userConfiguration.passwordEncoder().encode(register.getPassword()));
 		User user = modelMapper.map(register, User.class);
 		userRepository.save(user);
@@ -141,13 +126,13 @@ public class ImplUserService implements IUserService {
 			throw new UserException(email + CommonFiles.EMAIL_FAILED);
 
 		}
-		EmailData emailData=new EmailData();
+		EmailData emailData = new EmailData();
 		emailData.setEmail(email);
 		emailData.setToken(TokenUtility.tokenBuild(email));
 		emailData.setMessage(CommonFiles.EMAIL_SUBJECT_SETPASSWORD);
 		emailData.setPath(CommonFiles.SET_PASSWORD_URL);
-	    rabbitTemplate.convertAndSend(CommonFiles.ROUTING_KEY, emailData);
-	
+		rabbitTemplate.convertAndSend(CommonFiles.ROUTING_KEY, emailData);
+
 		return new Response(200, CommonFiles.EMAIL_SUCCESS, true);
 
 	}
@@ -177,8 +162,6 @@ public class ImplUserService implements IUserService {
 		return new Response(200, CommonFiles.SET_PASSWORD_SUCCESS, userRepository.save(user));
 
 	}
-
-
 
 	/**
 	 * Purpose: Method for verifying the user in which the user get authorization to
@@ -272,6 +255,9 @@ public class ImplUserService implements IUserService {
 
 		if (user == null) {
 			throw new UserException(CommonFiles.USER_FOUND_FAILED);
+		}
+		if(user.getProfilePic()==null) {
+			throw new UserException(CommonFiles.NO_PROFILE_PIC);
 		}
 		byte[] bytes = file.getBytes();
 		Path path = Paths.get(CommonFiles.PROFILE_PIC_PATH + file.getOriginalFilename());

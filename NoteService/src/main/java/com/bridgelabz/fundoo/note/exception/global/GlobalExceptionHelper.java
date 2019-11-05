@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.bridgelabz.fundoo.note.exception.custom.NoteException;
-
+import com.bridgelabz.fundoo.note.exception.custom.CollaboratorException;
 import com.bridgelabz.fundoo.note.exception.custom.LabelException;
 
 import com.bridgelabz.fundoo.note.response.Response;
@@ -63,12 +63,28 @@ public class GlobalExceptionHelper {
 	 *          and object.
 	 */
 	@ExceptionHandler(LabelException.class)
-	public final ResponseEntity<Response> updateNoteException(LabelException ex) {
+	public final ResponseEntity<Response> LabelException(LabelException ex) {
 
 		Response responseMessage = new Response(400, ex.getMessage(), null);
 
 		return new ResponseEntity<>(responseMessage, HttpStatus.BAD_GATEWAY);
 	}
+	
+	/**
+	 * Purpose: to create a global exception handler for CollaboratorException custom
+	 *          exception. 
+	 * @param   ex the exception message .
+	 * @return  ResponseEntity showing Http status , exception message 
+	 *          and object.
+	 */
+	@ExceptionHandler(CollaboratorException.class)
+	public final ResponseEntity<Response> CollaboratorException(CollaboratorException ex) {
+
+		Response responseMessage = new Response(400, ex.getMessage(), null);
+
+		return new ResponseEntity<>(responseMessage, HttpStatus.BAD_GATEWAY);
+	}
+	
 
 	
 

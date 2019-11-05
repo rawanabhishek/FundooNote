@@ -48,7 +48,7 @@ public class EmailSender  implements Serializable{
 	public  void mailSender(EmailData emailData) {
 		
 		    
-		         SimpleMailMessage message = new SimpleMailMessage(); 
+		        SimpleMailMessage message = new SimpleMailMessage(); 
 		        message.setTo(emailData.getEmail()); 
 		        message.setSubject(emailData.getMessage()); 
 		        message.setText(emailData.getPath() + emailData.getToken());

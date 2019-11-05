@@ -28,7 +28,7 @@ public class CommonFiles {
 	public static final String PHOTO_REMOVED_SUCCESS = "photo removed successfully";
 	public static final String USER_FOUND_FAILED = "user not found";
 	public static final String PROFILE_PIC_PATH = "/home/admin1/FundooNote/UserService/src/main/java/com/bridgelabz/fundoo/user/ImageFiles";
-	
+	public static final String NO_PROFILE_PIC = "There is no profile pic to update";
 	
 	
 	//Email Subject messages
@@ -65,6 +65,7 @@ public class CommonFiles {
 	public static final String CONTROLLER_SETPASSWORD_METHOD="Set password controller method";
 	public static final String CONTROLLER_REGISTER_METHOD="Register controller method";
 	public static final String CONTROLLER_ISVERIFIED_METHOD="Is verified controller method";
+	
 	
 	
 

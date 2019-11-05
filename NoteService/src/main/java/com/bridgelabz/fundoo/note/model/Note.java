@@ -89,8 +89,8 @@ public class Note {
 	private List<Label> labels;
 	
 	
-
-//	@OneToMany
-//	private List<String> collaborator=new ArrayList<String>();
+   @JsonIgnoreProperties(value = "notes")
+   @ManyToMany(fetch = FetchType.LAZY)
+   private List<Collaborator> collaborator;
 
 }

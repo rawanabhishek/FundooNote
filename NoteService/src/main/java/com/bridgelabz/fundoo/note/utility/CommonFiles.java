@@ -62,8 +62,12 @@ public class CommonFiles {
 	
 	
 	
-	
-	
+	//Collaborator
+	public static final String COLLABORATOR_ADDED_SUCCESS = "Collaborator added successfully";
+	public static final String COLLABORATOR_ADDED_FAILED = "adding collaborator failed";
+	public static final String COLLABORATOR_FOUND_FAILED = "Collaborator not found";
+	public static final String COLLABORATOR_PRESENT_ALREADY = "Collaborator id present already";
+	public static final String COLLABORATOR_FOUND_SUCCESS="colloaborator found success";
 
 	
 	//Email Subject messages
@@ -87,6 +91,9 @@ public class CommonFiles {
 	public static final String SERVICE_ARCHIVE_METHOD="Archive service method";
 	public static final String SERVICE_ARCHIVE_PIN_METHOD="Archive pin service method";
 	public static final String UPDATE_REMAINDER_SUCCESS = "Reminder updated successfully";
+	
+	
+
 	
 	
 	
