@@ -1,3 +1,12 @@
+/******************************************************************************
+ 
+ *  Purpose: An interface class extending Jpa repository  which give 
+ *           its  service to use in the application .
+ *  @author  Abhishek Rawat
+ *  @version 1.0
+ *  @since   05-11-2019
+ *
+ ******************************************************************************/
 package com.bridgelabz.fundoo.note.repository;
 
 import java.util.Optional;

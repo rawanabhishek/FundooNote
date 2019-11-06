@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Service;
 
 
@@ -49,6 +50,15 @@ public class ImplNoteService implements INoteService {
 	
 	@Autowired
 	private CollaboratorRepository collaboratorRepository;
+	
+//	
+//	private RedisTemplate<String ,Object> redisTemplate;
+//	
+//	
+//	private HashOperations<String , Long ,Note> hashOperations;
+	
+	
+
 
 	public static final Logger LOG = LoggerFactory.getLogger(ImplNoteService.class);
 
@@ -70,7 +80,7 @@ public class ImplNoteService implements INoteService {
 			note.setNoteColor(CommonFiles.COLOR_DEFAULT_VALUE);
 		}
 		note.setEmailId(TokenUtility.tokenParser(token));
-
+        
 		return new Response(200, CommonFiles.ADD_NOTE_SUCCESS, noteRepository.save(note));
 
 	}
@@ -85,7 +95,7 @@ public class ImplNoteService implements INoteService {
 		if (((updateDTO.getTitle().isBlank() && updateDTO.getDescription().isBlank())) && note == null) {
 			throw new NoteException(CommonFiles.UPDATE_NOTE_FAILED);
 		}
-
+        
 		note.setDescription(updateDTO.getDescription());
 		note.setTitle(updateDTO.getTitle());
 		return new Response(200, CommonFiles.UPDATE_NOTE_SUCCESS, noteRepository.save(note));

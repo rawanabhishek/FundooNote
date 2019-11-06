@@ -18,6 +18,7 @@ import java.util.Date;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -59,6 +60,7 @@ public class NoteController {
 	 *         message and object
 	 * 
 	 */
+	@Cacheable("title")
 	@PostMapping("/")
 	public ResponseEntity<Response> add(@RequestBody NoteDTO noteDTO ,@RequestHeader("emailIdToken") String emailIdToken) {
 		
@@ -245,7 +247,7 @@ public class NoteController {
 	@PostMapping("/addreminder")
 	public ResponseEntity<Response> addReminder(@RequestParam("noteId") int  noteId , @RequestHeader("emailIdToken")
 			String emailIdToken , 
-			@RequestParam("reminder") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)Date date){
+			@RequestParam("reminder")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date date){
 		
 		return new ResponseEntity<>(noteService.addReminder(noteId ,emailIdToken , date),HttpStatus.OK);
 	}
@@ -260,7 +262,7 @@ public class NoteController {
 	 */
 	@PutMapping("/updatereminder")
 	public ResponseEntity<Response> updateReminder(@RequestParam("noteId") int  noteId , @RequestHeader("emailIdToken")
-			String emailIdToken , @RequestParam("reminder") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)Date date){
+			String emailIdToken , @RequestParam("reminder") Date date){
 	
 		return new ResponseEntity<>(noteService.updateReminder(noteId ,emailIdToken , date),HttpStatus.OK);
 	}

@@ -12,6 +12,7 @@
 package com.bridgelabz.fundoo.note.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -62,6 +63,7 @@ public class LabelController {
 	 * @return ResponseEntity containing Response which contains status code,
 	 *         message and object
 	 */
+	@Cacheable()
 	@GetMapping("/")
 	public ResponseEntity<Response> get(@RequestParam int labelId , @RequestHeader("emailIdToken") String emailIdToken){
 		return new ResponseEntity<Response>(labelService.get(labelId, emailIdToken),HttpStatus.OK);

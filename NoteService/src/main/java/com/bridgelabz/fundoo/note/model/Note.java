@@ -12,6 +12,7 @@
 package com.bridgelabz.fundoo.note.model;
 
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -33,15 +34,20 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.Data;
+
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity
 @Getter
 @Setter
-@Data
-public class Note {
+
+public class Note implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@Column(name = "note_id")
