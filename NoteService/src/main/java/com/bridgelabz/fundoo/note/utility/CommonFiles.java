@@ -46,6 +46,7 @@ public class CommonFiles {
 	public static final String COLOR_UPDATED_SUCCESS = "Color updated successfully";
 	public static final String DEFAULT_COLOR_PRESENT = "Note is set to default color you need to add color to update";
 	public static final String COLOR_DEFAULT_VALUE="#ffffff";
+	public static final String NO_REMINDER = "There is no reminder to update";
 	
 	
 	//labelService related message
@@ -91,6 +92,7 @@ public class CommonFiles {
 	public static final String SERVICE_ARCHIVE_METHOD="Archive service method";
 	public static final String SERVICE_ARCHIVE_PIN_METHOD="Archive pin service method";
 	public static final String UPDATE_REMAINDER_SUCCESS = "Reminder updated successfully";
+	
 	
 	
 

@@ -18,7 +18,7 @@ import java.util.Date;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
+
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -60,7 +60,7 @@ public class NoteController {
 	 *         message and object
 	 * 
 	 */
-	@Cacheable("title")
+	//@Cacheable(cacheNames = "noteDTO", key="#p0")
 	@PostMapping("/")
 	public ResponseEntity<Response> add(@RequestBody NoteDTO noteDTO ,@RequestHeader("emailIdToken") String emailIdToken) {
 		
@@ -220,6 +220,13 @@ public class NoteController {
 		return new ResponseEntity<>(noteService.removeLabel(noteId ,emailIdToken ,labelId),HttpStatus.OK);
 	}
 	
+	/**
+	 * Purpose: Creating add collaborator controller for adding collaborator to note
+	 * @param noteId containing note id
+	 * @param emailIdToken token containing email id 
+	 * @param collaborator email Id
+	 * @return
+	 */
 	@PutMapping("/addcollaborator")
 	public ResponseEntity<Response> addCollaborator(@RequestParam int  noteId , @RequestHeader
 			String emailIdToken , @RequestHeader String collaborator){
@@ -228,6 +235,13 @@ public class NoteController {
 	}
 	
 	
+	/**
+	 * Purpose: Creating remove collaborator controller for removing collaborattor from the note
+	 * @param noteId containing note id
+	 * @param emailIdToken token containing email id 
+	 * @param collaborator email Id
+	 * @return
+	 */
 	@PutMapping("/removecollaborator")
 	public ResponseEntity<Response> removeCollaborator(@RequestParam int  noteId , @RequestHeader
 			String emailIdToken , @RequestHeader String collaborator){
@@ -262,7 +276,7 @@ public class NoteController {
 	 */
 	@PutMapping("/updatereminder")
 	public ResponseEntity<Response> updateReminder(@RequestParam("noteId") int  noteId , @RequestHeader("emailIdToken")
-			String emailIdToken , @RequestParam("reminder") Date date){
+			String emailIdToken , @RequestParam("reminder")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date date){
 	
 		return new ResponseEntity<>(noteService.updateReminder(noteId ,emailIdToken , date),HttpStatus.OK);
 	}

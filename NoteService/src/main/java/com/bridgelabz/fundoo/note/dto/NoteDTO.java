@@ -11,11 +11,12 @@
  ******************************************************************************/
 package com.bridgelabz.fundoo.note.dto;
 
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
+
 
 import com.bridgelabz.fundoo.note.model.Label;
 
@@ -24,12 +25,16 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class NoteDTO extends JdkSerializationRedisSerializer implements Serializable{
+public class NoteDTO implements Serializable {
 
+
+	
+	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
 	
 	
 	private String title;

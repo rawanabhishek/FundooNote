@@ -9,7 +9,6 @@
  ******************************************************************************/
 package com.bridgelabz.fundoo.note.service;
 
-
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,7 +18,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
-
 
 import com.bridgelabz.fundoo.note.configuration.ApplicationConfiguration;
 
@@ -34,6 +32,7 @@ import com.bridgelabz.fundoo.note.repository.LabelRepository;
 import com.bridgelabz.fundoo.note.repository.NoteRepository;
 import com.bridgelabz.fundoo.note.response.Response;
 import com.bridgelabz.fundoo.note.utility.CommonFiles;
+
 import com.bridgelabz.fundoo.note.utility.TokenUtility;
 
 @Service
@@ -47,21 +46,11 @@ public class ImplNoteService implements INoteService {
 
 	@Autowired
 	private ApplicationConfiguration configuration;
-	
+
 	@Autowired
 	private CollaboratorRepository collaboratorRepository;
-	
-//	
-//	private RedisTemplate<String ,Object> redisTemplate;
-//	
-//	
-//	private HashOperations<String , Long ,Note> hashOperations;
-	
-	
-
 
 	public static final Logger LOG = LoggerFactory.getLogger(ImplNoteService.class);
-
 
 	@Override
 	public Response add(NoteDTO noteDTO, String token) {
@@ -80,11 +69,10 @@ public class ImplNoteService implements INoteService {
 			note.setNoteColor(CommonFiles.COLOR_DEFAULT_VALUE);
 		}
 		note.setEmailId(TokenUtility.tokenParser(token));
-        
+
 		return new Response(200, CommonFiles.ADD_NOTE_SUCCESS, noteRepository.save(note));
 
 	}
-
 
 	@Override
 	public Response update(NoteUpdateDTO updateDTO, int noteId, String emailIdToken) {
@@ -95,12 +83,11 @@ public class ImplNoteService implements INoteService {
 		if (((updateDTO.getTitle().isBlank() && updateDTO.getDescription().isBlank())) && note == null) {
 			throw new NoteException(CommonFiles.UPDATE_NOTE_FAILED);
 		}
-        
+
 		note.setDescription(updateDTO.getDescription());
 		note.setTitle(updateDTO.getTitle());
 		return new Response(200, CommonFiles.UPDATE_NOTE_SUCCESS, noteRepository.save(note));
 	}
-
 
 	@Override
 	public Response delete(int noteId, String emailIdToken) {
@@ -120,7 +107,6 @@ public class ImplNoteService implements INoteService {
 		return new Response(200, CommonFiles.DELETE_NOTE_SUCCESS, true);
 	}
 
-
 	@Override
 	public Response get(String emailIdToken) {
 		LOG.info(CommonFiles.SERVICE_GET_METHOD);
@@ -136,7 +122,6 @@ public class ImplNoteService implements INoteService {
 
 		return new Response(200, CommonFiles.GET_NOTE_SUCCESS, note);
 	}
-
 
 	@Override
 	public Response pin(int noteId, String emailIdToken) {
@@ -160,7 +145,6 @@ public class ImplNoteService implements INoteService {
 		}
 	}
 
-
 	@Override
 	public Response archive(int noteId, String emailIdToken) {
 		String emailId = TokenUtility.tokenParser(emailIdToken);
@@ -183,7 +167,6 @@ public class ImplNoteService implements INoteService {
 		}
 	}
 
-
 	@Override
 	public Response archivePin(int noteId, String emailIdToken) {
 		String emailId = TokenUtility.tokenParser(emailIdToken);
@@ -202,7 +185,6 @@ public class ImplNoteService implements INoteService {
 
 		}
 	}
-
 
 	@Override
 	public Response trash(int noteId, String emailIdToken) {
@@ -226,7 +208,6 @@ public class ImplNoteService implements INoteService {
 
 	}
 
-
 	@Override
 	public Response sortDate(String emailIdToken) {
 		String emailId = TokenUtility.tokenParser(emailIdToken);
@@ -239,7 +220,6 @@ public class ImplNoteService implements INoteService {
 		return new Response(200, CommonFiles.SORT_DATE_SUCCESS, sortedNote);
 
 	}
-
 
 	@Override
 	public Response sortName(String emailIdToken) {
@@ -294,38 +274,36 @@ public class ImplNoteService implements INoteService {
 	public Response addCollaborator(int noteId, String emailIdToken, String collaboratorEmail) {
 		String emailId = TokenUtility.tokenParser(emailIdToken);
 
-		String collaboratorEmailId=TokenUtility.tokenParser(collaboratorEmail);
+		String collaboratorEmailId = TokenUtility.tokenParser(collaboratorEmail);
 
 		Note note = noteRepository.findByNoteIdAndEmailId(noteId, emailId).orElse(null);
-        Collaborator  collaborator= collaboratorRepository.findByEmail(collaboratorEmailId).orElse(null);
-	
 		if (note == null) {
 			throw new NoteException(CommonFiles.NOTE_FOUND_FAILED);
 		}
-		if(collaborator==null) {
+		Collaborator collaborator = collaboratorRepository.findByEmail(collaboratorEmailId).orElse(null);
+
+		if (collaborator == null) {
 			throw new NoteException(CommonFiles.USER_FOUND_FAILED);
 		}
-         collaborator.setEmail(collaboratorEmail);
-         collaborator.getNotes().add(note);
-         
+		collaborator.setEmail(collaboratorEmail);
+		collaborator.getNotes().add(note);
+
 		note.getCollaborator().add(collaborator);
 
 		return new Response(200, CommonFiles.ADD_COLLABORATOR_SUCCESS, noteRepository.save(note));
 	}
 
 	@Override
-	public Response removeCollaborator(int noteId, String emailIdToken,  String collaboratorEmail) {
+	public Response removeCollaborator(int noteId, String emailIdToken, String collaboratorEmail) {
 		String emailId = TokenUtility.tokenParser(emailIdToken);
 
-		
-
 		Note note = noteRepository.findByNoteIdAndEmailId(noteId, emailId).orElse(null);
-		Collaborator  collaborator= collaboratorRepository.findAllByEmail(collaboratorEmail);
-
 		if (note == null) {
 			throw new NoteException(CommonFiles.NOTE_FOUND_FAILED);
 		}
-		if(collaborator==null) {
+		Collaborator collaborator = collaboratorRepository.findAllByEmail(collaboratorEmail);
+
+		if (collaborator == null) {
 			throw new NoteException(CommonFiles.USER_FOUND_FAILED);
 		}
 		note.getCollaborator().remove(collaborator);
@@ -361,6 +339,9 @@ public class ImplNoteService implements INoteService {
 		if (date.before(new Date())) {
 			throw new NoteException(CommonFiles.INVALID_DATE);
 		}
+		if (note.getReminder() != null) {
+			throw new NoteException(CommonFiles.NO_REMINDER);
+		}
 		note.setReminder(date);
 		return new Response(200, CommonFiles.UPDATE_REMAINDER_SUCCESS, noteRepository.save(note));
 
@@ -386,7 +367,6 @@ public class ImplNoteService implements INoteService {
 			throw new NoteException(CommonFiles.NOTE_FOUND_FAILED);
 		}
 		note.setNoteColor(color);
-		
 
 		return new Response(200, CommonFiles.COLOR_ADDED_SUCCESS, noteRepository.save(note));
 	}
@@ -413,15 +393,12 @@ public class ImplNoteService implements INoteService {
 		if (note == null) {
 			throw new NoteException(CommonFiles.NOTE_FOUND_FAILED);
 		}
-		if(note.getNoteColor().equals(CommonFiles.COLOR_DEFAULT_VALUE)) {
+		if (note.getNoteColor().equals(CommonFiles.COLOR_DEFAULT_VALUE)) {
 			throw new NoteException(CommonFiles.DEFAULT_COLOR_PRESENT);
 		}
 		note.setNoteColor(color);
-		
 
 		return new Response(200, CommonFiles.COLOR_UPDATED_SUCCESS, noteRepository.save(note));
 	}
-
-	
 
 }

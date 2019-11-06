@@ -10,6 +10,15 @@
  ******************************************************************************/
 package com.bridgelabz.fundoo.user.response;
 
+
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Response {
 	
 	private int statusCode;
@@ -18,38 +27,5 @@ public class Response {
 	
 	private Object data;
 	
-	public int getStatusCode() {
-		return statusCode;
-	}
-	public void setStatusCode(int statusCode) {
-		this.statusCode = statusCode;
-	}
-	public String getMessage() {
-		return message;
-	}
-	public void setMessage(String message) {
-		this.message = message;
-	}
-
-	public Object getData() {
-		return data;
-	}
-	public void setData(Object data) {
-		this.data = data;
-	}
-
-	
-	
-	
-	public Response(int statusCode, String message, Object data) {
-		super();
-		this.statusCode = statusCode;
-		this.message = message;
-		this.data = data;
-	}
-	@Override
-	public String toString() {
-		return "Response [statusCode=" + statusCode + ", message=" + message + ", data=" + data + "]";
-	}
 	
 }
