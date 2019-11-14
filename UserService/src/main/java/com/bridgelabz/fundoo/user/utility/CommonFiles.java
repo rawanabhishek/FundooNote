@@ -45,8 +45,8 @@ public class CommonFiles {
 	
 	
 	//url message for different functionality of user service
-	public static final String VERIFY_URL="http://localhost:8080/user/verify/";	
-	public static final String SET_PASSWORD_URL="http://localhost:8080/user/setpassword/";
+	public static final String VERIFY_URL="http://localhost:4200/verify/";	
+	public static final String SET_PASSWORD_URL="http://localhost:4200/setpassword?token=";
 
 	
 	//User service Methods messages

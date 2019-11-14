@@ -16,6 +16,7 @@ import org.springframework.amqp.core.BindingBuilder;
 
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.TopicExchange;
+import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
@@ -29,10 +30,20 @@ import com.bridgelabz.fundoo.user.utility.EmailSender;
 @Configuration
 public class RabbitMqConfiguration {
 	
+	
+	@Bean
+	public ConnectionFactory connectionFactory() {
+	CachingConnectionFactory cachingConnectionFactory = new CachingConnectionFactory("localhost");
+	cachingConnectionFactory.setUsername("rawan");
+	cachingConnectionFactory.setPassword("rawan");
+	return cachingConnectionFactory;
+	}
+
+	
 
 	@Bean
 	Queue queue() {
-		return new Queue(CommonFiles.ROUTING_KEY, true);
+		return new Queue(CommonFiles.ROUTING_KEY, false);
 	}
 
 	@Bean
@@ -41,17 +52,18 @@ public class RabbitMqConfiguration {
 	}
 
 	@Bean
-	Binding binding(Queue queue, TopicExchange exchange) {
-		return BindingBuilder.bind(queue).to(exchange).with(CommonFiles.ROUTING_KEY);
+	Binding binding(Queue queue, TopicExchange topicExchange) {
+		return BindingBuilder.bind(queue).to(topicExchange).with(CommonFiles.ROUTING_KEY);
 	}
 
 	@Bean
 	SimpleMessageListenerContainer container(ConnectionFactory connectionFactory,
-	MessageListenerAdapter listenerAdapter) {
+			MessageListenerAdapter messageListenerAdapter) {
+
 		SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
 		container.setConnectionFactory(connectionFactory);
 		container.setQueueNames(CommonFiles.ROUTING_KEY);
-		container.setMessageListener(listenerAdapter);
+		container.setMessageListener(messageListenerAdapter);
 		return container;
 	}
 	
