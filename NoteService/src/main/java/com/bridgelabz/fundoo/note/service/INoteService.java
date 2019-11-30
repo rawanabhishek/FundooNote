@@ -46,7 +46,7 @@ public interface INoteService {
 	 * @return Response object containing status code , message 
 	 *         and object .
 	 */
-	public Response get(String emailIdToken);
+	public Response get(String emailIdToken ,boolean pin , boolean archive , boolean trash);
 	
 	/**
 	 * Purpose: Method for updating notes of a particular user 
@@ -183,16 +183,14 @@ public interface INoteService {
 	 */
 	public Response removeReminder(int noteId ,String emailIdToken);
 	
-	/**
-	 * Purpose: Method for adding color to a note 
-	 * @param noteId containing note id 
-	 * @param emailIdToken containing email id
-	 * @param color code for a note in hex color format
-	 * @return
-	 */
-	public Response addColor(int noteId , String emailIdToken , String color);
-	
-	
+//	/**
+//	 * Purpose: Method for adding color to a note 
+//	 * @param noteId containing note id 
+//	 * @param emailIdToken containing email id
+//	 * @param color code for a note in hex color format
+//	 * @return
+//	 */
+////	public Response addColor(int noteId , String emailIdToken , String color);
 	/**
 	 * Purpose: Method for updating color of a  note
 	 * @param noteId containing note id 
@@ -203,15 +201,15 @@ public interface INoteService {
 	 */
 	public Response updateColor(int noteId, String emailIdToken, String color);
 	
-	/**
-	 * Purpose: Method for removing color of a  note
-	 * @param noteId containing note id 
-	 * @param emailIdToken containing email id
-	 * @return Response object containing status code , message 
-	 *         and object 
-	 */
-	public Response removeColor(int noteId , String emailIdToken);
-	
+//	/**
+//	 * Purpose: Method for removing color of a  note
+//	 * @param noteId containing note id 
+//	 * @param emailIdToken containing email id
+//	 * @return Response object containing status code , message 
+//	 *         and object 
+//	 */
+//	public Response removeColor(int noteId , String emailIdToken);
+//	
 
 	
 

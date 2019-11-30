@@ -20,7 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bridgelabz.fundoo.note.configuration.ApplicationConfiguration;
-
 import com.bridgelabz.fundoo.note.dto.NoteDTO;
 import com.bridgelabz.fundoo.note.dto.NoteUpdateDTO;
 import com.bridgelabz.fundoo.note.exception.custom.NoteException;
@@ -108,12 +107,13 @@ public class ImplNoteService implements INoteService {
 	}
 
 	@Override
-	public Response get(String emailIdToken) {
+	public Response get(String emailIdToken , boolean pin , boolean archive , boolean trash) {
 		LOG.info(CommonFiles.SERVICE_GET_METHOD);
-
+        LOG.info("pin="+pin+"archice="+archive+"trash="+trash);
 		String emailId = TokenUtility.tokenParser(emailIdToken);
 
-		List<Note> note = noteRepository.findAll().stream().filter(i -> i.getEmailId().equals(emailId))
+		List<Note> note = noteRepository.findAll().stream().filter(i -> i.getEmailId().equals(emailId) && 
+				i.isPin() == pin && i.isArchive() == archive && i.isTrash()==trash)
 				.collect(Collectors.toList());
 
 		if (note == null) {
@@ -239,12 +239,18 @@ public class ImplNoteService implements INoteService {
 		String emailId = TokenUtility.tokenParser(emailIdToken);
 
 		Note note = noteRepository.findByNoteIdAndEmailId(noteId, emailId).orElse(null);
+		if(note == null) {
+			throw new NoteException(CommonFiles.NOTE_FOUND_FAILED);
+		}
 
 		Label label = labelRepository.findById(labelId).orElse(null);
 
-		if (label.getEmailId().equals(emailId)) {
+		if (label == null) {
 
 			throw new NoteException(CommonFiles.LABEL_FOUND_FAILED);
+		}
+		if(note.getLabels().contains(label)) {
+			throw new NoteException(CommonFiles.LABEL_PRESENT);
 		}
 
 		note.getLabels().add(label);
@@ -339,9 +345,9 @@ public class ImplNoteService implements INoteService {
 		if (date.before(new Date())) {
 			throw new NoteException(CommonFiles.INVALID_DATE);
 		}
-		if (note.getReminder() != null) {
-			throw new NoteException(CommonFiles.NO_REMINDER);
-		}
+//		if (note.getReminder() != null) {
+//			throw new NoteException(CommonFiles.NO_REMINDER);
+//		}
 		note.setReminder(date);
 		return new Response(200, CommonFiles.UPDATE_REMAINDER_SUCCESS, noteRepository.save(note));
 
@@ -359,43 +365,45 @@ public class ImplNoteService implements INoteService {
 
 	}
 
-	@Override
-	public Response addColor(int noteId, String emailIdToken, String color) {
-		String emailId = TokenUtility.tokenParser(emailIdToken);
-		Note note = noteRepository.findByNoteIdAndEmailId(noteId, emailId).orElse(null);
-		if (note == null) {
-			throw new NoteException(CommonFiles.NOTE_FOUND_FAILED);
-		}
-		note.setNoteColor(color);
+//	@Override
+//	public Response addColor(int noteId, String emailIdToken, String color) {
+//		String emailId = TokenUtility.tokenParser(emailIdToken);
+//		
+//		Note note = noteRepository.findByNoteIdAndEmailId(noteId, emailId).orElse(null);
+//		if (note == null) {
+//			throw new NoteException(CommonFiles.NOTE_FOUND_FAILED);
+//		}
+//		note.setNoteColor(color);
+//
+//		return new Response(200, CommonFiles.COLOR_ADDED_SUCCESS, noteRepository.save(note));
+//	}
 
-		return new Response(200, CommonFiles.COLOR_ADDED_SUCCESS, noteRepository.save(note));
-	}
-
-	@Override
-	public Response removeColor(int noteId, String emailIdToken) {
-		String emailId = TokenUtility.tokenParser(emailIdToken);
-		Note note = noteRepository.findByNoteIdAndEmailId(noteId, emailId).orElse(null);
-		if (note == null) {
-			throw new NoteException(CommonFiles.NOTE_FOUND_FAILED);
-		}
-		if (note.getNoteColor() == null) {
-			throw new NoteException(CommonFiles.COLOR_ABSENT);
-		}
-		note.setNoteColor(null);
-		return new Response(200, CommonFiles.COLOR_REMOVED_SUCCESS, noteRepository.save(note));
-
-	}
+//	@Override
+//	public Response removeColor(int noteId, String emailIdToken) {
+//		String emailId = TokenUtility.tokenParser(emailIdToken);
+//		Note note = noteRepository.findByNoteIdAndEmailId(noteId, emailId).orElse(null);
+//		if (note == null) {
+//			throw new NoteException(CommonFiles.NOTE_FOUND_FAILED);
+//		}
+//		if (note.getNoteColor() == null) {
+//			throw new NoteException(CommonFiles.COLOR_ABSENT);
+//		}
+//		note.setNoteColor(null);
+//		return new Response(200, CommonFiles.COLOR_REMOVED_SUCCESS, noteRepository.save(note));
+//
+//	}
 
 	@Override
 	public Response updateColor(int noteId, String emailIdToken, String color) {
+		System.out.println("color------->"+color);
 		String emailId = TokenUtility.tokenParser(emailIdToken);
 		Note note = noteRepository.findByNoteIdAndEmailId(noteId, emailId).orElse(null);
 		if (note == null) {
 			throw new NoteException(CommonFiles.NOTE_FOUND_FAILED);
 		}
-		if (note.getNoteColor().equals(CommonFiles.COLOR_DEFAULT_VALUE)) {
-			throw new NoteException(CommonFiles.DEFAULT_COLOR_PRESENT);
-		}
+//		if (note.getNoteColor().equals(CommonFiles.COLOR_DEFAULT_VALUE)) {
+//			throw new NoteException(CommonFiles.DEFAULT_COLOR_PRESENT);
+//		}
 		note.setNoteColor(color);
 
 		return new Response(200, CommonFiles.COLOR_UPDATED_SUCCESS, noteRepository.save(note));

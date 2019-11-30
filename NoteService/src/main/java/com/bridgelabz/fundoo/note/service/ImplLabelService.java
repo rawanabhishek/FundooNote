@@ -9,18 +9,21 @@
  ******************************************************************************/
 package com.bridgelabz.fundoo.note.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bridgelabz.fundoo.note.configuration.ApplicationConfiguration;
-
 import com.bridgelabz.fundoo.note.dto.LabelDTO;
-
 import com.bridgelabz.fundoo.note.exception.custom.LabelException;
 import com.bridgelabz.fundoo.note.model.Label;
+import com.bridgelabz.fundoo.note.model.Note;
 import com.bridgelabz.fundoo.note.repository.LabelRepository;
+import com.bridgelabz.fundoo.note.repository.NoteRepository;
 import com.bridgelabz.fundoo.note.response.Response;
 import com.bridgelabz.fundoo.note.utility.CommonFiles;
 
@@ -31,6 +34,9 @@ public class ImplLabelService implements ILabelService {
 
 	@Autowired
 	private LabelRepository labelRepository;
+	
+	@Autowired
+	private NoteRepository  noteRepository;
 
 	@Autowired
 	private ApplicationConfiguration configuration;
@@ -41,12 +47,20 @@ public class ImplLabelService implements ILabelService {
 	@Override
 	public Response add(LabelDTO labelDTO, String emailIdToken) {
 		LOG.info(CommonFiles.SERVICE_ADD_METHOD);
+		
+		String key = TokenUtility.tokenParser(emailIdToken);
 
 		if (labelDTO == null) {
 			throw new LabelException(CommonFiles.ADD_LABEL_FAILED);
 		}
+		
+		if(labelRepository.findAll().stream().anyMatch(i -> i.getName().
+				equals(labelDTO.getName()) && i.getEmailId().equals(key))) {
+			throw new LabelException(CommonFiles.LABEL_ALREADY_PRESENT);
+		}
+		
 
-		String key = TokenUtility.tokenParser(emailIdToken);
+		
 
 		Label label = configuration.modelMapper().map(labelDTO, Label.class);
 		label.setEmailId(key);
@@ -62,7 +76,9 @@ public class ImplLabelService implements ILabelService {
 	public Response update(LabelDTO labelDTO, int labelId) {
 
 		LOG.info(CommonFiles.SERVICE_UPDATE_METHOD);
-
+         if(labelDTO.getName()==null) {
+        	 throw new LabelException(CommonFiles.UPDATE_LABEL_FAILED);
+         }
 		Label label = labelRepository.findById(labelId).orElse(null);
 		if (label == null) {
 			throw new LabelException(CommonFiles.UPDATE_LABEL_FAILED);
@@ -83,9 +99,17 @@ public class ImplLabelService implements ILabelService {
 		if (label == null) {
 
 			throw new LabelException(CommonFiles.DELETE_LABEL_FAILED);
-
+ 
 		}
-
+		
+		List<Note> notes=noteRepository.findAll().stream().filter(i -> i.getLabels().
+				stream().anyMatch(j -> j.getLabelId() == labelId)).collect(Collectors.toList());
+	
+		for(Note note : notes) {
+			note.getLabels().remove(label);
+			noteRepository.save(note);
+		}
+		
 		labelRepository.deleteById(labelId);
 		return new Response(200, CommonFiles.DELETE_LABEL_SUCCESS, true);
 
@@ -93,16 +117,14 @@ public class ImplLabelService implements ILabelService {
 
 
 	@Override
-	public Response get(int labelId, String emailIdToken) {
+	public Response get( String emailIdToken) {
 
 		String emailId = TokenUtility.tokenParser(emailIdToken);
 
 		LOG.info(CommonFiles.SERVICE_GET_METHOD);
-		if (labelId == 0) {
-			throw new LabelException(CommonFiles.GET_LABEL_FAILED);
-		}
+		
 		return new Response(200, CommonFiles.GET_LABEL_SUCCESS,
-				labelRepository.findById(labelId).filter(i -> i.getEmailId().equals(emailId)));
+				labelRepository.findAll().stream().filter(i -> i.getEmailId().equals(emailId)));
 
 	}
 

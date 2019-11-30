@@ -12,9 +12,10 @@
 package com.bridgelabz.fundoo.note.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,8 +32,10 @@ import com.bridgelabz.fundoo.note.dto.LabelDTO;
 import com.bridgelabz.fundoo.note.response.Response;
 import com.bridgelabz.fundoo.note.service.ILabelService;
 
+
 @RestController
 @RequestMapping("/user/label")
+@CrossOrigin
 public class LabelController {
 	
 	
@@ -49,8 +52,8 @@ public class LabelController {
 	 * @return ResponseEntity containing Response which contains status code,
 	 *         message and object
 	 */
-	@PostMapping("/")
-	public ResponseEntity<Response> add(@RequestBody LabelDTO labelDTO ,@RequestHeader("emailIdToken") String emailIdToken ){
+	@PostMapping()
+	public ResponseEntity<Response> add(@RequestBody LabelDTO labelDTO ,@RequestHeader() String emailIdToken ){
 		return new ResponseEntity<Response>(labelService.add(labelDTO ,emailIdToken),HttpStatus.OK);
 		
 	}
@@ -63,10 +66,10 @@ public class LabelController {
 	 * @return ResponseEntity containing Response which contains status code,
 	 *         message and object
 	 */
-	@Cacheable()
-	@GetMapping("/")
-	public ResponseEntity<Response> get(@RequestParam int labelId , @RequestHeader("emailIdToken") String emailIdToken){
-		return new ResponseEntity<Response>(labelService.get(labelId, emailIdToken),HttpStatus.OK);
+	
+	@GetMapping()
+	public ResponseEntity<Response> get( @RequestHeader() String emailIdToken){
+		return new ResponseEntity<Response>(labelService.get( emailIdToken),HttpStatus.OK);
 		
 	}
 	
@@ -79,8 +82,8 @@ public class LabelController {
 	 * @return ResponseEntity containing Response which contains status code,
 	 *         message and object
 	 */
-	@DeleteMapping("/")
-	public ResponseEntity<Response> delete(@RequestParam int labelId , @RequestHeader("emailIdToken") String emailIdToken){
+	@DeleteMapping()
+	public ResponseEntity<Response> delete(@RequestParam int labelId , @RequestHeader() String emailIdToken){
 		return new ResponseEntity<Response>(labelService.delete(labelId, emailIdToken),HttpStatus.OK);
 		
 	}
@@ -94,8 +97,8 @@ public class LabelController {
 	 *         message and object
 	 */
 	
-	@PutMapping("/")
-	public ResponseEntity<Response> update(@RequestBody LabelDTO labelDTO ,@RequestParam("labelId") int labelId){
+	@PutMapping()
+	public ResponseEntity<Response> update(@RequestBody LabelDTO labelDTO ,@RequestParam() int labelId){
 		return new ResponseEntity<Response>(labelService.update(labelDTO , labelId),HttpStatus.OK);
 		
 	}

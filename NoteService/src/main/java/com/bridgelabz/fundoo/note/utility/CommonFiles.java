@@ -47,6 +47,7 @@ public class CommonFiles {
 	public static final String DEFAULT_COLOR_PRESENT = "Note is set to default color you need to add color to update";
 	public static final String COLOR_DEFAULT_VALUE="#ffffff";
 	public static final String NO_REMINDER = "There is no reminder to update";
+	public static final String LABEL_PRESENT = "Label has been already added to note";
 	
 	
 	//labelService related message
@@ -60,6 +61,7 @@ public class CommonFiles {
 	public static final String UPDATE_LABEL_FAILED="updating label failed";
 	public static final String LABEL_FOUND_FAILED = "Label not found";
 	public static final String REMOVE_LABEL_SUCCESS = "label Removed successfully";
+	public static final String LABEL_ALREADY_PRESENT = "Label already present";
 	
 	
 	
@@ -92,6 +94,12 @@ public class CommonFiles {
 	public static final String SERVICE_ARCHIVE_METHOD="Archive service method";
 	public static final String SERVICE_ARCHIVE_PIN_METHOD="Archive pin service method";
 	public static final String UPDATE_REMAINDER_SUCCESS = "Reminder updated successfully";
+	
+	
+	//Elastic Search
+	public static final String HTTP_SUCCESS_MSG = "Success";
+	
+	
 	
 	
 	

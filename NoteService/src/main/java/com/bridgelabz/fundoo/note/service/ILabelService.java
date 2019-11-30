@@ -66,6 +66,6 @@ public interface ILabelService {
 	 * @return Response object containing status code , message 
 	 *         and object .
 	 */
-	public Response get(int labelId , String emailIdToken);
+	public Response get( String emailIdToken);
 
 }

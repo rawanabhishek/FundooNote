@@ -41,7 +41,7 @@ public class NoteDTO implements Serializable {
 	private String description;
 
 	private boolean pin;
-	private Date remainder;
+	private Date reminder;
 	private boolean archive;
 	private List<Label> labels;
 	private String noteColor;

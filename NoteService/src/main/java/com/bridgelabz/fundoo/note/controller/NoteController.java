@@ -19,9 +19,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.springframework.format.annotation.DateTimeFormat;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,7 +40,7 @@ import com.bridgelabz.fundoo.note.dto.NoteUpdateDTO;
 import com.bridgelabz.fundoo.note.response.Response;
 import com.bridgelabz.fundoo.note.service.INoteService;
 
-
+@CrossOrigin
 @RestController
 @RequestMapping("/user/note")
 public class NoteController {
@@ -61,8 +62,8 @@ public class NoteController {
 	 * 
 	 */
 	//@Cacheable(cacheNames = "noteDTO", key="#p0")
-	@PostMapping("/")
-	public ResponseEntity<Response> add(@RequestBody NoteDTO noteDTO ,@RequestHeader("emailIdToken") String emailIdToken) {
+	@PostMapping()
+	public ResponseEntity<Response> add(@RequestBody NoteDTO noteDTO ,@RequestHeader() String emailIdToken) {
 		
 		return new ResponseEntity<>(noteService.add(noteDTO ,emailIdToken),HttpStatus.OK);
 	}
@@ -77,9 +78,10 @@ public class NoteController {
 	 *         message and object
 	 * 
 	 */
-	@GetMapping("/")
-	public ResponseEntity<Response> get(@RequestHeader("emailIdToken") String emailIdToken){
-		return new ResponseEntity<>(noteService.get(emailIdToken),HttpStatus.OK);
+	@GetMapping()
+	public ResponseEntity<Response> get(@RequestHeader() String emailIdToken ,@RequestParam() boolean pin , 
+			@RequestParam() boolean archive , @RequestParam() boolean trash){
+		return new ResponseEntity<>(noteService.get(emailIdToken,pin,archive,trash),HttpStatus.OK);
 	}
 	
 	
@@ -91,9 +93,9 @@ public class NoteController {
 	 *         message and object
 	 * 
 	 */
-	@PutMapping("/")
+	@PutMapping()
 	public ResponseEntity<Response> update(@RequestBody NoteUpdateDTO updateDTO , 
-			@RequestParam("noteId") int noteId ,@RequestHeader("emailIdToken") String emailIdToken) {
+			@RequestParam() int noteId ,@RequestHeader() String emailIdToken) {
 		
 		return new ResponseEntity<>(noteService.update(updateDTO, noteId , emailIdToken),HttpStatus.OK);
 	}
@@ -106,9 +108,9 @@ public class NoteController {
 	 * @return ResponseEntity containing Response which contains status code,
 	 *         message and object
 	 */
-	@DeleteMapping("/")
-	public ResponseEntity<Response> delete(@RequestParam("noteId") int  noteId , 
-			@RequestHeader("emailIdToken") String emailIdToken){
+	@DeleteMapping()
+	public ResponseEntity<Response> delete(@RequestParam() int  noteId , 
+			@RequestHeader() String emailIdToken){
 		return new ResponseEntity<>(noteService.delete(noteId ,emailIdToken),HttpStatus.OK);
 	}
 	
@@ -121,7 +123,7 @@ public class NoteController {
 	 *         message and object
 	 */
 	@PutMapping("/pin")
-	public ResponseEntity<Response> pin(@RequestParam("noteId")int  noteId , @RequestHeader("emailIdToken") String emailIdToken){
+	public ResponseEntity<Response> pin(@RequestParam()int  noteId , @RequestHeader() String emailIdToken){
 		return new ResponseEntity<>(noteService.pin(noteId ,emailIdToken),HttpStatus.OK);
 	}
 	
@@ -134,7 +136,7 @@ public class NoteController {
 	 *         message and object
 	 */
 	@PutMapping("/archive")
-	public ResponseEntity<Response> archive(@RequestParam("noteId") int  noteId , @RequestHeader("emailIdToken") String emailIdToken){
+	public ResponseEntity<Response> archive(@RequestParam("noteId") int  noteId , @RequestHeader() String emailIdToken){
 		return new ResponseEntity<>(noteService.archive(noteId ,emailIdToken),HttpStatus.OK);
 	}
 	
@@ -146,7 +148,7 @@ public class NoteController {
 	 *         message and object
 	 */
 	@PutMapping("/archivepin")
-	public ResponseEntity<Response> archivePin(@RequestParam("noteId") int noteId, @RequestHeader("emailIdToken") String emailIdToken){
+	public ResponseEntity<Response> archivePin(@RequestParam() int noteId, @RequestHeader() String emailIdToken){
 		return new ResponseEntity<>(noteService.archivePin(noteId ,emailIdToken),HttpStatus.OK);
 	}
 	
@@ -160,7 +162,7 @@ public class NoteController {
 	 *         message and object
 	 */
 	@PutMapping("/trash")
-	public ResponseEntity<Response> trash(@RequestParam("noteId") int  noteId , @RequestHeader("emailIdToken") String emailIdToken){
+	public ResponseEntity<Response> trash(@RequestParam() int  noteId , @RequestHeader() String emailIdToken){
 		return new ResponseEntity<>(noteService.trash(noteId ,emailIdToken),HttpStatus.OK);
 	}
 	
@@ -173,7 +175,7 @@ public class NoteController {
 	 *         message and object
 	 */
 	@GetMapping("/date")
-	public ResponseEntity<Response> sortDate(@RequestHeader("emailIdToken") String emailIdToken){
+	public ResponseEntity<Response> sortDate(@RequestHeader() String emailIdToken){
 		return new ResponseEntity<>(noteService.sortDate(emailIdToken),HttpStatus.OK);
 	}
 	
@@ -184,7 +186,7 @@ public class NoteController {
 	 *         message and object
 	 */
 	@GetMapping("/name")
-	public ResponseEntity<Response> sortName(@RequestHeader("emailIdToken") String emailIdToken){
+	public ResponseEntity<Response> sortName(@RequestHeader() String emailIdToken){
 		return new ResponseEntity<>(noteService.sortName(emailIdToken),HttpStatus.OK);
 	}
 	
@@ -198,8 +200,8 @@ public class NoteController {
 	 *         message and object
 	 */
 	@PutMapping("/label")
-	public ResponseEntity<Response> addLabel(@RequestParam("noteId") int  noteId , @RequestHeader("emailIdToken")
-			String emailIdToken , @RequestHeader("labelId") int labelId){
+	public ResponseEntity<Response> addLabel(@RequestParam() int  noteId , @RequestHeader()
+			String emailIdToken , @RequestParam() int labelId){
 		
 		return new ResponseEntity<>(noteService.addLabel(noteId ,emailIdToken ,labelId),HttpStatus.OK);
 	}
@@ -214,8 +216,8 @@ public class NoteController {
 	 *         message and object
 	 */
 	@PutMapping("/removelabel")
-	public ResponseEntity<Response> removeLabel(@RequestParam("noteId") int  noteId , @RequestHeader("emailIdToken")
-			String emailIdToken , @RequestParam("labelId") int labelId){
+	public ResponseEntity<Response> removeLabel(@RequestParam() int  noteId , @RequestHeader()
+			String emailIdToken , @RequestParam() int labelId){
 		
 		return new ResponseEntity<>(noteService.removeLabel(noteId ,emailIdToken ,labelId),HttpStatus.OK);
 	}
@@ -259,9 +261,9 @@ public class NoteController {
 	 *         message and object
 	 */
 	@PostMapping("/addreminder")
-	public ResponseEntity<Response> addReminder(@RequestParam("noteId") int  noteId , @RequestHeader("emailIdToken")
+	public ResponseEntity<Response> addReminder(@RequestParam() int  noteId , @RequestHeader()
 			String emailIdToken , 
-			@RequestParam("reminder")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date date){
+			@RequestParam() Date date){
 		
 		return new ResponseEntity<>(noteService.addReminder(noteId ,emailIdToken , date),HttpStatus.OK);
 	}
@@ -275,8 +277,8 @@ public class NoteController {
 	 *         message and object
 	 */
 	@PutMapping("/updatereminder")
-	public ResponseEntity<Response> updateReminder(@RequestParam("noteId") int  noteId , @RequestHeader("emailIdToken")
-			String emailIdToken , @RequestParam("reminder")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date date){
+	public ResponseEntity<Response> updateReminder(@RequestParam() int  noteId , @RequestHeader()
+			String emailIdToken , @RequestParam() Date date){
 	
 		return new ResponseEntity<>(noteService.updateReminder(noteId ,emailIdToken , date),HttpStatus.OK);
 	}
@@ -291,42 +293,42 @@ public class NoteController {
 	 *         message and object
 	 */
 	@PutMapping("/removeremainder")
-	public ResponseEntity<Response> removeRemainder(@RequestParam("noteId") int  noteId , @RequestHeader("emailIdToken")
+	public ResponseEntity<Response> removeRemainder(@RequestParam() int  noteId , @RequestHeader()
 			String emailIdToken ){
 		
 		return new ResponseEntity<>(noteService.removeReminder(noteId ,emailIdToken ),HttpStatus.OK);
 	}
 	
 	
-	/**
-	 * Purpose: Creating add color controller which will add color color to the note
-	 * @param noteId containing note id
-	 * @param emailIdToken containing email id
-	 * @param color code for a note in hex color format
-	 * @return ResponseEntity containing Response which contains status code,
-	 *         message and object
-	 */
-	@PostMapping("/addcolor")
-	public ResponseEntity<Response> addColor(@RequestParam("noteId") int  noteId , @RequestHeader("emailIdToken")
-			String emailIdToken  ,@RequestParam("color")String color){
-		
-		return new ResponseEntity<>(noteService.removeReminder(noteId ,emailIdToken ),HttpStatus.OK);
-	}
+//	/**
+//	 * Purpose: Creating add color controller which will add color color to the note
+//	 * @param noteId containing note id
+//	 * @param emailIdToken containing email id
+//	 * @param color code for a note in hex color format
+//	 * @return ResponseEntity containing Response which contains status code,
+//	 *         message and object
+//	 */
+//	@PostMapping("/addcolor")
+//	public ResponseEntity<Response> addColor(@RequestParam("noteId") int  noteId , @RequestHeader("emailIdToken")
+//			String emailIdToken  ,@RequestParam("color")String color){
+//		
+//		return new ResponseEntity<>(noteService.addColor(noteId ,emailIdToken ,color),HttpStatus.OK);
+//	}
 	
-	/**
-	 * Purpose: Creating remove color controller which will remove color from note
-	 * @param noteId containing note id
-	 * @param emailIdToken containing email id
-	 * @return ResponseEntity containing Response which contains status code,
-	 *         message and object
-	 */
-	@PutMapping("/removecolor")
-	public ResponseEntity<Response> removeColor(@RequestParam("noteId") int  noteId , @RequestHeader("emailIdToken")
-			String emailIdToken ){
-		
-		return new ResponseEntity<>(noteService.removeColor(noteId ,emailIdToken ),HttpStatus.OK);
-	}
-	
+//	/**
+//	 * Purpose: Creating remove color controller which will remove color from note
+//	 * @param noteId containing note id
+//	 * @param emailIdToken containing email id
+//	 * @return ResponseEntity containing Response which contains status code,
+//	 *         message and object
+//	 */
+//	@PutMapping("/removecolor")
+//	public ResponseEntity<Response> removeColor(@RequestParam("noteId") int  noteId , @RequestHeader("emailIdToken")
+//			String emailIdToken ){
+//		
+//		return new ResponseEntity<>(noteService.removeColor(noteId ,emailIdToken ),HttpStatus.OK);
+//	}
+//	
 	
 	/**
 	 * vPurpose: Creating update color controller which will update color for note
@@ -337,8 +339,8 @@ public class NoteController {
 	 *         message and object
 	 */
 	@PutMapping("/updatecolor")
-	public ResponseEntity<Response> updateColor(@RequestParam("noteId") int  noteId , @RequestHeader("emailIdToken")
-			String emailIdToken ,@RequestParam("color")String color ){
+	public ResponseEntity<Response> updateColor(@RequestParam() int  noteId , @RequestHeader()
+			String emailIdToken ,@RequestParam()String color ){
 		
 		return new ResponseEntity<>(noteService.updateColor(noteId ,emailIdToken,color ),HttpStatus.OK);
 	}
