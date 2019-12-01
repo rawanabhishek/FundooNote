@@ -48,6 +48,9 @@ public class ImplNoteService implements INoteService {
 
 	@Autowired
 	private CollaboratorRepository collaboratorRepository;
+	
+	@Autowired
+	private ImplElasticSearchService elasticService;
 
 	public static final Logger LOG = LoggerFactory.getLogger(ImplNoteService.class);
 
@@ -68,8 +71,17 @@ public class ImplNoteService implements INoteService {
 			note.setNoteColor(CommonFiles.COLOR_DEFAULT_VALUE);
 		}
 		note.setEmailId(TokenUtility.tokenParser(token));
+		noteRepository.save(note);
+		
+		try {
+			elasticService.addDocument(note);
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+		}
+		
 
-		return new Response(200, CommonFiles.ADD_NOTE_SUCCESS, noteRepository.save(note));
+		return new Response(200, CommonFiles.ADD_NOTE_SUCCESS, note);
 
 	}
 
@@ -85,6 +97,13 @@ public class ImplNoteService implements INoteService {
 
 		note.setDescription(updateDTO.getDescription());
 		note.setTitle(updateDTO.getTitle());
+		
+		try {
+			elasticService.addDocument(note);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return new Response(200, CommonFiles.UPDATE_NOTE_SUCCESS, noteRepository.save(note));
 	}
 

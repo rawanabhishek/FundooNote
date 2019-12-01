@@ -98,6 +98,10 @@ public class CommonFiles {
 	
 	//Elastic Search
 	public static final String HTTP_SUCCESS_MSG = "Success";
+	public static final String SEARCH_SUCCESSS = "Search operation successfull";
+	public static final String DELETE_SUCCESS = "Delete Opeartion success";
+	public static final String FETCH_DOCUMENT = "Document fecthed successfull";
+	public static final String ADD_DOCUMENT = "Add document success";
 	
 	
 	
