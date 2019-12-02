@@ -9,6 +9,7 @@
  ******************************************************************************/
 package com.bridgelabz.fundoo.note.service;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -120,7 +121,12 @@ public class ImplNoteService implements INoteService {
 		if (!note.isTrash()) {
 			throw new NoteException(CommonFiles.NOTE_TRASH);
 		}
-
+        try {
+			elasticService.deleteDocument(note.getNoteId().toString());
+		} catch (IOException e) {
+			
+			e.printStackTrace();
+		}
 		noteRepository.deleteById(noteId);
 		return new Response(200, CommonFiles.DELETE_NOTE_SUCCESS, true);
 	}

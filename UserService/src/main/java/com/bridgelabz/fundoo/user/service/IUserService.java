@@ -119,5 +119,8 @@ public interface IUserService {
 	 * @throws IOException
 	 */
 	public Response updateProfilePic( String emailIdToken , MultipartFile file)throws IOException;
+	
+	
+	public Response getProfilePic(String emailIdToken);
 
 }

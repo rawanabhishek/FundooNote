@@ -3,6 +3,7 @@ package com.bridgelabz.fundoo.note.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,7 +20,8 @@ import com.bridgelabz.fundoo.note.response.Response;
 import com.bridgelabz.fundoo.note.service.ImplElasticSearchService;
 
 @RestController
-@RequestMapping("/elastic")
+@RequestMapping("user/elastic")
+@CrossOrigin
 public class ElasticSearchcontroller {
 	
 	@Autowired
@@ -53,6 +55,11 @@ public class ElasticSearchcontroller {
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Response> deleteDocument(@PathVariable String id) throws Exception {
 		return new ResponseEntity<Response>((elasticService.deleteDocument(id)), HttpStatus.OK);
+	}
+	
+	@GetMapping("/title/description")
+	public ResponseEntity<Response> searchByTitleDescription(@RequestParam String searchString) throws Exception {
+		return new ResponseEntity<Response>((elasticService.searchByTitleDescription(searchString )), HttpStatus.OK);
 	}
 	
 	

@@ -27,8 +27,9 @@ public class CommonFiles {
 	public static final String PHOTO_ADDED_SUCCESS = "photo added suvvessfully";
 	public static final String PHOTO_REMOVED_SUCCESS = "photo removed successfully";
 	public static final String USER_FOUND_FAILED = "user not found";
-	public static final String PROFILE_PIC_PATH = "/home/admin1/FundooNote/UserService/src/main/java/com/bridgelabz/fundoo/user/ImageFiles";
+	public static final String PROFILE_PIC_PATH = "/home/admin1/FundooNote/UserService/src/main/java/com/bridgelabz/fundoo/user/ImageFiles/";
 	public static final String NO_PROFILE_PIC = "There is no profile pic to update";
+	public static final String PATH_FEATCHED="Profile pic path fetched successfully";
 	
 	
 	//Email Subject messages

@@ -97,6 +97,29 @@ public class ImplElasticSearchService implements IElasticSearchService {
 	}
 	
 	
+	public Response searchByTitleDescription(String value) throws IOException {
+
+		SearchRequest searchRequest = new SearchRequest();
+		searchRequest.indices(INDEX);
+		searchRequest.types(TYPE);
+
+		SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+
+		searchSourceBuilder.query(QueryBuilders.boolQuery().should(QueryBuilders.queryStringQuery(value).
+						field(CommonFiles.TITLE).field(CommonFiles.DESCRIPTION)));
+		searchRequest.source(searchSourceBuilder);
+
+		SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
+		SearchHit[] searchHit = searchResponse.getHits().getHits();
+		List<Note> noteDocuments = new ArrayList<>();
+		for (SearchHit hit : searchHit)
+			noteDocuments.add(objectMapper.convertValue(hit.getSourceAsMap(), Note.class));
+
+		List<Note> noteList = noteDocuments;
+		return new Response(200, CommonFiles.SEARCH_SUCCESSS, noteList);
+	}
+	
+	
 	
 
 }

@@ -9,11 +9,15 @@
  ******************************************************************************/
 package com.bridgelabz.fundoo.user.service;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Base64;
 
+import org.apache.commons.io.FilenameUtils;
 import org.modelmapper.ModelMapper;
 
 import org.slf4j.Logger;
@@ -37,6 +41,7 @@ import com.bridgelabz.fundoo.user.repository.UserRepository;
 import com.bridgelabz.fundoo.user.response.Response;
 import com.bridgelabz.fundoo.user.utility.CommonFiles;
 import com.bridgelabz.fundoo.user.utility.TokenUtility;
+
 
 @Service
 public class ImplUserService implements IUserService {
@@ -207,10 +212,11 @@ public class ImplUserService implements IUserService {
 		}
 
 		byte[] bytes = file.getBytes();
-		Path path = Paths.get(CommonFiles.PROFILE_PIC_PATH + file.getOriginalFilename());
+		String extension = file.getContentType().replace("image/", "");
+		Path path = Paths.get(CommonFiles.PROFILE_PIC_PATH + email + "." + extension);
 		Files.write(path, bytes);
 
-		user.setProfilePic(CommonFiles.PROFILE_PIC_PATH + file.getOriginalFilename());
+		user.setProfilePic(CommonFiles.PROFILE_PIC_PATH + email + "." + extension);
 
 		return new Response(200, CommonFiles.PHOTO_ADDED_SUCCESS, userRepository.save(user));
 
@@ -256,16 +262,55 @@ public class ImplUserService implements IUserService {
 		if (user == null) {
 			throw new UserException(CommonFiles.USER_FOUND_FAILED);
 		}
-		if(user.getProfilePic()==null) {
+		if (user.getProfilePic() == null) {
 			throw new UserException(CommonFiles.NO_PROFILE_PIC);
 		}
+
 		byte[] bytes = file.getBytes();
-		Path path = Paths.get(CommonFiles.PROFILE_PIC_PATH + file.getOriginalFilename());
+		String extension = file.getContentType().replace("image/", "");
+		Path path = Paths.get(CommonFiles.PROFILE_PIC_PATH + email + "." + extension);
 		Files.write(path, bytes);
 
-		user.setProfilePic(CommonFiles.PROFILE_PIC_PATH + file.getOriginalFilename());
+		user.setProfilePic(CommonFiles.PROFILE_PIC_PATH + email + "." + extension);
 
 		return new Response(200, CommonFiles.PHOTO_UPDATED_SUCCESS, userRepository.save(user));
+	}
+
+	@Override
+	public Response getProfilePic(String emailIdToken) {
+		String email = TokenUtility.tokenParser(emailIdToken);
+		User user = userRepository.findByEmail(email).orElse(null);
+		if (user == null) {
+			throw new UserException(CommonFiles.USER_FOUND_FAILED);
+		}
+		String profilePic = "";
+		String filePath = CommonFiles.PROFILE_PIC_PATH;
+		File fileFolder = new File(filePath);
+		if (fileFolder != null) {
+			for (final File file : fileFolder.listFiles()) {
+				if (!file.isDirectory()) {
+					String encodeBase64 = null;
+					try {
+						if ((CommonFiles.PROFILE_PIC_PATH + file.getName()).equals(user.getProfilePic())) {
+							String extension = FilenameUtils.getExtension(file.getName());
+							FileInputStream fileInputStream = new FileInputStream(file);
+							byte[] bytes = new byte[(int) file.length()];
+							fileInputStream.read(bytes);
+							encodeBase64 = Base64.getEncoder().encodeToString(bytes);
+							profilePic = ("data:image/" + extension + ";base64," + encodeBase64);
+							fileInputStream.close();
+							break;
+						}
+
+					} catch (Exception e) {
+
+					}
+				}
+			}
+		}
+
+		return new Response(200, CommonFiles.PATH_FEATCHED, profilePic);
+
 	}
 
 }

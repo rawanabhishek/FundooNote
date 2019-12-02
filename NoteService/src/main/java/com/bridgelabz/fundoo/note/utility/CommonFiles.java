@@ -102,6 +102,8 @@ public class CommonFiles {
 	public static final String DELETE_SUCCESS = "Delete Opeartion success";
 	public static final String FETCH_DOCUMENT = "Document fecthed successfull";
 	public static final String ADD_DOCUMENT = "Add document success";
+	public static final String DESCRIPTION = "description";
+	public static final String TITLE = "title";
 	
 	
 	
