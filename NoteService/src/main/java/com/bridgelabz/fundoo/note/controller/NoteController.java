@@ -300,35 +300,35 @@ public class NoteController {
 	}
 	
 	
-//	/**
-//	 * Purpose: Creating add color controller which will add color color to the note
-//	 * @param noteId containing note id
-//	 * @param emailIdToken containing email id
-//	 * @param color code for a note in hex color format
-//	 * @return ResponseEntity containing Response which contains status code,
-//	 *         message and object
-//	 */
-//	@PostMapping("/addcolor")
-//	public ResponseEntity<Response> addColor(@RequestParam("noteId") int  noteId , @RequestHeader("emailIdToken")
-//			String emailIdToken  ,@RequestParam("color")String color){
-//		
-//		return new ResponseEntity<>(noteService.addColor(noteId ,emailIdToken ,color),HttpStatus.OK);
-//	}
+	/**
+	 * Purpose: Creating add color controller which will add color color to the note
+	 * @param noteId containing note id
+	 * @param emailIdToken containing email id
+	 * @param color code for a note in hex color format
+	 * @return ResponseEntity containing Response which contains status code,
+	 *         message and object
+	 */
+	@PostMapping("/addcolor")
+	public ResponseEntity<Response> addColor(@RequestParam("noteId") int  noteId , @RequestHeader("emailIdToken")
+			String emailIdToken  ,@RequestParam("color")String color){
+		
+		return new ResponseEntity<>(noteService.addColor(noteId ,emailIdToken ,color),HttpStatus.OK);
+	}
 	
-//	/**
-//	 * Purpose: Creating remove color controller which will remove color from note
-//	 * @param noteId containing note id
-//	 * @param emailIdToken containing email id
-//	 * @return ResponseEntity containing Response which contains status code,
-//	 *         message and object
-//	 */
-//	@PutMapping("/removecolor")
-//	public ResponseEntity<Response> removeColor(@RequestParam("noteId") int  noteId , @RequestHeader("emailIdToken")
-//			String emailIdToken ){
-//		
-//		return new ResponseEntity<>(noteService.removeColor(noteId ,emailIdToken ),HttpStatus.OK);
-//	}
-//	
+	/**
+	 * Purpose: Creating remove color controller which will remove color from note
+	 * @param noteId containing note id
+	 * @param emailIdToken containing email id
+	 * @return ResponseEntity containing Response which contains status code,
+	 *         message and object
+	 */
+	@PutMapping("/removecolor")
+	public ResponseEntity<Response> removeColor(@RequestParam("noteId") int  noteId , @RequestHeader("emailIdToken")
+			String emailIdToken ){
+		
+		return new ResponseEntity<>(noteService.removeColor(noteId ,emailIdToken ),HttpStatus.OK);
+	}
+	
 	
 	/**
 	 * vPurpose: Creating update color controller which will update color for note
@@ -343,6 +343,20 @@ public class NoteController {
 			String emailIdToken ,@RequestParam()String color ){
 		
 		return new ResponseEntity<>(noteService.updateColor(noteId ,emailIdToken,color ),HttpStatus.OK);
+	}
+	
+	
+	
+	/**
+	 * @param searchString to search a query in the database 
+	 * @param emailIdtoken for validating the user 
+	 * @return
+	 * @throws Exception
+	 */
+	@GetMapping("/title/description")
+	public ResponseEntity<Response> searchByTitleDescription(@RequestParam String searchString, 
+			@RequestHeader()String emailIdtoken) throws Exception {
+		return new ResponseEntity<Response>((noteService.searchByTitleDescription(searchString ,emailIdtoken )), HttpStatus.OK);
 	}
 	
 	

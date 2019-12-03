@@ -183,14 +183,14 @@ public interface INoteService {
 	 */
 	public Response removeReminder(int noteId ,String emailIdToken);
 	
-//	/**
-//	 * Purpose: Method for adding color to a note 
-//	 * @param noteId containing note id 
-//	 * @param emailIdToken containing email id
-//	 * @param color code for a note in hex color format
-//	 * @return
-//	 */
-////	public Response addColor(int noteId , String emailIdToken , String color);
+	/**
+	 * Purpose: Method for adding color to a note 
+	 * @param noteId containing note id 
+	 * @param emailIdToken containing email id
+	 * @param color code for a note in hex color format
+	 * @return
+	 */
+	public Response addColor(int noteId , String emailIdToken , String color);
 	/**
 	 * Purpose: Method for updating color of a  note
 	 * @param noteId containing note id 
@@ -200,16 +200,25 @@ public interface INoteService {
 	 *         and object 
 	 */
 	public Response updateColor(int noteId, String emailIdToken, String color);
+
+
 	
-//	/**
-//	 * Purpose: Method for removing color of a  note
-//	 * @param noteId containing note id 
-//	 * @param emailIdToken containing email id
-//	 * @return Response object containing status code , message 
-//	 *         and object 
-//	 */
-//	public Response removeColor(int noteId , String emailIdToken);
-//	
+	/**
+	 * Purpose: Method for removing color of a  note
+	 * @param noteId containing note id 
+	 * @param emailIdToken containing email id
+	 * @return Response object containing status code , message 
+	 *         and object 
+	 */
+	public Response removeColor(int noteId , String emailIdToken);
+	
+	
+	/**
+	 * @param searchString to search a specific pharse in database
+	 * @param emailIdToken to validate the user 
+	 * @return
+	 */
+	public Response searchByTitleDescription(String searchString , String emailIdToken);
 
 	
 

@@ -262,9 +262,9 @@ public class ImplUserService implements IUserService {
 		if (user == null) {
 			throw new UserException(CommonFiles.USER_FOUND_FAILED);
 		}
-		if (user.getProfilePic() == null) {
-			throw new UserException(CommonFiles.NO_PROFILE_PIC);
-		}
+//		if (user.getProfilePic() == null) {
+//			throw new UserException(CommonFiles.NO_PROFILE_PIC);
+//		}
 
 		byte[] bytes = file.getBytes();
 		String extension = file.getContentType().replace("image/", "");

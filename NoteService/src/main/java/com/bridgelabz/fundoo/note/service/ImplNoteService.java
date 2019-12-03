@@ -390,33 +390,33 @@ public class ImplNoteService implements INoteService {
 
 	}
 
-//	@Override
-//	public Response addColor(int noteId, String emailIdToken, String color) {
-//		String emailId = TokenUtility.tokenParser(emailIdToken);
-//		
-//		Note note = noteRepository.findByNoteIdAndEmailId(noteId, emailId).orElse(null);
-//		if (note == null) {
-//			throw new NoteException(CommonFiles.NOTE_FOUND_FAILED);
-//		}
-//		note.setNoteColor(color);
-//
-//		return new Response(200, CommonFiles.COLOR_ADDED_SUCCESS, noteRepository.save(note));
-//	}
+	@Override
+	public Response addColor(int noteId, String emailIdToken, String color) {
+		String emailId = TokenUtility.tokenParser(emailIdToken);
+		
+		Note note = noteRepository.findByNoteIdAndEmailId(noteId, emailId).orElse(null);
+		if (note == null) {
+			throw new NoteException(CommonFiles.NOTE_FOUND_FAILED);
+		}
+		note.setNoteColor(color);
 
-//	@Override
-//	public Response removeColor(int noteId, String emailIdToken) {
-//		String emailId = TokenUtility.tokenParser(emailIdToken);
-//		Note note = noteRepository.findByNoteIdAndEmailId(noteId, emailId).orElse(null);
-//		if (note == null) {
-//			throw new NoteException(CommonFiles.NOTE_FOUND_FAILED);
-//		}
-//		if (note.getNoteColor() == null) {
-//			throw new NoteException(CommonFiles.COLOR_ABSENT);
-//		}
-//		note.setNoteColor(null);
-//		return new Response(200, CommonFiles.COLOR_REMOVED_SUCCESS, noteRepository.save(note));
-//
-//	}
+		return new Response(200, CommonFiles.COLOR_ADDED_SUCCESS, noteRepository.save(note));
+	}
+
+	@Override
+	public Response removeColor(int noteId, String emailIdToken) {
+		String emailId = TokenUtility.tokenParser(emailIdToken);
+		Note note = noteRepository.findByNoteIdAndEmailId(noteId, emailId).orElse(null);
+		if (note == null) {
+			throw new NoteException(CommonFiles.NOTE_FOUND_FAILED);
+		}
+		if (note.getNoteColor() == null) {
+			throw new NoteException(CommonFiles.COLOR_ABSENT);
+		}
+		note.setNoteColor(null);
+		return new Response(200, CommonFiles.COLOR_REMOVED_SUCCESS, noteRepository.save(note));
+
+	}
 
 	@Override
 	public Response updateColor(int noteId, String emailIdToken, String color) {
@@ -432,6 +432,21 @@ public class ImplNoteService implements INoteService {
 		note.setNoteColor(color);
 
 		return new Response(200, CommonFiles.COLOR_UPDATED_SUCCESS, noteRepository.save(note));
+	}
+
+	@Override
+	public Response searchByTitleDescription(String searchString, String emailIdToken) {
+		String emailId = TokenUtility.tokenParser(emailIdToken);
+		boolean note =noteRepository.findAll().stream().anyMatch(i -> i.getEmailId().equals(emailId));
+		if (note) {
+			throw new NoteException(CommonFiles.NOTE_FOUND_FAILED);
+		}
+		try {
+			return elasticService.searchByTitleDescription(searchString);
+		} catch (IOException e) {
+			throw new NoteException(e.toString());
+		}
+		
 	}
 
 }
