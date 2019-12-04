@@ -356,6 +356,7 @@ public class NoteController {
 	@GetMapping("/title/description")
 	public ResponseEntity<Response> searchByTitleDescription(@RequestParam String searchString, 
 			@RequestHeader()String emailIdtoken) throws Exception {
+		System.out.println("title desc");
 		return new ResponseEntity<Response>((noteService.searchByTitleDescription(searchString ,emailIdtoken )), HttpStatus.OK);
 	}
 	

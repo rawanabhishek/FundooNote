@@ -24,6 +24,8 @@ import com.bridgelabz.fundoo.note.model.Note;
 public interface NoteRepository  extends JpaRepository<Note, Integer>{
 
 	Optional<Note> findByNoteIdAndEmailId(Integer id , String email);
+
+	Optional<Note> findByEmailId(String emailId);
 	
 
 }
