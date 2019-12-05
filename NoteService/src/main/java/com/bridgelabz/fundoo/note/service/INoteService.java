@@ -214,6 +214,7 @@ public interface INoteService {
 	
 	
 	/**
+	 * Purpose: Method for searching note by title and description 
 	 * @param searchString to search a specific pharse in database
 	 * @param emailIdToken to validate the user 
 	 * @return

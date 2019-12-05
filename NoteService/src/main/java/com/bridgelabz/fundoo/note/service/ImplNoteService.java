@@ -434,19 +434,22 @@ public class ImplNoteService implements INoteService {
 		return new Response(200, CommonFiles.COLOR_UPDATED_SUCCESS, noteRepository.save(note));
 	}
 
+
 	@Override
 	public Response searchByTitleDescription(String searchString, String emailIdToken) {
 		String emailId = TokenUtility.tokenParser(emailIdToken);
-	
+		
+	   Note note =noteRepository.findAll().stream().filter(i -> i.getEmailId().
+			   equals(emailId)).findAny().orElse(null);
 		
 		
-//		if (noteRepository.findAll().stream().filter(i -> i.getEmailId().)) {
-//			System.out.println("Failed to fetch ");
-//			throw new NoteException(CommonFiles.NOTE_FOUND_FAILED);
-//		}
-		System.out.println("note search");
+		if (note==null) {
+			System.out.println("Failed to fetch ");
+			throw new NoteException(CommonFiles.NOTE_FOUND_FAILED);
+		}
+		
 		try {
-			System.out.println("Elastic");
+			
 			return elasticService.
 					searchByTitleDescription(searchString);
 		} catch (IOException e) {

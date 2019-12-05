@@ -331,7 +331,7 @@ public class NoteController {
 	
 	
 	/**
-	 * vPurpose: Creating update color controller which will update color for note
+	 * Purpose: Creating update color controller which will update color for note
 	 * @param noteId containing note id
 	 * @param emailIdToken containing email id
 	 * @param color code for a note in hex color format
@@ -348,6 +348,7 @@ public class NoteController {
 	
 	
 	/**
+	 * Purpose: To search note by title and description 
 	 * @param searchString to search a query in the database 
 	 * @param emailIdtoken for validating the user 
 	 * @return

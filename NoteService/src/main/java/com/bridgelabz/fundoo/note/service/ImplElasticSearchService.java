@@ -1,3 +1,12 @@
+/******************************************************************************
+ 
+ *  Purpose: This is a service class for Elasticsearch implementing elastic search
+ *           Service interface methods 
+ *  @author  Abhishek Rawat
+ *  @version 1.0
+ *  @since   02-12-2019
+ *
+ ******************************************************************************/
 package com.bridgelabz.fundoo.note.service;
 
 import java.io.IOException;
@@ -42,6 +51,7 @@ public class ImplElasticSearchService implements IElasticSearchService {
 	@Autowired
 	private ObjectMapper objectMapper;
 
+	@Override
 	public Response addDocument(Note note) throws Exception {
 
 		IndexRequest indexRequest = new IndexRequest(INDEX, TYPE, note.getNoteId().toString()).
@@ -53,7 +63,7 @@ public class ImplElasticSearchService implements IElasticSearchService {
 	}
 	
 	
-
+    @Override
 	public Response readDocument(String id) throws IOException {
 		GetRequest getRequest = new GetRequest(INDEX, TYPE, id);
 		GetResponse getResponse = client.get(getRequest, RequestOptions.DEFAULT);
@@ -62,7 +72,7 @@ public class ImplElasticSearchService implements IElasticSearchService {
 	}
 	
 	
-
+     @Override
 	public Response search(String value, String type) throws IOException {
 
 		SearchRequest searchRequest = new SearchRequest();
@@ -86,7 +96,7 @@ public class ImplElasticSearchService implements IElasticSearchService {
 	
 	
 	
-
+     @Override
 	public Response deleteDocument(String id) throws IOException {
 
 		DeleteRequest deleteRequest = new DeleteRequest(INDEX, TYPE, id);
@@ -97,6 +107,7 @@ public class ImplElasticSearchService implements IElasticSearchService {
 	}
 	
 	
+	@Override
 	public Response searchByTitleDescription(String value) throws IOException {
 
 		SearchRequest searchRequest = new SearchRequest();
@@ -105,7 +116,7 @@ public class ImplElasticSearchService implements IElasticSearchService {
 
 		SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
 
-		searchSourceBuilder.query(QueryBuilders.boolQuery().should(QueryBuilders.queryStringQuery(value).
+		searchSourceBuilder.query(QueryBuilders.boolQuery().should(QueryBuilders.queryStringQuery("*"+value+"*").
 						field(CommonFiles.TITLE).field(CommonFiles.DESCRIPTION)));
 		searchRequest.source(searchSourceBuilder);
 
