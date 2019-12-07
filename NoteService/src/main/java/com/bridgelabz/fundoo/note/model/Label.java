@@ -63,7 +63,7 @@ public class Label {
 	private Date updateDate;
 
 	
-	@JsonIgnoreProperties(value = "labels")
+	
 	@ManyToMany(mappedBy = "labels", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Note> notes;
 

@@ -17,6 +17,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Base64;
 
+import java.util.stream.Collectors;
+
 import org.apache.commons.io.FilenameUtils;
 import org.modelmapper.ModelMapper;
 
@@ -60,13 +62,7 @@ public class ImplUserService implements IUserService {
 
 	public static final Logger LOG = LoggerFactory.getLogger(ImplUserService.class);
 
-	/**
-	 * Purpose: Method for user login into the UserService.
-	 * 
-	 * @param login object containing user emailId and user password (in encoded
-	 *              format ).
-	 * @return Response which contains the response of the method .
-	 */
+
 	@Override
 	public Response userLogin(LoginDTO login) {
 		LOG.info(CommonFiles.SERVICE_LOGIN_METHOD);
@@ -82,14 +78,7 @@ public class ImplUserService implements IUserService {
 
 	}
 
-	/**
-	 * Purpose: Method for registration of new user into UserService.
-	 * 
-	 * @param register object contains users firstName, lastName ,contact , emailId
-	 *                 and password (in encoded format) and then mapping it to user
-	 *                 Model .
-	 * @return Response which contains the response of the method.
-	 */
+
 	@Override
 	public Response userRegister(RegisterDTO register) {
 		LOG.info(CommonFiles.SERVICE_REGISTER_METHOD);
@@ -115,14 +104,7 @@ public class ImplUserService implements IUserService {
 
 	}
 
-	/**
-	 * Purpose: Method for send mail to the user emailId if he/she has forgot
-	 * his/her password.
-	 * 
-	 * @param email to which the mail has to send the mail will contains a link to
-	 *              reset new password.
-	 * @return Response which contains the response of the method.
-	 */
+	
 	@Override
 	public Response userForgotPassword(String email) {
 		LOG.info(CommonFiles.SERVICE_FORGOTPASSWORD_METHOD);
@@ -142,14 +124,7 @@ public class ImplUserService implements IUserService {
 
 	}
 
-	/**
-	 * Purpose: Method for resetting the password of particular user.
-	 * 
-	 * @param password the new password which user to set for his id .
-	 * @param token    for checking the user is authorized or not for setting new
-	 *                 password.
-	 * @return Response which contains the response of the method.
-	 */
+
 	@Override
 	public Response userSetPassword(SetPasswordDTO setPasswordDTO, String token) {
 		LOG.info(CommonFiles.SERVICE_SETPASSWORD_METHOD);
@@ -168,14 +143,7 @@ public class ImplUserService implements IUserService {
 
 	}
 
-	/**
-	 * Purpose: Method for verifying the user in which the user get authorization to
-	 * use UserSevices.
-	 * 
-	 * @param token to verify the user and granting him/her the authorization to
-	 *              access the userServices.
-	 * @return Response which contains the response of the method.
-	 */
+
 	@Override
 	public Response isVerified(String token) {
 		LOG.info(CommonFiles.SERVICE_ISVERIFIED_METHOD);
@@ -193,15 +161,7 @@ public class ImplUserService implements IUserService {
 
 	}
 
-	/**
-	 * Purpose: Method for adding profile picture to user of UserService using multi
-	 * part file
-	 * 
-	 * @param emailIdToken
-	 * @param file         containing image for adding profile picture
-	 * @return Response which contains the response of the method
-	 * @throws IOException
-	 */
+
 	@Override
 	public Response addProfilePic(String emailIdToken, MultipartFile file) throws IOException {
 		String email = TokenUtility.tokenParser(emailIdToken);
@@ -222,14 +182,7 @@ public class ImplUserService implements IUserService {
 
 	}
 
-	/**
-	 * Purpose: Method for removing profile picture of user of UserService
-	 * 
-	 * @param emailIdToken to verify the user and granting him/her the authorization
-	 *                     to access the userServices.
-	 * @return Response which contains the response of the method
-	 * @throws IOException
-	 */
+
 	@Override
 	public Response removeProfilePic(String emailIdToken) throws IOException {
 		String email = TokenUtility.tokenParser(emailIdToken);
@@ -245,15 +198,7 @@ public class ImplUserService implements IUserService {
 		return new Response(200, CommonFiles.PHOTO_REMOVED_SUCCESS, userRepository.save(user));
 	}
 
-	/**
-	 * Purpose: Method for updating profile picture of user of userService
-	 * 
-	 * @param emailIdToken to verify the user and granting him/her the authorization
-	 *                     to access the userServices.
-	 * @param file         containing image for updating profile picture
-	 * @return Response which contains the response of the method
-	 * @throws IOException
-	 */
+	
 	@Override
 	public Response updateProfilePic(String emailIdToken, MultipartFile file) throws IOException {
 		String email = TokenUtility.tokenParser(emailIdToken);
@@ -311,6 +256,13 @@ public class ImplUserService implements IUserService {
 
 		return new Response(200, CommonFiles.PATH_FEATCHED, profilePic);
 
+	}
+
+	
+	@Override
+	public Response getAllUser() {
+		
+		return new Response(200 , CommonFiles.GET_ALL_USER, userRepository.findAll().stream().collect(Collectors.toList()));
 	}
 
 }

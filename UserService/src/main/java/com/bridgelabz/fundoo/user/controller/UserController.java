@@ -176,7 +176,7 @@ public class UserController {
 	 *              the account.
 	 * @param file containing image for updating user profile picture
 	 * @return ResponseEntity which is holding the user object and HttpStatus in
-	 *         that entity..
+	 *         that entity.
 	 * @throws IOException
 	 */
 	@PutMapping("/updateprofilepic")
@@ -187,11 +187,24 @@ public class UserController {
 	}
 	
 	
+	/**
+	 * Purpose: To fetch the profile picture of particular users
+	 * @param emailIdToken  for authorization to check the user has authority for Verifying
+	 *              the account.
+	 * @return ResponseEntity which is holding the user object and HttpStatus in
+	 *         that entity.
+	 * @throws IOException
+	 */
 	@GetMapping("/profilepic")
 	public ResponseEntity<Response> profilePicPath(@RequestHeader("emailIdToken")
 	String emailIdToken) throws IOException{
 
      return new ResponseEntity<>(userService.getProfilePic(emailIdToken ),HttpStatus.OK);
 }
+	
+	@GetMapping("/alluser")
+	public ResponseEntity<Response> getAllUser(){
+		return new ResponseEntity<>(userService.getAllUser(), HttpStatus.OK);
+	}
 
 }

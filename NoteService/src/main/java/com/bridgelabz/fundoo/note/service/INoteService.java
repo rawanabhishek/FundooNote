@@ -215,12 +215,25 @@ public interface INoteService {
 	
 	/**
 	 * Purpose: Method for searching note by title and description 
-	 * @param searchString to search a specific pharse in database
+	 * @param searchString to search a specific phrase in database
 	 * @param emailIdToken to validate the user 
-	 * @return
+	 * @return Response object containing status code , message 
+	 *         and object 
 	 */
 	public Response searchByTitleDescription(String searchString , String emailIdToken);
 
+	
+	
+	/**
+	 * Purpose: Method for get all user form user database
+	 * @return Response object containing status code , message 
+	 *         and object 
+	 */
+	public Response  getUsers();
+	
+
+	
+	
 	
 
 }

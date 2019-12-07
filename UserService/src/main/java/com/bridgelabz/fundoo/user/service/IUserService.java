@@ -121,6 +121,18 @@ public interface IUserService {
 	public Response updateProfilePic( String emailIdToken , MultipartFile file)throws IOException;
 	
 	
+	/**
+	 * Purpose: Method for getting profile picture of particular user
+	 * @param emailIdToken  to verify the user and granting him/her the authorization to
+	 *              access the userServices.
+	 * @return Response which contains the response of the method
+	 */
 	public Response getProfilePic(String emailIdToken);
+	
+	/**
+	 * Purpose: Method for getting all user present in the database
+	 * @return  Response which contains the response of the method
+	 */
+	public Response getAllUser();
 
 }

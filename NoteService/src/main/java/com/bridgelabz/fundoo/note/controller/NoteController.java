@@ -40,6 +40,10 @@ import com.bridgelabz.fundoo.note.dto.NoteUpdateDTO;
 import com.bridgelabz.fundoo.note.response.Response;
 import com.bridgelabz.fundoo.note.service.INoteService;
 
+/**
+ * @author admin1
+ *
+ */
 @CrossOrigin
 @RestController
 @RequestMapping("/user/note")
@@ -360,6 +364,23 @@ public class NoteController {
 		System.out.println("title desc");
 		return new ResponseEntity<Response>((noteService.searchByTitleDescription(searchString ,emailIdtoken )), HttpStatus.OK);
 	}
+	
+	
+	
+	
+	
+	@GetMapping("/notes/users")
+	public ResponseEntity<Response> getUsers() throws Exception {
+	
+		return new ResponseEntity<Response>((noteService.getUsers()), HttpStatus.OK);
+	}
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	

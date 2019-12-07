@@ -10,6 +10,7 @@
 package com.bridgelabz.fundoo.note.service;
 
 import java.io.IOException;
+
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import com.bridgelabz.fundoo.note.configuration.ApplicationConfiguration;
 import com.bridgelabz.fundoo.note.dto.NoteDTO;
@@ -27,6 +29,7 @@ import com.bridgelabz.fundoo.note.exception.custom.NoteException;
 import com.bridgelabz.fundoo.note.model.Collaborator;
 import com.bridgelabz.fundoo.note.model.Label;
 import com.bridgelabz.fundoo.note.model.Note;
+import com.bridgelabz.fundoo.note.model.User;
 import com.bridgelabz.fundoo.note.repository.CollaboratorRepository;
 import com.bridgelabz.fundoo.note.repository.LabelRepository;
 import com.bridgelabz.fundoo.note.repository.NoteRepository;
@@ -52,6 +55,9 @@ public class ImplNoteService implements INoteService {
 	
 	@Autowired
 	private ImplElasticSearchService elasticService;
+	
+	@Autowired
+	private RestTemplate restTemplate;
 
 	public static final Logger LOG = LoggerFactory.getLogger(ImplNoteService.class);
 
@@ -457,5 +463,24 @@ public class ImplNoteService implements INoteService {
 		}
 		
 	}
+
+	@Override
+	public Response getUsers() {
+		
+		return new Response(200, CommonFiles.COLLABORATOR_FOUND_SUCCESS, getUserList());
+	}
+	
+	
+	
+	
+	private List<User> getUserList(){
+		Response response = restTemplate.getForObject("http://user-service/user/alluser", Response.class);
+		@SuppressWarnings("unchecked")
+		List<User> users = (List<User>) response.getData();
+		return users;
+	
+	}
+
+	
 
 }
