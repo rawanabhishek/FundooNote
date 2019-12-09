@@ -26,7 +26,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -79,6 +80,7 @@ public class ImplUserService implements IUserService {
 	}
 
 
+	
 	@Override
 	public Response userRegister(RegisterDTO register) {
 		LOG.info(CommonFiles.SERVICE_REGISTER_METHOD);
@@ -124,12 +126,12 @@ public class ImplUserService implements IUserService {
 
 	}
 
-
+	@CachePut(value = "user", key = "#email")
 	@Override
-	public Response userSetPassword(SetPasswordDTO setPasswordDTO, String token) {
+	public User userSetPassword(SetPasswordDTO setPasswordDTO, String email) {
 		LOG.info(CommonFiles.SERVICE_SETPASSWORD_METHOD);
 
-		User user = userRepository.findAll().stream().filter(i -> i.getEmail().equals(TokenUtility.tokenParser(token)))
+		User user = userRepository.findAll().stream().filter(i -> i.getEmail().equals(email))
 				.findAny().orElse(null);
 
 		if (user == null && !(setPasswordDTO.getPassword().equals(setPasswordDTO.getConfirmPassword()))) {
@@ -139,16 +141,17 @@ public class ImplUserService implements IUserService {
 		}
 		user.setPassword(userConfiguration.passwordEncoder().encode(setPasswordDTO.getPassword()));
 
-		return new Response(200, CommonFiles.SET_PASSWORD_SUCCESS, userRepository.save(user));
+		return  userRepository.save(user);
 
 	}
 
 
+	
 	@Override
-	public Response isVerified(String token) {
+	public Response isVerified(String email) {
 		LOG.info(CommonFiles.SERVICE_ISVERIFIED_METHOD);
 
-		User user = userRepository.findAll().stream().filter(i -> i.getEmail().equals(TokenUtility.tokenParser(token)))
+		User user = userRepository.findAll().stream().filter(i -> i.getEmail().equals(email))
 				.findAny().orElse(null);
 
 		if (user == null) {
@@ -161,10 +164,10 @@ public class ImplUserService implements IUserService {
 
 	}
 
-
+	@CachePut(value = "user", key = "#email")
 	@Override
-	public Response addProfilePic(String emailIdToken, MultipartFile file) throws IOException {
-		String email = TokenUtility.tokenParser(emailIdToken);
+	public User addProfilePic(String email, MultipartFile file) throws IOException {
+		
 		User user = userRepository.findByEmail(email).orElse(null);
 
 		if (user == null) {
@@ -178,14 +181,15 @@ public class ImplUserService implements IUserService {
 
 		user.setProfilePic(CommonFiles.PROFILE_PIC_PATH + email + "." + extension);
 
-		return new Response(200, CommonFiles.PHOTO_ADDED_SUCCESS, userRepository.save(user));
+		return  userRepository.save(user);
 
 	}
 
 
+	@CachePut(value = "user", key = "#email")
 	@Override
-	public Response removeProfilePic(String emailIdToken) throws IOException {
-		String email = TokenUtility.tokenParser(emailIdToken);
+	public User removeProfilePic(String email) throws IOException {
+		
 		User user = userRepository.findByEmail(email).orElse(null);
 
 		if (user == null) {
@@ -195,15 +199,15 @@ public class ImplUserService implements IUserService {
 
 		Files.delete(path);
 		user.setProfilePic(null);
-		return new Response(200, CommonFiles.PHOTO_REMOVED_SUCCESS, userRepository.save(user));
+		return  userRepository.save(user);
 	}
 
-	
+	@CachePut(value = "user", key = "#email")
 	@Override
-	public Response updateProfilePic(String emailIdToken, MultipartFile file) throws IOException {
-		String email = TokenUtility.tokenParser(emailIdToken);
+	public User updateProfilePic(String email, MultipartFile file) throws IOException {
+	
 		User user = userRepository.findByEmail(email).orElse(null);
-
+		System.out.println("Update profile pic service");
 		if (user == null) {
 			throw new UserException(CommonFiles.USER_FOUND_FAILED);
 		}
@@ -218,12 +222,12 @@ public class ImplUserService implements IUserService {
 
 		user.setProfilePic(CommonFiles.PROFILE_PIC_PATH + email + "." + extension);
 
-		return new Response(200, CommonFiles.PHOTO_UPDATED_SUCCESS, userRepository.save(user));
+		return  userRepository.save(user);
 	}
 
 	@Override
-	public Response getProfilePic(String emailIdToken) {
-		String email = TokenUtility.tokenParser(emailIdToken);
+	public Response getProfilePic(String email) {
+		
 		User user = userRepository.findByEmail(email).orElse(null);
 		if (user == null) {
 			throw new UserException(CommonFiles.USER_FOUND_FAILED);
@@ -263,6 +267,16 @@ public class ImplUserService implements IUserService {
 	public Response getAllUser() {
 		
 		return new Response(200 , CommonFiles.GET_ALL_USER, userRepository.findAll().stream().collect(Collectors.toList()));
+	}
+
+
+
+	@Cacheable(value ="user" , key="#email")
+	@Override
+	public User getUser(String email) {
+		LOG.info(CommonFiles.GET_USER);
+		return userRepository.findByEmail(email).get();
+		
 	}
 
 }

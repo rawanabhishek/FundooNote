@@ -39,6 +39,7 @@ import com.bridgelabz.fundoo.user.dto.SetPasswordDTO;
 import com.bridgelabz.fundoo.user.response.Response;
 import com.bridgelabz.fundoo.user.service.IUserService;
 import com.bridgelabz.fundoo.user.utility.CommonFiles;
+import com.bridgelabz.fundoo.user.utility.TokenUtility;
 
 
 
@@ -115,7 +116,7 @@ public class UserController {
 	public ResponseEntity<Response> userSetPassword(@Valid @RequestBody SetPasswordDTO setPasswordDTO ,@RequestHeader String token) {
 
 		LOG.info(CommonFiles.CONTROLLER_SETPASSWORD_METHOD);
-		return new ResponseEntity<>(userService.userSetPassword(setPasswordDTO ,token), HttpStatus.OK);
+		return new ResponseEntity<>(new Response(200, CommonFiles.SET_PASSWORD_SUCCESS,userService.userSetPassword(setPasswordDTO ,TokenUtility.tokenParser(token))), HttpStatus.OK);
 	}
 
 	/**
@@ -132,7 +133,7 @@ public class UserController {
 	@PutMapping("/verify")
 	public ResponseEntity<Response> userVerfication(@RequestHeader(name = "token") String token) {
 		LOG.info(CommonFiles.CONTROLLER_ISVERIFIED_METHOD);
-		return new ResponseEntity<>(userService.isVerified(token), HttpStatus.OK);
+		return new ResponseEntity<>(userService.isVerified(TokenUtility.tokenParser(token)), HttpStatus.OK);
 
 	}
 	
@@ -149,7 +150,7 @@ public class UserController {
 	public ResponseEntity<Response> addProfilePic( @RequestHeader("emailIdToken")
 			String emailIdToken  , @RequestParam("picture") MultipartFile file) throws IOException{
 		
-		return new ResponseEntity<>(userService.addProfilePic(emailIdToken , file),HttpStatus.OK);
+		return new ResponseEntity<>(new Response(200, CommonFiles.PHOTO_ADDED_SUCCESS,userService.addProfilePic(TokenUtility.tokenParser(emailIdToken) , file)),HttpStatus.OK);
 	}
 	
 	
@@ -166,7 +167,7 @@ public class UserController {
 	public ResponseEntity<Response> removeProfilePic( @RequestHeader("emailIdToken")
 			String emailIdToken  ) throws IOException{
 		
-		return new ResponseEntity<>(userService.removeProfilePic(emailIdToken ),HttpStatus.OK);
+		return new ResponseEntity<>(new Response(200, CommonFiles.PHOTO_REMOVED_SUCCESS,userService.removeProfilePic(TokenUtility.tokenParser(emailIdToken))),HttpStatus.OK);
 	}
 	
 	/**
@@ -182,8 +183,8 @@ public class UserController {
 	@PutMapping("/updateprofilepic")
 	public ResponseEntity<Response> updateProfilePic(@RequestHeader("emailIdToken")
 			String emailIdToken ,@RequestParam("picture") MultipartFile file ) throws IOException{
-		
-		return new ResponseEntity<>(userService.updateProfilePic(emailIdToken ,file),HttpStatus.OK);
+		   System.out.println("Update profile pic controller");
+		return new ResponseEntity<>(new Response(200, CommonFiles.PHOTO_UPDATED_SUCCESS,userService.updateProfilePic(TokenUtility.tokenParser(emailIdToken) ,file)),HttpStatus.OK);
 	}
 	
 	
@@ -199,12 +200,33 @@ public class UserController {
 	public ResponseEntity<Response> profilePicPath(@RequestHeader("emailIdToken")
 	String emailIdToken) throws IOException{
 
-     return new ResponseEntity<>(userService.getProfilePic(emailIdToken ),HttpStatus.OK);
+     return new ResponseEntity<>(userService.getProfilePic(TokenUtility.tokenParser(emailIdToken)),HttpStatus.OK);
 }
 	
+	/**
+	 * Purpose: To fetch all users from database
+	 * @return ResponseEntity which is holding the user object and HttpStatus in
+	 *         that entity.
+	 */
 	@GetMapping("/alluser")
 	public ResponseEntity<Response> getAllUser(){
 		return new ResponseEntity<>(userService.getAllUser(), HttpStatus.OK);
 	}
+	
+	
+	/**
+	 * Purpose: To fetch particular user by emailId
+	 * @param emaiIdToken for authorization to check the user has authority for Verifying
+	 *              the account.
+	 * @return  ResponseEntity which is holding the user object and HttpStatus in
+	 *         that entity.
+	 */
+	@GetMapping("/userById")
+	public ResponseEntity<Response> getUser(@RequestHeader String emaiIdToken){
+		System.out.println("get user by id controller");
+		return new ResponseEntity<>(new Response(200, CommonFiles.GET_ALL_USER , userService.getUser(TokenUtility.tokenParser(emaiIdToken))), HttpStatus.OK);
+	}
+	
+	
 
 }

@@ -235,9 +235,9 @@ public class NoteController {
 	 */
 	@PutMapping("/addcollaborator")
 	public ResponseEntity<Response> addCollaborator(@RequestParam int  noteId , @RequestHeader
-			String emailIdToken , @RequestHeader String collaborator){
+			String emailIdToken , @RequestHeader String collaboratorEmailId){
 		
-		return new ResponseEntity<>(noteService.addCollaborator(noteId ,emailIdToken , collaborator),HttpStatus.OK);
+		return new ResponseEntity<>(noteService.addCollaborator(noteId ,emailIdToken , collaboratorEmailId),HttpStatus.OK);
 	}
 	
 	
@@ -355,7 +355,8 @@ public class NoteController {
 	 * Purpose: To search note by title and description 
 	 * @param searchString to search a query in the database 
 	 * @param emailIdtoken for validating the user 
-	 * @return
+	 * @return ResponseEntity containing Response which contains status code,
+	 *         message and object
 	 * @throws Exception
 	 */
 	@GetMapping("/title/description")
@@ -369,6 +370,12 @@ public class NoteController {
 	
 	
 	
+	/**
+	 * Purpose: To all user from the user service using rest template
+	 * @return ResponseEntity containing Response which contains status code,
+	 *         message and object
+	 * @throws Exception
+	 */
 	@GetMapping("/notes/users")
 	public ResponseEntity<Response> getUsers() throws Exception {
 	

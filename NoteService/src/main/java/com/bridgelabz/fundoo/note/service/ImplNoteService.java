@@ -52,10 +52,10 @@ public class ImplNoteService implements INoteService {
 
 	@Autowired
 	private CollaboratorRepository collaboratorRepository;
-	
+
 	@Autowired
 	private ImplElasticSearchService elasticService;
-	
+
 	@Autowired
 	private RestTemplate restTemplate;
 
@@ -79,14 +79,13 @@ public class ImplNoteService implements INoteService {
 		}
 		note.setEmailId(TokenUtility.tokenParser(token));
 		noteRepository.save(note);
-		
+
 		try {
 			elasticService.addDocument(note);
 		} catch (Exception e) {
-			
+
 			e.printStackTrace();
 		}
-		
 
 		return new Response(200, CommonFiles.ADD_NOTE_SUCCESS, note);
 
@@ -104,7 +103,7 @@ public class ImplNoteService implements INoteService {
 
 		note.setDescription(updateDTO.getDescription());
 		note.setTitle(updateDTO.getTitle());
-		
+
 		try {
 			elasticService.addDocument(note);
 		} catch (Exception e) {
@@ -127,10 +126,10 @@ public class ImplNoteService implements INoteService {
 		if (!note.isTrash()) {
 			throw new NoteException(CommonFiles.NOTE_TRASH);
 		}
-        try {
+		try {
 			elasticService.deleteDocument(note.getNoteId().toString());
 		} catch (IOException e) {
-			
+
 			e.printStackTrace();
 		}
 		noteRepository.deleteById(noteId);
@@ -138,14 +137,13 @@ public class ImplNoteService implements INoteService {
 	}
 
 	@Override
-	public Response get(String emailIdToken , boolean pin , boolean archive , boolean trash) {
+	public Response get(String emailIdToken, boolean pin, boolean archive, boolean trash) {
 		LOG.info(CommonFiles.SERVICE_GET_METHOD);
-        LOG.info("pin="+pin+"archice="+archive+"trash="+trash);
+		LOG.info("pin=" + pin + "archice=" + archive + "trash=" + trash);
 		String emailId = TokenUtility.tokenParser(emailIdToken);
 
-		List<Note> note = noteRepository.findAll().stream().filter(i -> i.getEmailId().equals(emailId) && 
-				i.isPin() == pin && i.isArchive() == archive && i.isTrash()==trash)
-				.collect(Collectors.toList());
+		List<Note> note = noteRepository.findAll().stream().filter(i -> i.getEmailId().equals(emailId)
+				&& i.isPin() == pin && i.isArchive() == archive && i.isTrash() == trash).collect(Collectors.toList());
 
 		if (note == null) {
 			throw new NoteException(CommonFiles.GET_NOTE_FAILED);
@@ -270,7 +268,7 @@ public class ImplNoteService implements INoteService {
 		String emailId = TokenUtility.tokenParser(emailIdToken);
 
 		Note note = noteRepository.findByNoteIdAndEmailId(noteId, emailId).orElse(null);
-		if(note == null) {
+		if (note == null) {
 			throw new NoteException(CommonFiles.NOTE_FOUND_FAILED);
 		}
 
@@ -280,7 +278,7 @@ public class ImplNoteService implements INoteService {
 
 			throw new NoteException(CommonFiles.LABEL_FOUND_FAILED);
 		}
-		if(note.getLabels().contains(label)) {
+		if (note.getLabels().contains(label)) {
 			throw new NoteException(CommonFiles.LABEL_PRESENT);
 		}
 
@@ -313,19 +311,32 @@ public class ImplNoteService implements INoteService {
 
 		String collaboratorEmailId = TokenUtility.tokenParser(collaboratorEmail);
 
+		@SuppressWarnings("unchecked")
+		List<User> users = (List<User>) getUserList();
+		System.out.println("note id " + noteId + " emailId" + emailId + "Collb email" + collaboratorEmailId);
 		Note note = noteRepository.findByNoteIdAndEmailId(noteId, emailId).orElse(null);
+
 		if (note == null) {
 			throw new NoteException(CommonFiles.NOTE_FOUND_FAILED);
 		}
-		Collaborator collaborator = collaboratorRepository.findByEmail(collaboratorEmailId).orElse(null);
 
-		if (collaborator == null) {
+
+		Collaborator collaborator = new Collaborator();
+		System.out.println("Note is not null");
+		
+		 User user= users.stream().findAny().filter(i ->
+		 i.getEmail().equals(collaboratorEmailId)).orElse(null);
+
+		if (user == null) {
+			System.out.println("User is null");
 			throw new NoteException(CommonFiles.USER_FOUND_FAILED);
 		}
-		collaborator.setEmail(collaboratorEmail);
-		collaborator.getNotes().add(note);
 
-		note.getCollaborator().add(collaborator);
+		
+		collaborator.setEmail(collaboratorEmailId);
+		collaboratorRepository.save(collaborator);
+	
+		note.getCollaborators().add(collaborator);
 
 		return new Response(200, CommonFiles.ADD_COLLABORATOR_SUCCESS, noteRepository.save(note));
 	}
@@ -338,12 +349,13 @@ public class ImplNoteService implements INoteService {
 		if (note == null) {
 			throw new NoteException(CommonFiles.NOTE_FOUND_FAILED);
 		}
+
 		Collaborator collaborator = collaboratorRepository.findAllByEmail(collaboratorEmail);
 
 		if (collaborator == null) {
 			throw new NoteException(CommonFiles.USER_FOUND_FAILED);
 		}
-		note.getCollaborator().remove(collaborator);
+		note.getCollaborators().remove(collaborator);
 		return new Response(200, CommonFiles.REMOVE_COLLABORATOR_SUCCESS, noteRepository.save(note));
 	}
 
@@ -399,7 +411,7 @@ public class ImplNoteService implements INoteService {
 	@Override
 	public Response addColor(int noteId, String emailIdToken, String color) {
 		String emailId = TokenUtility.tokenParser(emailIdToken);
-		
+
 		Note note = noteRepository.findByNoteIdAndEmailId(noteId, emailId).orElse(null);
 		if (note == null) {
 			throw new NoteException(CommonFiles.NOTE_FOUND_FAILED);
@@ -426,7 +438,7 @@ public class ImplNoteService implements INoteService {
 
 	@Override
 	public Response updateColor(int noteId, String emailIdToken, String color) {
-		System.out.println("color------->"+color);
+	
 		String emailId = TokenUtility.tokenParser(emailIdToken);
 		Note note = noteRepository.findByNoteIdAndEmailId(noteId, emailId).orElse(null);
 		if (note == null) {
@@ -440,47 +452,41 @@ public class ImplNoteService implements INoteService {
 		return new Response(200, CommonFiles.COLOR_UPDATED_SUCCESS, noteRepository.save(note));
 	}
 
-
 	@Override
 	public Response searchByTitleDescription(String searchString, String emailIdToken) {
 		String emailId = TokenUtility.tokenParser(emailIdToken);
-		
-	   Note note =noteRepository.findAll().stream().filter(i -> i.getEmailId().
-			   equals(emailId)).findAny().orElse(null);
-		
-		
-		if (note==null) {
+
+		Note note = noteRepository.findAll().stream().filter(i -> i.getEmailId().equals(emailId)).findAny()
+				.orElse(null);
+
+		if (note == null) {
 			System.out.println("Failed to fetch ");
 			throw new NoteException(CommonFiles.NOTE_FOUND_FAILED);
 		}
-		
+
 		try {
-			
-			return elasticService.
-					searchByTitleDescription(searchString);
+
+			return elasticService.searchByTitleDescription(searchString);
 		} catch (IOException e) {
 			throw new NoteException(e.toString());
 		}
-		
+
 	}
 
 	@Override
 	public Response getUsers() {
-		
+
 		return new Response(200, CommonFiles.COLLABORATOR_FOUND_SUCCESS, getUserList());
 	}
-	
-	
-	
-	
-	private List<User> getUserList(){
+
+	private Object getUserList() {
 		Response response = restTemplate.getForObject("http://user-service/user/alluser", Response.class);
+		
 		@SuppressWarnings("unchecked")
 		List<User> users = (List<User>) response.getData();
 		return users;
 	
-	}
 
-	
+	}
 
 }

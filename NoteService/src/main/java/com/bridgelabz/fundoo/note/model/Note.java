@@ -11,12 +11,12 @@
  ******************************************************************************/
 package com.bridgelabz.fundoo.note.model;
 
-
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
+
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -31,7 +31,6 @@ import javax.validation.constraints.Pattern;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -85,18 +84,15 @@ public class Note implements Serializable {
 	@Column(name = "reminder")
 	private Date reminder;
 
-
-	
-    @Pattern(regexp="^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})|([0]{0})$")
-    private String noteColor;
+	@Pattern(regexp = "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})|([0]{0})$")
+	private String noteColor;
 
 	@JsonIgnoreProperties(value = "notes")
 	@ManyToMany(fetch = FetchType.LAZY)
 	private List<Label> labels;
-	
-	
-   @JsonIgnoreProperties(value = "notes")
-   @ManyToMany(fetch = FetchType.LAZY)
-   private List<Collaborator> collaborator;
+
+	@JsonIgnoreProperties(value = "notes")
+	@ManyToMany(fetch = FetchType.LAZY)
+	private List<Collaborator> collaborators;
 
 }

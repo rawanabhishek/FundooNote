@@ -2,8 +2,11 @@ package com.bridgelabz.fundoo.note.model;
 
 import java.util.Date;
 
+
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 
 @NoArgsConstructor
 @Data

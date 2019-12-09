@@ -10,6 +10,7 @@
  ******************************************************************************/
 package com.bridgelabz.fundoo.user.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -34,7 +35,13 @@ import lombok.Data;
 @Entity
 @Table(name = "user")
 @Data
-public class User {
+public class User implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,14 +1,3 @@
-/******************************************************************************
- 
- *  Purpose:  A Class  for creating the POJO class Of Collaborator  
- *            this class uses @Entity annotation to get know spring that it is 
- *            an entity.
- *  		 
- *  @author   Abhishek Rawat
- *  @version  1.0
- *  @since    05-11-2019
- *
- ******************************************************************************/
 package com.bridgelabz.fundoo.note.model;
 
 import java.util.List;
@@ -32,15 +21,16 @@ import lombok.Setter;
 @Getter
 @Data
 public class Collaborator {
-
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer collaboratorId;
 
 	private String email;
 
-	@JsonIgnoreProperties(value = "labels , collaborator")
-	@ManyToMany(mappedBy = "collaborator", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JsonIgnoreProperties(value = "collaborators")
+	@ManyToMany(mappedBy = "collaborators", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Note> notes;
+	
 
 }

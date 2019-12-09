@@ -66,7 +66,8 @@ public class CommonFiles {
 	public static final String CONTROLLER_SETPASSWORD_METHOD="Set password controller method";
 	public static final String CONTROLLER_REGISTER_METHOD="Register controller method";
 	public static final String CONTROLLER_ISVERIFIED_METHOD="Is verified controller method";
-	public static final String GET_ALL_USER = "User fetched success ";
+	public static final String GET_ALL_USER = "Users fetched success ";
+	public static final String GET_USER = "User fetched success";
 	
 	
 	

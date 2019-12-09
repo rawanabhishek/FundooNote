@@ -19,7 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.bridgelabz.fundoo.user.dto.LoginDTO;
 import com.bridgelabz.fundoo.user.dto.RegisterDTO;
 import com.bridgelabz.fundoo.user.dto.SetPasswordDTO;
-
+import com.bridgelabz.fundoo.user.model.User;
 import com.bridgelabz.fundoo.user.response.Response;
 
 public interface IUserService {
@@ -28,13 +28,12 @@ public interface IUserService {
 	 * Purpose: Method for resetting the password of particular user.
 	 * 
 	 * @param password the new password which user to set for his id .
-	 * @param token    for checking the user is authorized or not for setting new
-	 *                 password.
+	 * @param email of user 
 	 * @return Response which contains the response of the method.
 	 */
 
 	
-	public Response userSetPassword(SetPasswordDTO setPasswordDTO ,String token);
+	public User userSetPassword(SetPasswordDTO setPasswordDTO ,String email);
 	
 	
 
@@ -97,7 +96,7 @@ public interface IUserService {
 	 * @return Response which contains the response of the method
 	 * @throws IOException 
 	 */
-	public Response addProfilePic( String emailIdToken , MultipartFile file ) throws IOException;
+	public User addProfilePic( String email , MultipartFile file ) throws IOException;
 	
 
 	 /**
@@ -107,7 +106,7 @@ public interface IUserService {
 	 * @return Response which contains the response of the method
 	 * @throws IOException
 	 */
-	public Response removeProfilePic(String emailIdToken) throws IOException;
+	public User removeProfilePic(String email) throws IOException;
 	
 	
 	/**
@@ -118,7 +117,7 @@ public interface IUserService {
 	 * @return Response which contains the response of the method
 	 * @throws IOException
 	 */
-	public Response updateProfilePic( String emailIdToken , MultipartFile file)throws IOException;
+	public User updateProfilePic( String email , MultipartFile file)throws IOException;
 	
 	
 	/**
@@ -127,12 +126,15 @@ public interface IUserService {
 	 *              access the userServices.
 	 * @return Response which contains the response of the method
 	 */
-	public Response getProfilePic(String emailIdToken);
+	public Response getProfilePic(String email);
 	
 	/**
 	 * Purpose: Method for getting all user present in the database
 	 * @return  Response which contains the response of the method
 	 */
 	public Response getAllUser();
+	
+	
+	public User getUser(String email);
 
 }
