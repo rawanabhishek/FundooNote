@@ -179,8 +179,9 @@ public class NoteController {
 	 *         message and object
 	 */
 	@GetMapping("/date")
-	public ResponseEntity<Response> sortDate(@RequestHeader() String emailIdToken){
-		return new ResponseEntity<>(noteService.sortDate(emailIdToken),HttpStatus.OK);
+	public ResponseEntity<Response> sortDate(@RequestHeader() String emailIdToken ,@RequestParam() boolean pin , 
+			@RequestParam() boolean archive , @RequestParam() boolean trash){
+		return new ResponseEntity<>(noteService.sortDate(emailIdToken ,pin,archive,trash),HttpStatus.OK);
 	}
 	
 	/**
@@ -381,6 +382,24 @@ public class NoteController {
 	
 		return new ResponseEntity<Response>((noteService.getUsers()), HttpStatus.OK);
 	}
+	
+	
+	@GetMapping("/notes/userbyid")
+	public ResponseEntity<Object> getUserById(@RequestParam String emailId) throws Exception {
+	
+		return new ResponseEntity<>((noteService.getUserById(emailId)), HttpStatus.OK);
+	}
+	
+	
+	@GetMapping("/bylabel")
+	public ResponseEntity<Response> getNoteByLabel(@RequestHeader String emailIdToken , @RequestParam int labelId) throws Exception {
+	
+		return new ResponseEntity<>((noteService.getNoteByLabel(emailIdToken , labelId)), HttpStatus.OK);
+	}
+	
+	
+	
+	
 	
 	
 	

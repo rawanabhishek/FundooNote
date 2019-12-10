@@ -22,7 +22,7 @@ import java.util.Date;
 
 import com.bridgelabz.fundoo.note.dto.NoteDTO;
 import com.bridgelabz.fundoo.note.dto.NoteUpdateDTO;
-
+import com.bridgelabz.fundoo.note.model.User;
 import com.bridgelabz.fundoo.note.response.Response;
 
 public interface INoteService {
@@ -115,7 +115,7 @@ public interface INoteService {
 	 * @return Response object containing status code , message 
 	 *         and object .
 	 */
-	public Response sortDate(String emailIdToken);
+	public Response sortDate(String emailIdToken , boolean pin, boolean archive, boolean trash);
 	
 	/**
 	 * Purpose: Method for sorting notes of a user by name (title()  
@@ -230,6 +230,11 @@ public interface INoteService {
 	 *         and object 
 	 */
 	public Response  getUsers();
+	
+	
+	public User  getUserById(String collaboratorEmail);
+	
+	public Response getNoteByLabel(String emailIdToken ,int labelId);
 	
 
 	

@@ -37,6 +37,10 @@ import com.bridgelabz.fundoo.note.response.Response;
 import com.bridgelabz.fundoo.note.utility.CommonFiles;
 
 import com.bridgelabz.fundoo.note.utility.TokenUtility;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+
 
 @Service
 public class ImplNoteService implements INoteService {
@@ -58,6 +62,9 @@ public class ImplNoteService implements INoteService {
 
 	@Autowired
 	private RestTemplate restTemplate;
+
+	@Autowired
+	private ObjectMapper mapper;
 
 	public static final Logger LOG = LoggerFactory.getLogger(ImplNoteService.class);
 
@@ -144,7 +151,7 @@ public class ImplNoteService implements INoteService {
 
 		List<Note> note = noteRepository.findAll().stream().filter(i -> i.getEmailId().equals(emailId)
 				&& i.isPin() == pin && i.isArchive() == archive && i.isTrash() == trash).collect(Collectors.toList());
-
+	
 		if (note == null) {
 			throw new NoteException(CommonFiles.GET_NOTE_FAILED);
 		}
@@ -238,14 +245,18 @@ public class ImplNoteService implements INoteService {
 	}
 
 	@Override
-	public Response sortDate(String emailIdToken) {
+	public Response sortDate(String emailIdToken , boolean pin, boolean archive, boolean trash) {
 		String emailId = TokenUtility.tokenParser(emailIdToken);
 		LOG.info(CommonFiles.SERVICE_SORT_METHOD);
 
-		List<Note> sortedNote = noteRepository.findAll().stream().filter(i -> i.getEmailId().equals(emailId))
+		List<Note> sortedNote = noteRepository.findAll().stream().filter(i -> i.getEmailId().equals(emailId) &&
+				i.isPin() == pin && i.isArchive() == archive && i.isTrash() == trash )
 				.sorted((Note n1, Note n2) -> n1.getUpdate().compareTo(n2.getUpdate())).parallel()
 				.collect(Collectors.toList());
 
+	
+
+		
 		return new Response(200, CommonFiles.SORT_DATE_SUCCESS, sortedNote);
 
 	}
@@ -309,34 +320,31 @@ public class ImplNoteService implements INoteService {
 	public Response addCollaborator(int noteId, String emailIdToken, String collaboratorEmail) {
 		String emailId = TokenUtility.tokenParser(emailIdToken);
 
-		String collaboratorEmailId = TokenUtility.tokenParser(collaboratorEmail);
-
-		@SuppressWarnings("unchecked")
-		List<User> users = (List<User>) getUserList();
-		System.out.println("note id " + noteId + " emailId" + emailId + "Collb email" + collaboratorEmailId);
+		System.out.println("note id " + noteId + " emailId" + emailId + "Collb email" + collaboratorEmail);
 		Note note = noteRepository.findByNoteIdAndEmailId(noteId, emailId).orElse(null);
 
 		if (note == null) {
 			throw new NoteException(CommonFiles.NOTE_FOUND_FAILED);
 		}
 
-
-		Collaborator collaborator = new Collaborator();
-		System.out.println("Note is not null");
-		
-		 User user= users.stream().findAny().filter(i ->
-		 i.getEmail().equals(collaboratorEmailId)).orElse(null);
-
-		if (user == null) {
-			System.out.println("User is null");
+		if (getUserById(collaboratorEmail) == null) {
 			throw new NoteException(CommonFiles.USER_FOUND_FAILED);
 		}
 
-		
-		collaborator.setEmail(collaboratorEmailId);
-		collaboratorRepository.save(collaborator);
-	
-		note.getCollaborators().add(collaborator);
+		if (note.getCollaborators().stream().anyMatch(i -> i.getEmail().equals(collaboratorEmail))) {
+			throw new NoteException(CommonFiles.COLLABORATOR_PRESENT_ALREADY);
+		}
+
+		Collaborator collaborator = collaboratorRepository.findByEmail(collaboratorEmail).orElse(null);
+
+		if (collaborator == null) {
+			Collaborator collab = new Collaborator();
+			collab.setEmail(collaboratorEmail);
+			collaboratorRepository.save(collab);
+			note.getCollaborators().add(collab);
+		} else {
+			note.getCollaborators().add(collaborator);
+		}
 
 		return new Response(200, CommonFiles.ADD_COLLABORATOR_SUCCESS, noteRepository.save(note));
 	}
@@ -350,12 +358,16 @@ public class ImplNoteService implements INoteService {
 			throw new NoteException(CommonFiles.NOTE_FOUND_FAILED);
 		}
 
-		Collaborator collaborator = collaboratorRepository.findAllByEmail(collaboratorEmail);
+		Collaborator collaborator = collaboratorRepository.findByEmail(collaboratorEmail).orElse(null);
 
 		if (collaborator == null) {
 			throw new NoteException(CommonFiles.USER_FOUND_FAILED);
 		}
+
 		note.getCollaborators().remove(collaborator);
+
+		collaboratorRepository.delete(collaborator);
+
 		return new Response(200, CommonFiles.REMOVE_COLLABORATOR_SUCCESS, noteRepository.save(note));
 	}
 
@@ -438,7 +450,7 @@ public class ImplNoteService implements INoteService {
 
 	@Override
 	public Response updateColor(int noteId, String emailIdToken, String color) {
-	
+
 		String emailId = TokenUtility.tokenParser(emailIdToken);
 		Note note = noteRepository.findByNoteIdAndEmailId(noteId, emailId).orElse(null);
 		if (note == null) {
@@ -479,14 +491,38 @@ public class ImplNoteService implements INoteService {
 		return new Response(200, CommonFiles.COLLABORATOR_FOUND_SUCCESS, getUserList());
 	}
 
-	private Object getUserList() {
+	private List<User> getUserList() {
 		Response response = restTemplate.getForObject("http://user-service/user/alluser", Response.class);
-		
 		@SuppressWarnings("unchecked")
-		List<User> users = (List<User>) response.getData();
+		List<User> user = (List<User>) response.getData();
+		List<User> users = mapper.convertValue(user, new TypeReference<List<User>>() {
+		});
 		return users;
-	
 
+	}
+
+	@Override
+	public User getUserById(String collaboratorEmail) {
+		User user = restTemplate.getForObject(
+				"http://user-service/user/userbyid?emaiIdToken=" + TokenUtility.tokenBuild(collaboratorEmail),
+				User.class);
+
+		return user;
+	}
+
+	@Override
+	public Response getNoteByLabel(String emailIdToken,  int labelId) {
+		String emailId = TokenUtility.tokenParser(emailIdToken);
+		List<Note> note = noteRepository.findAll().stream()
+		        .filter(i ->  i.getEmailId().equals(emailId)  && i.getLabels().stream().anyMatch(s -> s.getLabelId() == labelId))
+		        .collect(Collectors.toList());
+		if (note == null) {
+			throw new NoteException(CommonFiles.GET_NOTE_FAILED);
+		}
+
+		return new Response(200, CommonFiles.GET_NOTE_SUCCESS, note);
+	
+		
 	}
 
 }

@@ -35,7 +35,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.bridgelabz.fundoo.user.dto.LoginDTO;
 import com.bridgelabz.fundoo.user.dto.RegisterDTO;
 import com.bridgelabz.fundoo.user.dto.SetPasswordDTO;
-
+import com.bridgelabz.fundoo.user.model.User;
 import com.bridgelabz.fundoo.user.response.Response;
 import com.bridgelabz.fundoo.user.service.IUserService;
 import com.bridgelabz.fundoo.user.utility.CommonFiles;
@@ -221,10 +221,10 @@ public class UserController {
 	 * @return  ResponseEntity which is holding the user object and HttpStatus in
 	 *         that entity.
 	 */
-	@GetMapping("/userById")
-	public ResponseEntity<Response> getUser(@RequestHeader String emaiIdToken){
+	@GetMapping("/userbyid")
+	public User getUser(@RequestParam String emaiIdToken){
 		System.out.println("get user by id controller");
-		return new ResponseEntity<>(new Response(200, CommonFiles.GET_ALL_USER , userService.getUser(TokenUtility.tokenParser(emaiIdToken))), HttpStatus.OK);
+		return  userService.getUser(TokenUtility.tokenParser(emaiIdToken));
 	}
 	
 	
