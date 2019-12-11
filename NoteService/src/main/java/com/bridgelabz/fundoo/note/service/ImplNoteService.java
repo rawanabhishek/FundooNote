@@ -251,7 +251,7 @@ public class ImplNoteService implements INoteService {
 
 		List<Note> sortedNote = noteRepository.findAll().stream().filter(i -> i.getEmailId().equals(emailId) &&
 				i.isPin() == pin && i.isArchive() == archive && i.isTrash() == trash )
-				.sorted((Note n1, Note n2) -> n1.getUpdate().compareTo(n2.getUpdate())).parallel()
+				.sorted((Note n1, Note n2) -> n1.getCreated().compareTo(n2.getCreated())).parallel()
 				.collect(Collectors.toList());
 
 	
