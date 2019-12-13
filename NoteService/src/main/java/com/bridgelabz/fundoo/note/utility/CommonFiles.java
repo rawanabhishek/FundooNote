@@ -104,6 +104,7 @@ public class CommonFiles {
 	public static final String ADD_DOCUMENT = "Add document success";
 	public static final String DESCRIPTION = "description";
 	public static final String TITLE = "title";
+	public static final String GET_PROFILE_COLLAB_OWNER = "Note onwer profile pic fetched successfully";
 	
 	
 	

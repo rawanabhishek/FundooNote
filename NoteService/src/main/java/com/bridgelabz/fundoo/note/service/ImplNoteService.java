@@ -18,6 +18,9 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -39,8 +42,6 @@ import com.bridgelabz.fundoo.note.utility.CommonFiles;
 import com.bridgelabz.fundoo.note.utility.TokenUtility;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-
 
 @Service
 public class ImplNoteService implements INoteService {
@@ -151,7 +152,7 @@ public class ImplNoteService implements INoteService {
 
 		List<Note> note = noteRepository.findAll().stream().filter(i -> i.getEmailId().equals(emailId)
 				&& i.isPin() == pin && i.isArchive() == archive && i.isTrash() == trash).collect(Collectors.toList());
-	
+
 		if (note == null) {
 			throw new NoteException(CommonFiles.GET_NOTE_FAILED);
 		}
@@ -245,18 +246,16 @@ public class ImplNoteService implements INoteService {
 	}
 
 	@Override
-	public Response sortDate(String emailIdToken , boolean pin, boolean archive, boolean trash) {
+	public Response sortDate(String emailIdToken, boolean pin, boolean archive, boolean trash) {
 		String emailId = TokenUtility.tokenParser(emailIdToken);
 		LOG.info(CommonFiles.SERVICE_SORT_METHOD);
 
-		List<Note> sortedNote = noteRepository.findAll().stream().filter(i -> i.getEmailId().equals(emailId) &&
-				i.isPin() == pin && i.isArchive() == archive && i.isTrash() == trash )
+		List<Note> sortedNote = noteRepository.findAll().stream()
+				.filter(i -> i.getEmailId().equals(emailId) && i.isPin() == pin && i.isArchive() == archive
+						&& i.isTrash() == trash)
 				.sorted((Note n1, Note n2) -> n1.getCreated().compareTo(n2.getCreated())).parallel()
 				.collect(Collectors.toList());
 
-	
-
-		
 		return new Response(200, CommonFiles.SORT_DATE_SUCCESS, sortedNote);
 
 	}
@@ -327,7 +326,9 @@ public class ImplNoteService implements INoteService {
 			throw new NoteException(CommonFiles.NOTE_FOUND_FAILED);
 		}
 
-		if (getUserById(collaboratorEmail) == null) {
+		User user = getUserById(collaboratorEmail);
+
+		if (user == null) {
 			throw new NoteException(CommonFiles.USER_FOUND_FAILED);
 		}
 
@@ -340,13 +341,20 @@ public class ImplNoteService implements INoteService {
 		if (collaborator == null) {
 			Collaborator collab = new Collaborator();
 			collab.setEmail(collaboratorEmail);
+			collab.setFirstName(user.getFirstName());
+			collab.setLastName(user.getLastName());
+
 			collaboratorRepository.save(collab);
 			note.getCollaborators().add(collab);
+
 		} else {
+
 			note.getCollaborators().add(collaborator);
 		}
 
-		return new Response(200, CommonFiles.ADD_COLLABORATOR_SUCCESS, noteRepository.save(note));
+		noteRepository.save(note);
+
+		return new Response(200, CommonFiles.ADD_COLLABORATOR_SUCCESS, note);
 	}
 
 	@Override
@@ -366,9 +374,31 @@ public class ImplNoteService implements INoteService {
 
 		note.getCollaborators().remove(collaborator);
 
-		collaboratorRepository.delete(collaborator);
-
 		return new Response(200, CommonFiles.REMOVE_COLLABORATOR_SUCCESS, noteRepository.save(note));
+	}
+
+	@Override
+	public Response getCollaborator(String collaboratorEmail) {
+
+		User user = getUserById(collaboratorEmail);
+
+		if (user == null) {
+			throw new NoteException(CommonFiles.USER_FOUND_FAILED);
+		}
+
+		Collaborator collaborator = collaboratorRepository.findByEmail(collaboratorEmail).orElse(null);
+
+		if (collaborator == null) {
+			Collaborator collab = new Collaborator();
+			collab.setEmail(collaboratorEmail);
+			collab.setFirstName(user.getFirstName());
+			collab.setLastName(user.getLastName());
+
+			collaboratorRepository.save(collab);
+			return new Response(200, CommonFiles.ADD_COLLABORATOR_SUCCESS, collaborator);
+		}
+
+		return new Response(200, CommonFiles.ADD_COLLABORATOR_SUCCESS, collaborator);
 	}
 
 	@Override
@@ -504,25 +534,46 @@ public class ImplNoteService implements INoteService {
 	@Override
 	public User getUserById(String collaboratorEmail) {
 		User user = restTemplate.getForObject(
-				"http://user-service/user/userbyid?emaiIdToken=" + TokenUtility.tokenBuild(collaboratorEmail),
+				"http://user-service/user/userbyid?emailIdToken=" + TokenUtility.tokenBuild(collaboratorEmail),
 				User.class);
 
 		return user;
 	}
 
 	@Override
-	public Response getNoteByLabel(String emailIdToken,  int labelId) {
+	public Response getNoteByLabel(String emailIdToken, int labelId) {
 		String emailId = TokenUtility.tokenParser(emailIdToken);
-		List<Note> note = noteRepository.findAll().stream()
-		        .filter(i ->  i.getEmailId().equals(emailId)  && i.getLabels().stream().anyMatch(s -> s.getLabelId() == labelId))
-		        .collect(Collectors.toList());
+		List<Note> note = noteRepository.findAll().stream().filter(
+				i -> i.getEmailId().equals(emailId) && i.getLabels().stream().anyMatch(s -> s.getLabelId() == labelId))
+				.collect(Collectors.toList());
 		if (note == null) {
 			throw new NoteException(CommonFiles.GET_NOTE_FAILED);
 		}
 
 		return new Response(200, CommonFiles.GET_NOTE_SUCCESS, note);
-	
-		
+
+	}
+
+	@Override
+	public Response getProfilePic(String collaboratorEmail, int noteId, String emailIdToken) {
+
+		String emailId = TokenUtility.tokenParser(emailIdToken);
+		Note note = noteRepository.findByNoteIdAndEmailId(noteId, emailId).orElse(null);
+		if (note == null) {
+			throw new NoteException(CommonFiles.NOTE_FOUND_FAILED);
+		}
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.set("emailIdToken", TokenUtility.tokenBuild(collaboratorEmail));
+
+		HttpEntity<Response> entity = new HttpEntity<Response>(headers);
+
+		HttpEntity<Response> response = restTemplate.exchange("http://user-service/user/profilepic", HttpMethod.GET,
+				entity, Response.class);
+
+		String profilePicCollaborator = (String) response.getBody().getData();
+
+		return new Response(200, CommonFiles.GET_PROFILE_COLLAB_OWNER, profilePicCollaborator);
 	}
 
 }

@@ -155,6 +155,8 @@ public interface INoteService {
 	
 	public Response removeCollaborator(int noteId , String emailIdToken, String collaboratorEmail);
 	
+	public Response getCollaborator(String collaboratorEmail);
+	
 	/**
 	 * Purpose: Method for adding reminder to a  note
 	 * @param noteId
@@ -232,9 +234,28 @@ public interface INoteService {
 	public Response  getUsers();
 	
 	
+	/**
+	 * Purpose: Method to get user by particular id
+	 * @param collaboratorEmail of user to add to the note collaborator
+	 * @return
+	 */
 	public User  getUserById(String collaboratorEmail);
 	
+	/**
+	 * Purpose: Method to get Notes by particular labelId
+	 * @param emailIdToken to validate the user 
+	 * @param labelId of label to fetch the particular notes associated with it
+	 * @return
+	 */
 	public Response getNoteByLabel(String emailIdToken ,int labelId);
+	
+	
+	/**
+	 * Purpose: Method to get profilePic of particular user
+	 * @param email of user to fetch the profile picture associated with it
+	 * @return
+	 */
+	public Response getProfilePic(String email ,int noteId , String emailIdToken);
 	
 
 	

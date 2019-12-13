@@ -27,6 +27,17 @@ public class Collaborator {
 	private Integer collaboratorId;
 
 	private String email;
+	
+	private String firstName;
+	
+	private String lastName;
+	
+	private String profilePic;
+	
+	
+	
+	
+	
 
 	@JsonIgnoreProperties(value = "collaborators")
 	@ManyToMany(mappedBy = "collaborators", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

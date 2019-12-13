@@ -13,6 +13,7 @@ package com.bridgelabz.fundoo.note.controller;
 
 
 
+import java.io.IOException;
 import java.util.Date;
 
 import org.slf4j.Logger;
@@ -39,6 +40,7 @@ import com.bridgelabz.fundoo.note.dto.NoteUpdateDTO;
 
 import com.bridgelabz.fundoo.note.response.Response;
 import com.bridgelabz.fundoo.note.service.INoteService;
+
 
 /**
  * @author admin1
@@ -251,9 +253,9 @@ public class NoteController {
 	 */
 	@PutMapping("/removecollaborator")
 	public ResponseEntity<Response> removeCollaborator(@RequestParam int  noteId , @RequestHeader
-			String emailIdToken , @RequestHeader String collaborator){
+			String emailIdToken , @RequestHeader String collaboratorEmailId){
 		
-		return new ResponseEntity<>(noteService.removeCollaborator(noteId ,emailIdToken , collaborator),HttpStatus.OK);
+		return new ResponseEntity<>(noteService.removeCollaborator(noteId ,emailIdToken , collaboratorEmailId),HttpStatus.OK);
 	}
 	
 	
@@ -384,6 +386,12 @@ public class NoteController {
 	}
 	
 	
+	/**
+	 * Purpose: To get user by particular Id
+	 * @param emailId  for validating the user 
+	 * @return
+	 * @throws Exception
+	 */
 	@GetMapping("/notes/userbyid")
 	public ResponseEntity<Object> getUserById(@RequestParam String emailId) throws Exception {
 	
@@ -391,11 +399,45 @@ public class NoteController {
 	}
 	
 	
+	/**
+	 * Purpose: To get list of notes for a particular label
+	 * @param emailIdToken  for validating the user 
+	 * @param labelId  of particular label to gets its notes
+	 * @return
+	 * @throws Exception
+	 */
 	@GetMapping("/bylabel")
 	public ResponseEntity<Response> getNoteByLabel(@RequestHeader String emailIdToken , @RequestParam int labelId) throws Exception {
 	
 		return new ResponseEntity<>((noteService.getNoteByLabel(emailIdToken , labelId)), HttpStatus.OK);
 	}
+	
+	
+	
+	/**
+	 * Purpose: To get profile picture of collaborators
+	 * @param emailIdToken for validating the user 
+	 * @return
+	 * @throws IOException
+	 */
+	@GetMapping("/profilepic")
+	public ResponseEntity<Response> getProfilePic(@RequestHeader String emailIdCollaborator , @RequestParam int noteId ,
+			@RequestHeader String emailIdToken  ) throws IOException{
+
+     return new ResponseEntity<>(noteService.getProfilePic(emailIdCollaborator , noteId , emailIdToken),HttpStatus.OK);
+     
+	}
+	
+	
+	
+     @GetMapping("/getcollaborator")
+     public ResponseEntity<Response> getCollaborator(@RequestHeader String emailIdCollaborator) throws IOException{
+
+      return new ResponseEntity<>(noteService.getCollaborator(emailIdCollaborator ),HttpStatus.OK);
+}
+	
+	
+	
 	
 	
 	

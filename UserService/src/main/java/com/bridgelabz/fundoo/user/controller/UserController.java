@@ -197,7 +197,7 @@ public class UserController {
 	 * @throws IOException
 	 */
 	@GetMapping("/profilepic")
-	public ResponseEntity<Response> profilePicPath(@RequestHeader("emailIdToken")
+	public ResponseEntity<Response> getProfilePic(@RequestHeader()
 	String emailIdToken) throws IOException{
 
      return new ResponseEntity<>(userService.getProfilePic(TokenUtility.tokenParser(emailIdToken)),HttpStatus.OK);
@@ -222,10 +222,26 @@ public class UserController {
 	 *         that entity.
 	 */
 	@GetMapping("/userbyid")
-	public User getUser(@RequestParam String emaiIdToken){
+	public User getUser(@RequestParam String emailIdToken){
 		System.out.println("get user by id controller");
-		return  userService.getUser(TokenUtility.tokenParser(emaiIdToken));
+		return  userService.getUser(TokenUtility.tokenParser(emailIdToken));
 	}
+	
+	
+	/**
+	 * Purpose: To fetch the profile picture of particular collaborator
+	 * @param emailIdToken  for authorization to check the user has authority for Verifying
+	 *              the account.
+	 * @return ResponseEntity which is holding the user object and HttpStatus in
+	 *         that entity.
+	 * @throws IOException
+	 */
+	@GetMapping("/collaboratorprofilepic")
+	public ResponseEntity<Response> getCollaboratorProfilePic(@RequestHeader()
+	String collaboratorEmailId) throws IOException{
+
+     return new ResponseEntity<>(userService.getProfilePic(collaboratorEmailId),HttpStatus.OK);
+}
 	
 	
 

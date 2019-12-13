@@ -39,5 +39,7 @@ public class User {
 
 	private boolean isVerified;
 	
+	private String profilePic;
+	
 
 }
