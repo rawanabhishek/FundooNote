@@ -100,7 +100,7 @@ public interface INoteService {
 	public Response archivePin(int noteId , String emailIdToken );
 	
 	/**
-	 * Purpose:Method for trash and untrash a note
+	 * Purpose:Method for trash and  untrash a note
 	 * @param emailIdToken token containing email id 
 	 * @param noteId containing note id 
 	 * @return Response object containing status code , message 
@@ -115,7 +115,7 @@ public interface INoteService {
 	 * @return Response object containing status code , message 
 	 *         and object .
 	 */
-	public Response sortDate(String emailIdToken , boolean pin, boolean archive, boolean trash);
+	public Response sortDate(String emailIdToken , boolean archive, boolean trash);
 	
 	/**
 	 * Purpose: Method for sorting notes of a user by name (title()  
@@ -128,7 +128,7 @@ public interface INoteService {
 	
 	
 	/**
-	 * Purpose: Method for sorting notes of a user by updated date
+	 * Purpose: Method for adding label to the note
 	 * @param noteId containing note id 
 	 * @param emailIdToken  containing email id
 	 * @param labelId containing label id 
@@ -140,29 +140,52 @@ public interface INoteService {
 
 	
 	/**
-	 * Purpose: Method for sorting notes of a user by updated date
+	 * Purpose: Method for removing label from note
 	 * @param noteId containing note id 
 	 * @param emailIdToken containing email id
 	 * @param labelId containing label id 
 	 * @return Response object containing status code , message 
 	 *         and object 
 	 */
-	public Response removeLabel(int noteId , String emailIdToken , int labelId);
+   public Response removeLabel(int noteId , String emailIdToken , int labelId);
 	
 	
+	/**
+	 * Purpose: Method for adding collaborator to the note
+	 * @param noteId containing note id 
+	 * @param emailIdToken containing email id
+	 * @param collaboratorEmail containing collaborator emailId
+	 * @return Response object containing status code , message 
+	 *         and object
+	 */
 	public Response addCollaborator(int noteId , String emailIdToken,String collaboratorEmail);
 	
 	
+	/**
+	 * Purpose: Method for removing collaborator from note
+	 * @param noteId containing note id
+	 * @param emailIdToken containing email id
+	 * @param collaboratorEmail containing collaborator emailId
+	 * @return Response object containing status code , message 
+	 *         and object
+	 */
 	public Response removeCollaborator(int noteId , String emailIdToken, String collaboratorEmail);
 	
+	/**
+	 * Purpose: Method for getting collaborator object from note
+	 * @param collaboratorEmail containing collaborator emailId
+	 * @return Response object containing status code , message 
+	 *         and object
+	 */
 	public Response getCollaborator(String collaboratorEmail);
 	
 	/**
 	 * Purpose: Method for adding reminder to a  note
-	 * @param noteId
+	 * @param noteId containing noteId
 	 * @param emailIdToken containing email id
 	 * @param date for adding reminder
-	 * @return
+	 * @return Response object containing status code , message 
+	 *         and object
 	 */
 	public Response addReminder(int noteId ,String emailIdToken, Date date );
 	
@@ -245,7 +268,8 @@ public interface INoteService {
 	 * Purpose: Method to get Notes by particular labelId
 	 * @param emailIdToken to validate the user 
 	 * @param labelId of label to fetch the particular notes associated with it
-	 * @return
+	 * @return Response object containing status code , message 
+	 *         and object
 	 */
 	public Response getNoteByLabel(String emailIdToken ,int labelId);
 	
@@ -253,7 +277,8 @@ public interface INoteService {
 	/**
 	 * Purpose: Method to get profilePic of particular user
 	 * @param email of user to fetch the profile picture associated with it
-	 * @return
+	 * @return Response object containing status code , message 
+	 *         and object
 	 */
 	public Response getProfilePic(String email ,int noteId , String emailIdToken);
 	

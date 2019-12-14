@@ -10,7 +10,7 @@
 package com.bridgelabz.fundoo.note.service;
 
 import java.io.IOException;
-
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -246,14 +246,14 @@ public class ImplNoteService implements INoteService {
 	}
 
 	@Override
-	public Response sortDate(String emailIdToken, boolean pin, boolean archive, boolean trash) {
+	public Response sortDate(String emailIdToken,  boolean archive, boolean trash) {
 		String emailId = TokenUtility.tokenParser(emailIdToken);
 		LOG.info(CommonFiles.SERVICE_SORT_METHOD);
 
 		List<Note> sortedNote = noteRepository.findAll().stream()
-				.filter(i -> i.getEmailId().equals(emailId) && i.isPin() == pin && i.isArchive() == archive
+				.filter(i -> (i.getEmailId().equals(emailId) || i.getCollaborators().stream().allMatch(j -> j.getEmail().equals(emailId)))  && i.isArchive() == archive
 						&& i.isTrash() == trash)
-				.sorted((Note n1, Note n2) -> n1.getCreated().compareTo(n2.getCreated())).parallel()
+				.sorted(Comparator.comparing(Note::getCreated).reversed()).parallel()
 				.collect(Collectors.toList());
 
 		return new Response(200, CommonFiles.SORT_DATE_SUCCESS, sortedNote);
@@ -430,9 +430,6 @@ public class ImplNoteService implements INoteService {
 		if (date.before(new Date())) {
 			throw new NoteException(CommonFiles.INVALID_DATE);
 		}
-//		if (note.getReminder() != null) {
-//			throw new NoteException(CommonFiles.NO_REMINDER);
-//		}
 		note.setReminder(date);
 		return new Response(200, CommonFiles.UPDATE_REMAINDER_SUCCESS, noteRepository.save(note));
 

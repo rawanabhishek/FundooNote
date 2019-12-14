@@ -16,8 +16,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-
-
+import com.bridgelabz.fundoo.note.model.Collaborator;
 import com.bridgelabz.fundoo.note.model.Label;
 
 import lombok.Getter;
@@ -45,5 +44,6 @@ public class NoteDTO implements Serializable {
 	private boolean archive;
 	private List<Label> labels;
 	private String noteColor;
+	private List<Collaborator> collaborators;
 
 }

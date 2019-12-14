@@ -1,6 +1,6 @@
 /******************************************************************************
  
- *  Purpose: An interface class extending Jpa repository  which give 
+ *  Purpose: An interface class extending JPA repository  which give 
  *           its  service to use in the application .
  *  @author  Abhishek Rawat
  *  @version 1.0
@@ -23,6 +23,12 @@ import com.bridgelabz.fundoo.note.model.Label;
 @Repository
 public interface  LabelRepository extends JpaRepository<Label, Integer>{
 
+	/**
+	 * Purpose: Method for finding label by labelId and emailId  of User
+	 * @param id of particular label
+	 * @param email of particular user
+	 * @return
+	 */
 	Optional<Label> findByLabelIdAndEmailId(Integer id , String email);
 
 	

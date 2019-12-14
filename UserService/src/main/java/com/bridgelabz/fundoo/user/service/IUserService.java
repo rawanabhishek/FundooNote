@@ -135,6 +135,11 @@ public interface IUserService {
 	public Response getAllUser();
 	
 	
+	/**
+	 * Purpose: Method for getting particular user in database 
+	 * @param email   of particular user
+	 * @return
+	 */
 	public User getUser(String email);
 
 }

@@ -181,9 +181,9 @@ public class NoteController {
 	 *         message and object
 	 */
 	@GetMapping("/date")
-	public ResponseEntity<Response> sortDate(@RequestHeader() String emailIdToken ,@RequestParam() boolean pin , 
+	public ResponseEntity<Response> sortDate(@RequestHeader() String emailIdToken , 
 			@RequestParam() boolean archive , @RequestParam() boolean trash){
-		return new ResponseEntity<>(noteService.sortDate(emailIdToken ,pin,archive,trash),HttpStatus.OK);
+		return new ResponseEntity<>(noteService.sortDate(emailIdToken ,archive,trash),HttpStatus.OK);
 	}
 	
 	/**

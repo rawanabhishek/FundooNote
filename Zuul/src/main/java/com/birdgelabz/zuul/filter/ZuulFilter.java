@@ -1,3 +1,13 @@
+/******************************************************************************
+ 
+ *  Purpose: To create filter for API gateway of note service and user service
+ *         
+ *          
+ *  @author  Abhishek Rawat
+ *  @version 1.0
+ *  @since   09-12-2019
+ *
+ ******************************************************************************/
 package com.birdgelabz.zuul.filter;
 
 import javax.servlet.http.HttpServletRequest;

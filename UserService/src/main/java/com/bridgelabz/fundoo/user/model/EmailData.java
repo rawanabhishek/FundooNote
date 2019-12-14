@@ -1,3 +1,12 @@
+/******************************************************************************
+ 
+ *  Purpose:  A Class  for creating the POJO class Of EmailData 
+ *  		 
+ *  @author   Abhishek Rawat
+ *  @version  1.0
+ *  @since    20-10-2019
+ *
+ ******************************************************************************/
 package com.bridgelabz.fundoo.user.model;
 
 import java.io.Serializable;

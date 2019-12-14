@@ -1,3 +1,14 @@
+/******************************************************************************
+ 
+ *  Purpose: To create a Eureka Discovery server Application using Spring Boot 
+ *           and creating and adding user service and note service to the 
+ *           discovery server
+ *          
+ *  @author  Abhishek Rawat
+ *  @version 1.0
+ *  @since   09-12-2019
+ *
+ ******************************************************************************/
 package com.bridgelabz.fundoo;
 
 import org.springframework.boot.SpringApplication;
